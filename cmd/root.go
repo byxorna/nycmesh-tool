@@ -29,7 +29,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.nycmesh.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.nycmesh-tool.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -49,7 +49,7 @@ func initConfig() {
 		// Search config in home directory with name ".tool" (without extension).
 		viper.AddConfigPath(home)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".nycmesh")
+		viper.SetConfigName(".nycmesh-tool")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
