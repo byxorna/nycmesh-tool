@@ -37,3 +37,9 @@ Now, invoke the tool:
 ```
 ./bin/nycmesh-tool uisp authorization getUser
 ```
+
+# Adding new commands
+
+```
+$ cobra add set-some-feature
+```
