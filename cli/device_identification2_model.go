@@ -8,9 +8,8 @@ package cli
 import (
 	"encoding/json"
 	"fmt"
-
+ "github.com/byxorna/nycmesh-tool/models"
 	"github.com/go-openapi/swag"
-
 	"github.com/spf13/cobra"
 )
 

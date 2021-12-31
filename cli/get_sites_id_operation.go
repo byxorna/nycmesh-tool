@@ -62,6 +62,7 @@ func runOperationSitesGetSitesID(cmd *cobra.Command, args []string) error {
 }
 
 // registerOperationSitesGetSitesIDParamFlags registers all flags needed to fill params
+/**
 func registerOperationSitesGetSitesIDParamFlags(cmd *cobra.Command) error {
 	if err := registerOperationSitesGetSitesIDIDParamFlags("", cmd); err != nil {
 		return err
@@ -71,6 +72,7 @@ func registerOperationSitesGetSitesIDParamFlags(cmd *cobra.Command) error {
 	}
 	return nil
 }
+*/
 
 func registerOperationSitesGetSitesIDIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 

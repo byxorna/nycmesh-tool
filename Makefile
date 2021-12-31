@@ -13,6 +13,8 @@ codegen:
 .PHONY: go_build
 go_build: 
 	go build -o bin/ $(PACKAGE)
+	# build UISP CLI
+	go build cmd/uisp/main.go
 
 .PHONY: go
 go: go_build

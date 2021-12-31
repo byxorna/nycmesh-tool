@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/go-openapi/swag"
+  "github.com/byxorna/nycmesh-tool/models"
 
 	"github.com/spf13/cobra"
 )

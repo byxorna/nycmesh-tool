@@ -10,7 +10,8 @@ import (
 
 	"github.com/go-openapi/swag"
 
-	"github.com/spf13/cobra"
+  "github.com/byxorna/nycmesh-tool/models"
+  "github.com/spf13/cobra"
 )
 
 // Schema cli for Model10
