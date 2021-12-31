@@ -302,7 +302,7 @@ func retrieveOperationLogsGetLogsDeviceIDFlag(m *logs.GetLogsParams, cmdPrefix s
 		if err != nil {
 			return err, false
 		}
-		m.DeviceID = &deviceIdFlagValues
+		m.DeviceID = deviceIdFlagValues
 
 	}
 	return nil, retAdded

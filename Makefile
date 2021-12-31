@@ -14,7 +14,7 @@ codegen:
 go_build: 
 	go build -o bin/ $(PACKAGE)
 	# build UISP CLI
-	go build cmd/uisp/main.go
+	go build -o bin/uisp cmd/uisp/main.go
 
 .PHONY: go
 go: go_build
@@ -22,7 +22,7 @@ go: go_build
 all: go .git/hooks/pre-commit
 
 .git/hooks/pre-commit:
-	pre-commit install
+	pre-commit install --allow-missing-config
 
 .PHONY: clean
 clean:

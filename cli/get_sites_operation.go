@@ -245,7 +245,7 @@ func retrieveOperationSitesGetSitesIDFlag(m *sites.GetSitesParams, cmdPrefix str
 		if err != nil {
 			return err, false
 		}
-		m.ID = &idFlagValues
+		m.ID = idFlagValues
 
 	}
 	return nil, retAdded

@@ -211,7 +211,7 @@ func retrieveOperationDevicesGetDevicesRoleFlag(m *devices.GetDevicesParams, cmd
 		if err != nil {
 			return err, false
 		}
-		m.Role = &roleFlagValues
+		m.Role = roleFlagValues
 
 	}
 	return nil, retAdded
@@ -251,7 +251,7 @@ func retrieveOperationDevicesGetDevicesTypeFlag(m *devices.GetDevicesParams, cmd
 		if err != nil {
 			return err, false
 		}
-		m.Type = &typeFlagValues
+		m.Type = typeFlagValues
 
 	}
 	return nil, retAdded
