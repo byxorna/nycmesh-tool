@@ -7,7 +7,8 @@ timestamp := $(shell date +%s)
 
 .PHONY: codegen
 codegen:
-	echo hello
+	echo Generating UISP CLI
+	swagger generate cli -f ./spec/uisp_swagger.json --cli-app-name uisp --skip-validation -t generated/go/uisp/
 
 .PHONY: go_build
 go_build: 
