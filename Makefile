@@ -1,20 +1,17 @@
 .DEFAULT_GOAL := all
 
 PACKAGE := github.com/byxorna/nycmesh-tool
-config_file := config/$(CONFIG).yaml
 timestamp := $(shell date +%s)
 
 .PHONY: codegen
 codegen:
 	echo Generating UISP CLI
-	# override this with https://10.70.76.21/nms/api-docs/swagger.json for example, if you are authenticated
 	swagger generate cli -f ./spec/uisp_swagger.json --cli-app-name uisp --skip-validation -t generated/go/uisp/
 
 .PHONY: go_build
 go_build: 
 	go build -o bin/ $(PACKAGE)
-	# build UISP CLI
-	go build -o bin/uisp cmd/uisp/main.go
+	@echo Now run bin/nycmesh-tool!
 
 .PHONY: go
 go: go_build
@@ -31,6 +28,3 @@ clean:
 .PHONY: pre_commit
 pre_commit:
 	pre-commit run
-
-dev: go
-	UISP_AUTH_TOKEN=$$(cat authtoken) bin/nycmesh-tool experiment
