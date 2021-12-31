@@ -1,12 +1,12 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
+	"github.com/byxorna/nycmesh-tool/generated/go/uisp/cli"
 )
 
-var (
-	uispCmd = &cobra.Command{
-		Use:   "uisp",
-		Short: "UISP CLI",
-	}
-)
+func init() {
+	uispCmd, _ := cli.MakeRootCmd()
+	uispCmd.Use = "uisp"
+	uispCmd.Short = "UISP API operations"
+	rootCmd.AddCommand(uispCmd)
+}

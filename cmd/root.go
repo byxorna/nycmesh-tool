@@ -3,9 +3,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"os"
-
 	"github.com/spf13/viper"
+	"os"
 )
 
 var cfgFile string
@@ -13,7 +12,7 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var (
 	rootCmd = &cobra.Command{
-		Use:   "tool",
+		Use:   "nycmesh-tool",
 		Short: "NYC Mesh tool to help run the network",
 		// Uncomment the following line if your bare application
 		// has an action associated with it:
