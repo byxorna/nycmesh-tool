@@ -28,3 +28,10 @@ clean:
 .PHONY: pre_commit
 pre_commit:
 	pre-commit run
+
+.PHONY: test
+test: go_build go_test
+
+.PHONY: go_test
+go_test:
+	go test -v $(PACKAGE)/...
