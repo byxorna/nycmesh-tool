@@ -45,6 +45,10 @@ func logDebugf(format string, v ...interface{}) {
 // depth of recursion to construct model flags
 var maxDepth int = 5
 
+func NewClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
+  return makeClient(cmd, args)
+}
+
 // makeClient constructs a client object
 func makeClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
 	hostname := viper.GetString("hostname")

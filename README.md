@@ -24,7 +24,7 @@ $ ./bin/nycmesh-tool -h
 
 # UISP API Commands
 
-By default (`--config`) we read `~/.nycmesh-tool.yaml` for global flags for the tool. You could pass these parameters on the CLI, or store them in `~/.nycmesh-tool.yaml`:
+By default (`--config`) we read `.nycmesh-tool.yaml` for global flags for the tool. You could pass these parameters on the CLI, or store them in `~/.nycmesh-tool.yaml` (or `.`):
 
 ```yaml
 x-auth-token: xxx
