@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"sort"
 	"time"
+
+	"github.com/byxorna/nycmesh-tool/pkg/cache"
 )
 
 var (
@@ -20,6 +22,7 @@ var (
 // wrapper around https://github.com/meshcenter/mesh-api
 type Client struct {
 	http.Client
+	diskCache *cache.DiskCache
 }
 
 // https://github.com/meshcenter/mesh-api/blob/master/migrations/1608616875404_base.js#L27
@@ -69,18 +72,41 @@ func (s NodesByID) Less(i, j int) bool {
 }
 
 func New() (*Client, error) {
+	dc, err := cache.NewDiskCache()
+	if err != nil {
+		return nil, err
+	}
+
 	return &Client{
 		Client: *&http.Client{
 			Timeout: defaultTimeout,
 		},
+		diskCache: dc,
 	}, nil
 }
 
 func (c *Client) Nodes() ([]Node, error) {
-	body, err := c.do_body("GET", path+"/nodes", map[string]string{})
-	if err != nil {
-		return nil, fmt.Errorf("Unable to fetch nodes: %w", err)
+	var body []byte
+	var err error
+
+	if c.diskCache.HasValidCache("nodes") {
+		body, err = c.diskCache.Load("nodes")
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		body, err := c.do_body("GET", path+"/nodes", map[string]string{})
+		if err != nil {
+			return nil, fmt.Errorf("Unable to fetch nodes: %w", err)
+		}
+
+		fmt.Printf("fuck...\n")
+		err = c.diskCache.PopulateCache("nodes", body)
+		if err != nil {
+			return nil, err
+		}
 	}
+
 	var nodes []Node
 	if err = json.Unmarshal(body, &nodes); err != nil {
 		return nil, fmt.Errorf("unable to decode nodes: %w\n%s", err, body)
