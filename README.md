@@ -9,12 +9,13 @@ At the moment, the tool is pretty sparse. It provides the top level `nycmesh-too
 
 - `uisp` - Full UISP API CLI
 - `node` - Display nodes from https://api.nycmesh.net/v1/nodes
-- `setSectorFrequency` - set sector frequency (WIP)
-- `cache` - manipulate a simple on-disk cache for things like nodes
+- `map` - Open up nodes on a map from the command line
+- `cache` - manipulate a simple on-disk cache for things like API responses, for offline access to inventory
 
 Coming soon:
 
-- suggest device frequency changes based on observed RF
+- `setSectorFrequency` - set sector frequency (WIP)
+  - suggest device frequency changes based on observed RF
 
 # Build
 

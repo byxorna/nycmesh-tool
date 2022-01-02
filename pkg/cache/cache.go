@@ -13,12 +13,14 @@ import (
 )
 
 var (
+	// TODO: replace with github.com/adrg/xdg.XDG_CACHE_HOME
 	cacheDir = ".cache/nycmesh-tool"
 
 	CacheTTL     = time.Hour * 24 * 7
 	ErrNotCached = fmt.Errorf("no cache found")
 )
 
+// TODO: replace this module with something like https://github.com/gookit/cache?
 type DiskCache struct {
 	home string
 }
