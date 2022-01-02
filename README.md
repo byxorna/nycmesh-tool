@@ -7,7 +7,10 @@ nycmesh-tool CLI
 
 At the moment, the tool is pretty sparse. It provides the top level `nycmesh-tool` command, with subcommands for:
 
-- `uisp` - Full UISP CLI
+- `uisp` - Full UISP API CLI
+- `node` - Display nodes from https://api.nycmesh.net/v1/nodes
+- `setSectorFrequency` - set sector frequency (WIP)
+- `cache` - manipulate a simple on-disk cache for things like nodes
 
 Coming soon:
 
