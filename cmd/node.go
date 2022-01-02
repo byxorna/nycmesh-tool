@@ -1,12 +1,12 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"sort"
 	"strconv"
 
 	"github.com/byxorna/nycmesh-tool/pkg/app"
-	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
 	"github.com/spf13/cobra"
 )
 
@@ -31,8 +31,6 @@ var nodeGetCmd = &cobra.Command{
 			return err
 		}
 
-		nodesToShow := []nycmesh.Node{}
-
 		for _, a := range args {
 			n, err := strconv.Atoi(a)
 			if err != nil {
@@ -43,23 +41,12 @@ var nodeGetCmd = &cobra.Command{
 			if !ok {
 				return fmt.Errorf("node %d not found", n)
 			}
-			nodesToShow = append(nodesToShow, node)
-		}
-
-		headers := []string{"ID", "Geo", "Status", "Devices", "Notes"}
-		data := make([][]string, len(nodes))
-
-		for i, n := range nodesToShow {
-			data[i] = []string{
-				fmt.Sprintf("%d", n.ID),
-				n.GeoURI(),
-				fmt.Sprintf("%s", n.Status),
-				fmt.Sprintf("%d", len(n.Devices)),
-				fmt.Sprintf("%s", n.Notes),
+			pp, err := json.MarshalIndent(node, "", "\t")
+			if err != nil {
+				return err
 			}
+			fmt.Printf("%s\n", pp)
 		}
-
-		a.Tableify(headers, data)
 
 		return nil
 	},
