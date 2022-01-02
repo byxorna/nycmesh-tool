@@ -2,11 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"sort"
+	"strconv"
+
 	"github.com/byxorna/nycmesh-tool/pkg/app"
 	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
 	"github.com/spf13/cobra"
-	"sort"
-	"strconv"
 )
 
 // nodeCmd represents the node command
@@ -45,15 +46,13 @@ var nodeGetCmd = &cobra.Command{
 			nodesToShow = append(nodesToShow, node)
 		}
 
-		headers := []string{"ID", "Lat", "Lon", "Altitude", "Status", "Devices", "Notes"}
+		headers := []string{"ID", "Geo", "Status", "Devices", "Notes"}
 		data := make([][]string, len(nodes))
 
 		for i, n := range nodesToShow {
 			data[i] = []string{
 				fmt.Sprintf("%d", n.ID),
-				fmt.Sprintf("%f", n.Latitude),
-				fmt.Sprintf("%f", n.Longitude),
-				fmt.Sprintf("%f", n.AltitudeMeters),
+				n.GeoURI(),
 				fmt.Sprintf("%s", n.Status),
 				fmt.Sprintf("%d", len(n.Devices)),
 				fmt.Sprintf("%s", n.Notes),
@@ -80,7 +79,7 @@ var nodeListCmd = &cobra.Command{
 			return err
 		}
 
-		headers := []string{"ID", "Lat", "Lon", "Altitude", "Status", "Devices", "Notes"}
+		headers := []string{"ID", "Geo", "Status", "Devices", "Notes"}
 		data := make([][]string, len(nodes))
 
 		nodeNumbers := make([]int, 0, len(nodes))
@@ -93,9 +92,7 @@ var nodeListCmd = &cobra.Command{
 			n := nodes[nn]
 			data = append(data, []string{
 				fmt.Sprintf("%d", n.ID),
-				fmt.Sprintf("%f", n.Latitude),
-				fmt.Sprintf("%f", n.Longitude),
-				fmt.Sprintf("%f", n.AltitudeMeters),
+				n.GeoURI(),
 				fmt.Sprintf("%s", n.Status),
 				fmt.Sprintf("%d", len(n.Devices)),
 				fmt.Sprintf("%s", n.Notes),
