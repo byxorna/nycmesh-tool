@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"sort"
 	"time"
 
 	"github.com/byxorna/nycmesh-tool/pkg/cache"
@@ -27,7 +26,7 @@ type Client struct {
 
 // https://github.com/meshcenter/mesh-api/blob/master/migrations/1608616875404_base.js#L27
 type Node struct {
-	ID             int64      `json:"id"`
+	ID             int        `json:"id"`
 	Latitude       float64    `json:"lat"`
 	Longitude      float64    `json:"lng"`
 	AltitudeMeters float64    `json:"alt"`
@@ -37,22 +36,22 @@ type Node struct {
 	Notes          string     `json:"notes"`
 	Created        time.Time  `json:"create_date"`
 	Abandoned      *time.Time `json:"abandon_date,omitempty"`
-	BuildingID     int64      `json:"building_id"`
-	MemberID       int64      `json:"member_id"`
+	BuildingID     int        `json:"building_id"`
+	MemberID       int        `json:"member_id"`
 	Devices        []Device   `json:"devices"`
 }
 
 type Device struct {
-	ID             int64      `json:"id"`
+	ID             int        `json:"id"`
 	Latitude       float64    `json:"lat"`
 	Longitude      float64    `json:"lng"`
 	AltitudeMeters float64    `json:"alt"`
-	Azimuth        int64      `json:"azimuth"`
+	Azimuth        int        `json:"azimuth"`
 	Status         string     `json:"status"`
 	Name           string     `json:"name"`
 	SSID           string     `json:"ssid"`
 	Notes          string     `json:"notes"`
-	NodeID         int64      `json:"node_id"`
+	NodeID         int        `json:"node_id"`
 	Created        time.Time  `json:"create_date"`
 	Abandoned      *time.Time `json:"abandon_date,omitempty"`
 }
@@ -85,7 +84,7 @@ func New() (*Client, error) {
 	}, nil
 }
 
-func (c *Client) Nodes() ([]Node, error) {
+func (c *Client) Nodes() (map[int]Node, error) {
 	var body []byte
 	var err error
 
@@ -100,21 +99,22 @@ func (c *Client) Nodes() ([]Node, error) {
 			return nil, fmt.Errorf("Unable to fetch nodes: %w", err)
 		}
 
-		fmt.Printf("fuck...\n")
 		err = c.diskCache.PopulateCache("nodes", body)
 		if err != nil {
 			return nil, err
 		}
 	}
-
 	var nodes []Node
 	if err = json.Unmarshal(body, &nodes); err != nil {
 		return nil, fmt.Errorf("unable to decode nodes: %w\n%s", err, body)
 	}
 
-	sort.Sort(NodesByID(nodes))
+	m := map[int]Node{}
+	for _, node := range nodes {
+		m[node.ID] = node
+	}
 
-	return nodes, nil
+	return m, nil
 }
 
 func (c *Client) do_body(method, endpoint string, params map[string]string) ([]byte, error) {

@@ -5,6 +5,7 @@ import (
 	"github.com/byxorna/nycmesh-tool/pkg/app"
 	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
 	"github.com/spf13/cobra"
+	"sort"
 	"strconv"
 )
 
@@ -37,17 +38,11 @@ var nodeGetCmd = &cobra.Command{
 				return fmt.Errorf("%s is not a valid node identifier: %w", a, err)
 			}
 
-			// TODO: make this use sort.Search for efficient lookup
-			found := false
-			for i := 0; i < len(nodes) && !found; i++ {
-				if nodes[i].ID == int64(n) {
-					nodesToShow = append(nodesToShow, nodes[i])
-					found = true
-				}
-			}
-			if !found {
+			node, ok := nodes[n]
+			if !ok {
 				return fmt.Errorf("node %d not found", n)
 			}
+			nodesToShow = append(nodesToShow, node)
 		}
 
 		headers := []string{"ID", "Lat", "Lon", "Altitude", "Status", "Devices", "Notes"}
@@ -88,8 +83,15 @@ var nodeListCmd = &cobra.Command{
 		headers := []string{"ID", "Lat", "Lon", "Altitude", "Status", "Devices", "Notes"}
 		data := make([][]string, len(nodes))
 
-		for i, n := range nodes {
-			data[i] = []string{
+		nodeNumbers := make([]int, 0, len(nodes))
+		for _, n := range nodes {
+			nodeNumbers = append(nodeNumbers, int(n.ID))
+		}
+		sort.Ints(nodeNumbers)
+
+		for _, nn := range nodeNumbers {
+			n := nodes[nn]
+			data = append(data, []string{
 				fmt.Sprintf("%d", n.ID),
 				fmt.Sprintf("%f", n.Latitude),
 				fmt.Sprintf("%f", n.Longitude),
@@ -97,7 +99,7 @@ var nodeListCmd = &cobra.Command{
 				fmt.Sprintf("%s", n.Status),
 				fmt.Sprintf("%d", len(n.Devices)),
 				fmt.Sprintf("%s", n.Notes),
-			}
+			})
 		}
 
 		a.Tableify(headers, data)

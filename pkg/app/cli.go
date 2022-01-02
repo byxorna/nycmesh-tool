@@ -16,6 +16,7 @@ func (a *App) ConsoleWriteObject(obj string) error {
 }
 
 func (a *App) Tableify(headers []string, data [][]string) error {
+
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader(headers)
 	table.SetAutoWrapText(false)
