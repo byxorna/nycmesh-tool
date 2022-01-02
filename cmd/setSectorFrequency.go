@@ -29,7 +29,8 @@ either with a manually specified frequency, or an automated selection.`,
 			return err
 		}
 		if ssfo.apply {
-			return app.SetSectorFrequency(ssfo.frequency, args)
+			//return app.SetSectorFrequency(ssfo.frequency, args)
+			return fmt.Errorf("implement this")
 		} else {
 			app.ListSectorsByFrequency()
 			return fmt.Errorf("You must pass --apply to apply these changes")

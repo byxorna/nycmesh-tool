@@ -5,12 +5,14 @@ import (
 	"github.com/byxorna/nycmesh-tool/cli"
 	"github.com/byxorna/nycmesh-tool/client"
 	"github.com/byxorna/nycmesh-tool/client/devices"
+	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
 	"github.com/spf13/cobra"
 	"log"
 )
 
 type App struct {
 	*client.UISPAPI
+	*nycmesh.Client
 }
 
 func New(cmd *cobra.Command, args []string) (*App, error) {
@@ -20,6 +22,12 @@ func New(cmd *cobra.Command, args []string) (*App, error) {
 		return nil, err
 	}
 	a.UISPAPI = c
+
+	nycmeshClient, err := nycmesh.New()
+	if err != nil {
+		return nil, err
+	}
+	a.Client = nycmeshClient
 	return &a, nil
 }
 
@@ -36,6 +44,7 @@ func (a *App) ListSectorsByFrequency() error {
 	}
 	return nil
 }
+
 func (a *App) SetSectorFrequency(frequency string, devids ...[]string) error {
 	log.Printf("setSectorFrequency called: freq:%s devs:%v\n", frequency, devids)
 
