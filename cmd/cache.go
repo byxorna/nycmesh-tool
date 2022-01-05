@@ -19,11 +19,11 @@ var cacheClearCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		log.Println("clearing cache")
 
-		diskCache, err := cache.NewDiskCache()
+		diskCache, err := cache.NewDiskVCache()
 		if err != nil {
 			return err
 		}
-		err = diskCache.ClearAll()
+		err = diskCache.EraseAll()
 		if err != nil {
 			return err
 		}
