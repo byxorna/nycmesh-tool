@@ -1,6 +1,9 @@
 .DEFAULT_GOAL := all
 
 PACKAGE := github.com/byxorna/nycmesh-tool
+VERSION_PACKAGE := $(PACKAGE)/pkg/version
+GIT_COMMIT := $(shell git rev-parse HEAD)
+GO_LDFLAGS := -X $(VERSION_PACKAGE).GitCommit=$(GIT_COMMIT) -X "$(VERSION_PACKAGE).BuildDate=$(shell date -u)"
 timestamp := $(shell date +%s)
 
 .PHONY: codegen
@@ -10,7 +13,7 @@ codegen:
 
 .PHONY: go_build
 go_build: 
-	go build -o bin/ $(PACKAGE)
+	go build -ldflags='$(GO_LDFLAGS)' -o bin/ $(PACKAGE)
 	@echo Now run bin/nycmesh-tool!
 
 .PHONY: go

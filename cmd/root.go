@@ -2,17 +2,20 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
+	"github.com/byxorna/nycmesh-tool/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"os"
 )
 
 var cfgFile string
 
 var (
 	rootCmd = &cobra.Command{
-		Use:   "nycmesh-tool",
-		Short: "NYC Mesh tool to help run the network",
+		Use:     "nycmesh-tool",
+		Short:   "NYC Mesh tool to help run the network",
+		Version: version.GitCommit,
 	}
 )
 
