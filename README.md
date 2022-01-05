@@ -26,6 +26,14 @@ $ make
 $ ./bin/nycmesh-tool -h
 ```
 
+To cross-compile (i.e. for MacOS build on a linux box), pass `$GOOS` and `$GOARCH` like:
+
+```
+$ GOOS=darwin make
+$ file bin/nycmesh-tool
+bin/nycmesh-tool: Mach-O 64-bit x86_64 executable
+```
+
 # UISP API Commands
 
 By default (`--config`) we read `.nycmesh-tool.yaml` for global flags for the tool. You could pass these parameters on the CLI, or store them in `~/.nycmesh-tool.yaml` (or `.`):
