@@ -9,22 +9,27 @@ on:
 jobs:
 
   build:
+    strategy:
+      matrix:
+        go_version: [1.17]
+        os: [linux, darwin, windows]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up Go
+    - name: Set up Go ${{matrix.go_version}} for ${{matrix.os}}
       uses: actions/setup-go@v2
       with:
-        go-version: 1.17
+        go-version: ${{ matrix.go_version }}
 
     - name: Build
-      run: make
+      run: make GOOS=${{ matrix.os }}
 
     - name: Test
       run: make test
       
     - uses: actions/upload-artifact@v2
       with:
-        name: binaries
+        name: bin-${{ matrix.os}}
         path: bin/
+          
