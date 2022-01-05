@@ -16,7 +16,7 @@ go_build:
 .PHONY: go
 go: go_build
 
-all: go .git/hooks/pre-commit
+all: go
 
 .git/hooks/pre-commit:
 	pre-commit install --allow-missing-config
