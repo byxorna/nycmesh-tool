@@ -49,4 +49,4 @@ See [./HACKING.md](HACKING.md)
 
 # Releases
 
-See [./RELEASES.md](RELEASES.md)
+See [./RELEASE.md](RELEASE.md)
