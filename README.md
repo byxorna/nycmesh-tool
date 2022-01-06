@@ -36,22 +36,32 @@ bin/nycmesh-tool: Mach-O 64-bit x86_64 executable
 
 # UISP API Commands
 
+Invoke the tool:
+
+```
+$ ./bin/nycmesh-tool uisp authorization getUser
+$ ./bin/nycmesh-tool uisp  devices getDevices --hostname=uisp.mesh --scheme=https  --debug --skip-verify-tls
+```
+
+
+
 By default (`--config`) we read `.nycmesh-tool.yaml` for global flags for the tool. You could pass these parameters on the CLI, or store them in `~/.nycmesh-tool.yaml` (or `.`):
 
 ```yaml
-x-auth-token: xxx
-hostname: uisp-controller.hostname.xxx
+x-auth-token: xxx # get this from https://uisp.mesh/nms/user/login
+hostname: uisp.mesh
 scheme: https
-```
-
-Now, invoke the tool:
-
-```
-./bin/nycmesh-tool uisp authorization getUser
+skip-verify-tls: false
 ```
 
 # Adding new commands
 
+Create the `cmd/` entry, for flag processing and invoking the application.
+
 ```
 $ cobra add set-some-feature
+$ vi cmd/setSomeFeature.go
+...
 ```
+
+Business logic lives in `app/`, command line flag processing lives in `cmd/`.

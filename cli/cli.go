@@ -13,7 +13,6 @@ import (
 	"path/filepath"
 
 	"github.com/byxorna/nycmesh-tool/client"
-
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
 	"github.com/go-openapi/strfmt"
@@ -54,9 +53,18 @@ func makeClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
 	hostname := viper.GetString("hostname")
 	scheme := viper.GetString("scheme")
 
-	r := httptransport.New(hostname, client.DefaultBasePath, []string{scheme})
+httpc, err := httptransport.TLSClient(httptransport.TLSClientOptions{
+    InsecureSkipVerify: viper.GetBool("skip-verify-tls"),
+  })
+  if err!=nil{
+    return nil, err
+  }
+ 
+
+	r := httptransport.NewWithClient(hostname, client.DefaultBasePath, []string{scheme}, httpc)
 	r.SetDebug(debug)
-	// set custom producer and consumer to use the default ones
+
+  	// set custom producer and consumer to use the default ones
 
 	r.Consumers["application/json"] = runtime.JSONConsumer()
 
@@ -87,6 +95,10 @@ func MakeRootCmd() (*cobra.Command, error) {
 	viper.BindPFlag("hostname", rootCmd.PersistentFlags().Lookup("hostname"))
 	rootCmd.PersistentFlags().String("scheme", client.DefaultSchemes[0], fmt.Sprintf("Choose from: %v", client.DefaultSchemes))
 	viper.BindPFlag("scheme", rootCmd.PersistentFlags().Lookup("scheme"))
+
+  //     http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	rootCmd.PersistentFlags().Bool("skip-verify-tls", false, fmt.Sprintf("sets &tls.Config{InsecureSkipVerify: true} in UISP HTTP Client"))
+	viper.BindPFlag("skip-verify-tls", rootCmd.PersistentFlags().Lookup("skip-verify-tls"))
 
 	// configure debug flag
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "output debug logs")
