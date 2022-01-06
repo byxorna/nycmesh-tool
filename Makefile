@@ -13,8 +13,7 @@ codegen:
 
 .PHONY: go_build
 go_build: 
-	go build -ldflags='$(GO_LDFLAGS)' -o bin/ $(PACKAGE)
-	@echo Now run bin/nycmesh-tool!
+	go build -ldflags='$(GO_LDFLAGS)' -o bin/nycmesh-tool $(PACKAGE)
 
 .PHONY: go
 go: go_build

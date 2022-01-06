@@ -2,7 +2,6 @@
 
 nycmesh-tool CLI
 
-
 # Features
 
 At the moment, the tool is pretty sparse. It provides the top level `nycmesh-tool` command, with subcommands for:
@@ -17,22 +16,9 @@ Coming soon:
 - `setSectorFrequency` - set sector frequency (WIP)
   - suggest device frequency changes based on observed RF
 
-# Build
+# Get It
 
-To build the cli in `bin/`:
-
-```
-$ make
-$ ./bin/nycmesh-tool -h
-```
-
-To cross-compile (i.e. for MacOS build on a linux box), pass `$GOOS` and `$GOARCH` like:
-
-```
-$ GOOS=darwin make
-$ file bin/nycmesh-tool
-bin/nycmesh-tool: Mach-O 64-bit x86_64 executable
-```
+See [releases](https://github.com/byxorna/nycmesh-tool/releases)
 
 # UISP API Commands
 
@@ -57,14 +43,10 @@ uisp:
   debug: true
 ```
 
-# Adding new commands
+# Hacking
 
-Create the `cmd/` entry, for flag processing and invoking the application.
+See [./HACKING.md](HACKING.md)
 
-```
-$ cobra add set-some-feature
-$ vi cmd/setSomeFeature.go
-...
-```
+# Releases
 
-Business logic lives in `app/`, command line flag processing lives in `cmd/`.
+See [./RELEASES.md](RELEASES.md)
