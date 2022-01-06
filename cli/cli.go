@@ -45,7 +45,7 @@ func logDebugf(format string, v ...interface{}) {
 var maxDepth int = 5
 
 func NewClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
-  return makeClient(cmd, args)
+	return makeClient(cmd, args)
 }
 
 // makeClient constructs a client object
@@ -53,18 +53,17 @@ func makeClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
 	hostname := viper.GetString("hostname")
 	scheme := viper.GetString("scheme")
 
-httpc, err := httptransport.TLSClient(httptransport.TLSClientOptions{
-    InsecureSkipVerify: viper.GetBool("skip-verify-tls"),
-  })
-  if err!=nil{
-    return nil, err
-  }
- 
+	httpc, err := httptransport.TLSClient(httptransport.TLSClientOptions{
+		InsecureSkipVerify: viper.GetBool("skip-verify-tls"),
+	})
+	if err != nil {
+		return nil, err
+	}
 
 	r := httptransport.NewWithClient(hostname, client.DefaultBasePath, []string{scheme}, httpc)
 	r.SetDebug(debug)
 
-  	// set custom producer and consumer to use the default ones
+	// set custom producer and consumer to use the default ones
 
 	r.Consumers["application/json"] = runtime.JSONConsumer()
 
@@ -96,7 +95,7 @@ func MakeRootCmd() (*cobra.Command, error) {
 	rootCmd.PersistentFlags().String("scheme", client.DefaultSchemes[0], fmt.Sprintf("Choose from: %v", client.DefaultSchemes))
 	viper.BindPFlag("scheme", rootCmd.PersistentFlags().Lookup("scheme"))
 
-  //     http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	//     http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	rootCmd.PersistentFlags().Bool("skip-verify-tls", false, fmt.Sprintf("sets &tls.Config{InsecureSkipVerify: true} in UISP HTTP Client"))
 	viper.BindPFlag("skip-verify-tls", rootCmd.PersistentFlags().Lookup("skip-verify-tls"))
 

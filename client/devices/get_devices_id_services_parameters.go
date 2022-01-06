@@ -136,7 +136,7 @@ func (o *GetDevicesIDServicesParams) WithPayload(payload string) *GetDevicesIDSe
 }
 
 // SetPayload adds the payload to the get devices Id services params
-func (o *GetDevicesIDServicesParams) SetPayload(payload string){
+func (o *GetDevicesIDServicesParams) SetPayload(payload string) {
 	o.Payload = payload
 }
 

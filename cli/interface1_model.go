@@ -8,8 +8,8 @@ package cli
 import (
 	"fmt"
 
+	"github.com/byxorna/nycmesh-tool/models"
 	"github.com/go-openapi/swag"
-"github.com/byxorna/nycmesh-tool/models"
 	"github.com/spf13/cobra"
 )
 
@@ -147,5 +147,3 @@ func retrieveInterface1Sfp2Flags(depth int, m *models.Interface1, cmdPrefix stri
 
 	return nil, retAdded
 }
-
-

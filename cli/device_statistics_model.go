@@ -8,8 +8,8 @@ package cli
 import (
 	"fmt"
 
+	"github.com/byxorna/nycmesh-tool/models"
 	"github.com/go-openapi/swag"
- "github.com/byxorna/nycmesh-tool/models"
 	"github.com/spf13/cobra"
 )
 
