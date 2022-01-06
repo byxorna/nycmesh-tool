@@ -48,10 +48,13 @@ $ ./bin/nycmesh-tool uisp  devices getDevices --hostname=uisp.mesh --scheme=http
 By default (`--config`) we read `.nycmesh-tool.yaml` for global flags for the tool. You could pass these parameters on the CLI, or store them in `~/.nycmesh-tool.yaml` (or `.`):
 
 ```yaml
-x-auth-token: xxx # get this from https://uisp.mesh/nms/user/login
-hostname: uisp.mesh
-scheme: https
-skip-verify-tls: false
+---
+uisp:
+  x-auth-token: xxx # get this from https://uisp.mesh/nms/user/login
+  hostname: uisp.mesh
+  scheme: https
+  skip-verify-tls: false
+  debug: true
 ```
 
 # Adding new commands

@@ -50,18 +50,18 @@ func NewClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
 
 // makeClient constructs a client object
 func makeClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
-	hostname := viper.GetString("hostname")
-	scheme := viper.GetString("scheme")
+	hostname := viper.GetString("uisp.hostname")
+	scheme := viper.GetString("uisp.scheme")
 
 	httpc, err := httptransport.TLSClient(httptransport.TLSClientOptions{
-		InsecureSkipVerify: viper.GetBool("skip-verify-tls"),
+		InsecureSkipVerify: viper.GetBool("uisp.skip-verify-tls"),
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	r := httptransport.NewWithClient(hostname, client.DefaultBasePath, []string{scheme}, httpc)
-	r.SetDebug(debug)
+	r.SetDebug(viper.GetBool("uisp.debug"))
 
 	// set custom producer and consumer to use the default ones
 
@@ -91,17 +91,16 @@ func MakeRootCmd() (*cobra.Command, error) {
 
 	// register basic flags
 	rootCmd.PersistentFlags().String("hostname", client.DefaultHost, "hostname of the service")
-	viper.BindPFlag("hostname", rootCmd.PersistentFlags().Lookup("hostname"))
+	viper.BindPFlag("uisp.hostname", rootCmd.PersistentFlags().Lookup("hostname"))
 	rootCmd.PersistentFlags().String("scheme", client.DefaultSchemes[0], fmt.Sprintf("Choose from: %v", client.DefaultSchemes))
-	viper.BindPFlag("scheme", rootCmd.PersistentFlags().Lookup("scheme"))
+	viper.BindPFlag("uisp.scheme", rootCmd.PersistentFlags().Lookup("scheme"))
 
 	//     http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	rootCmd.PersistentFlags().Bool("skip-verify-tls", false, fmt.Sprintf("sets &tls.Config{InsecureSkipVerify: true} in UISP HTTP Client"))
-	viper.BindPFlag("skip-verify-tls", rootCmd.PersistentFlags().Lookup("skip-verify-tls"))
+	viper.BindPFlag("uisp.skip-verify-tls", rootCmd.PersistentFlags().Lookup("skip-verify-tls"))
 
-	// configure debug flag
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "output debug logs")
-	// configure config location
+	viper.BindPFlag("uisp.debug", rootCmd.PersistentFlags().Lookup("debug"))
 	rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "config file path")
 	// configure dry run flag
 	rootCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", false, "do not send the request to server")
