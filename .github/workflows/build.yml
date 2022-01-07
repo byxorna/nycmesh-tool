@@ -11,25 +11,27 @@ jobs:
   build:
     strategy:
       matrix:
+        arch: [amd64, arm64]
         go_version: [1.17]
         os: [linux, darwin, windows]
+
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up Go ${{matrix.go_version}} for ${{matrix.os}}
+    - name: Set up Go ${{matrix.go_version}} for ${{ matrix.os }}
       uses: actions/setup-go@v2
       with:
         go-version: ${{ matrix.go_version }}
 
     - name: Build
-      run: make GOOS=${{ matrix.os }}
+      run: make GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }}
 
     - name: Test
       run: make test
       
     - uses: actions/upload-artifact@v2
       with:
-        name: bin-${{ matrix.os}}
+        name: nycmesh-tool-${{ matrix.os }}-${{ matrix.arch }}
         path: bin/
           
