@@ -11,10 +11,22 @@ jobs:
   build:
     strategy:
       matrix:
-        arch: [amd64, arm64]
-        go_version: [1.17]
-        os: [linux, darwin, windows]
-
+        include:
+          - arch: amd64
+            os: linux
+            go_version: 1.17
+          - arch: arm64
+            os: linux
+            go_version: 1.17
+          - arch: arm64
+            os: darwin
+            go_version: 1.17
+          - arch: amd64
+            os: darwin
+            go_version: 1.17
+          - arch: amd64
+            os: windows
+            go_version: 1.17
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2

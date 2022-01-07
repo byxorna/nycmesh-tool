@@ -16,6 +16,25 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+    strategy:
+      matrix:
+        include:
+          - arch: amd64
+            os: linux
+            go_version: 1.17
+          - arch: arm64
+            os: linux
+            go_version: 1.17
+          - arch: arm64
+            os: darwin
+            go_version: 1.17
+          - arch: amd64
+            os: darwin
+            go_version: 1.17
+          - arch: amd64
+            os: windows
+            go_version: 1.17
+
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -29,8 +48,7 @@ jobs:
         id: Changelog
         env:
           REPO: ${{ github.repository }}
-          
-          
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
@@ -43,3 +61,37 @@ jobs:
             ${{ steps.Changelog.outputs.changelog }}
           draft: false
           prerelease: false
+
+      - name: Set up Go ${{matrix.go_version}} for ${{ matrix.os }}
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go_version }}
+
+      - name: Build
+        run: make GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }}
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: nycmesh-tool-${{ matrix.os }}-${{ matrix.arch }}
+          path: bin/nycmesh-tool
+
+      - name: Upload release attachment
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const fs = require('fs');
+            const tag = context.ref.replace("refs/tags/", "");
+            // Get release for this tag
+            const release = await github.repos.getReleaseByTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag
+            });
+            // Upload the release asset
+            await github.repos.uploadReleaseAsset({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release.data.id,
+              name: "nycmesh-tool-${{ matrix.os }}-${{matrix.arch}}",
+              data: await fs.readFileSync("bin/nycmesh-tool")
+            });
