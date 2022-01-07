@@ -14,33 +14,10 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    strategy:
-      matrix:
-        include:
-          - arch: amd64
-            os: linux
-            go_version: 1.17
-          - arch: arm64
-            os: linux
-            go_version: 1.17
-          - arch: arm64
-            os: darwin
-            go_version: 1.17
-          - arch: amd64
-            os: darwin
-            go_version: 1.17
-          - arch: amd64
-            os: windows
-            go_version: 1.17
-
-    # The type of runner that the job will run on
+  release:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: Changelog
@@ -62,6 +39,32 @@ jobs:
           draft: false
           prerelease: false
 
+
+  build:
+    strategy:
+      matrix:
+        include:
+          - arch: amd64
+            os: linux
+            go_version: 1.17
+          - arch: arm64
+            os: linux
+            go_version: 1.17
+          - arch: arm64
+            os: darwin
+            go_version: 1.17
+          - arch: amd64
+            os: darwin
+            go_version: 1.17
+          - arch: amd64
+            os: windows
+            go_version: 1.17
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
       - name: Set up Go ${{matrix.go_version}} for ${{ matrix.os }}
         uses: actions/setup-go@v2
         with:
@@ -75,7 +78,7 @@ jobs:
           name: nycmesh-tool-${{ matrix.os }}-${{ matrix.arch }}
           path: bin/nycmesh-tool
 
-      - name: Upload release attachment
+      - name: Upload artifact
         uses: actions/github-script@v4
         with:
           script: |
