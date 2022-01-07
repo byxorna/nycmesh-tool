@@ -41,6 +41,7 @@ jobs:
 
 
   build:
+    needs: release
     strategy:
       matrix:
         include:
