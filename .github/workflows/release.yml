@@ -72,7 +72,7 @@ jobs:
           go-version: ${{ matrix.go_version }}
 
       - name: Build
-        run: make GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }}
+        run: make clean all GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }}
 
       - uses: actions/upload-artifact@v2
         with:

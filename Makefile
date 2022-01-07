@@ -27,7 +27,7 @@ all: go
 
 .PHONY: clean
 clean:
-	rm bin/*
+	rm bin/* || :
 
 .PHONY: pre_commit
 pre_commit:
