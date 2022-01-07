@@ -31,25 +31,12 @@ func New(cmd *cobra.Command, args []string) (*App, error) {
 	return &a, nil
 }
 
-func (a *App) ListSectorsByFrequency() error {
-
-	params := devices.NewGetDevicesParams()
-	devs, err := a.Devices.GetDevices(params, nil)
-	if err != nil {
-		return err
-	}
-	fmt.Printf("res: %+v\n", devs)
-	for _, d := range devs.Payload {
-		fmt.Printf("%+v\n", d)
-	}
-	return nil
-}
-
+// TODO(gabe): implement me
 func (a *App) SetSectorFrequency(frequency string, devids ...[]string) error {
 	log.Printf("setSectorFrequency called: freq:%s devs:%v\n", frequency, devids)
 
 	params := devices.NewGetDevicesParams()
-	devs, err := a.Devices.GetDevices(params, nil)
+	devs, err := a.UISPAPI.Devices.GetDevices(params, nil)
 	if err != nil {
 		return err
 	}

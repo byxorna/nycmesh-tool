@@ -12,18 +12,23 @@ import (
 
 // nodeCmd represents the node command
 var nodeCmd = &cobra.Command{
-	Use:   "node",
-	Short: "nodes, hubs, and supernodes",
+	Use:     "node",
+	Aliases: []string{"n", "nodes"},
+	Short:   "nodes, hubs, and supernodes",
 }
 
 var nodeGetCmd = &cobra.Command{
 	Use:     "show",
-	Aliases: []string{"get", "s"},
+	Aliases: []string{"get", "s", "g"},
 	Short:   "show a node",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		a, err := app.New(cmd, args)
 		if err != nil {
 			return err
+		}
+
+		if len(args) != 1 {
+			return fmt.Errorf("one device identifier argument is required")
 		}
 
 		nodes, err := a.Nodes()
@@ -53,8 +58,9 @@ var nodeGetCmd = &cobra.Command{
 }
 
 var nodeListCmd = &cobra.Command{
-	Use:   "list",
-	Short: "list nodes",
+	Use:     "list",
+	Short:   "list nodes",
+	Aliases: []string{"find", "l", "f"},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		a, err := app.New(cmd, args)
 		if err != nil {

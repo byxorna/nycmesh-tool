@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 	"time"
-
+uisp "github.com/byxorna/nycmesh-tool/models"
 	"github.com/byxorna/nycmesh-tool/pkg/cache"
 )
 
@@ -54,6 +54,14 @@ type Device struct {
 	NodeID         int        `json:"node_id"`
 	Created        time.Time  `json:"create_date"`
 	Abandoned      *time.Time `json:"abandon_date,omitempty"`
+
+  State DeviceState
+}
+
+// DeviceState are where we keep additional properties we can discover from various
+// external sources, like UISP, airview tables, etc.
+type DeviceState struct {
+  UISPDevice *uisp.Device
 }
 
 type NodesByID []Node
