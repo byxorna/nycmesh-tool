@@ -1,5 +1,7 @@
 .DEFAULT_GOAL := all
 
+GOOS ?=
+GOARCH ?=
 PACKAGE := github.com/byxorna/nycmesh-tool
 VERSION_PACKAGE := $(PACKAGE)/pkg/version
 GIT_COMMIT := $(shell git rev-parse HEAD)
@@ -13,7 +15,7 @@ codegen:
 
 .PHONY: go_build
 go_build: 
-	go build -ldflags='$(GO_LDFLAGS)' -o bin/nycmesh-tool $(PACKAGE)
+	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -ldflags='$(GO_LDFLAGS)' -o bin/nycmesh-tool $(PACKAGE)
 
 .PHONY: go
 go: go_build
