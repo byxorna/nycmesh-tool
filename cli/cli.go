@@ -276,7 +276,7 @@ func initViperConfigs() {
 func registerAuthInoWriterFlags(cmd *cobra.Command) error {
 	/*x-auth-token User authorization token*/
 	cmd.PersistentFlags().String("x-auth-token", "", `User authorization token`)
-	viper.BindPFlag("x-auth-token", cmd.PersistentFlags().Lookup("x-auth-token"))
+	viper.BindPFlag("uisp.x-auth-token", cmd.PersistentFlags().Lookup("x-auth-token"))
 	return nil
 }
 
@@ -284,8 +284,8 @@ func registerAuthInoWriterFlags(cmd *cobra.Command) error {
 func makeAuthInfoWriter(cmd *cobra.Command) (runtime.ClientAuthInfoWriter, error) {
 	auths := []runtime.ClientAuthInfoWriter{}
 	/*x-auth-token User authorization token*/
-	if viper.IsSet("x-auth-token") {
-		XAuthTokenKey := viper.GetString("x-auth-token")
+	if viper.IsSet("uisp.x-auth-token") {
+		XAuthTokenKey := viper.GetString("uisp.x-auth-token")
 		auths = append(auths, httptransport.APIKeyAuth("x-auth-token", "header", XAuthTokenKey))
 	}
 	if len(auths) == 0 {
