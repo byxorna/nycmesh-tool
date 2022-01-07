@@ -60,6 +60,7 @@ jobs:
           - arch: amd64
             os: windows
             go_version: 1.17
+            binary_suffix: .exe
 
     runs-on: ubuntu-latest
 
@@ -96,6 +97,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               release_id: release.data.id,
-              name: "nycmesh-tool-${{ matrix.os }}-${{matrix.arch}}",
+              name: "nycmesh-tool-${{ matrix.os }}-${{matrix.arch}}${{matrix.binary_suffix}}",
               data: await fs.readFileSync("bin/nycmesh-tool")
             });
