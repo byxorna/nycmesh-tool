@@ -72,7 +72,7 @@ var nodeListCmd = &cobra.Command{
 			return err
 		}
 
-		headers := []string{"ID", "Geo", "Status", "Devices", "Notes"}
+		headers := []string{"ID", "Geo", "Status", "Devices", "Building", "Notes"}
 		data := make([][]string, len(nodes))
 
 		nodeNumbers := make([]int, 0, len(nodes))
@@ -88,6 +88,7 @@ var nodeListCmd = &cobra.Command{
 				n.GeoURI(),
 				fmt.Sprintf("%s", n.Status),
 				fmt.Sprintf("%d", len(n.Devices)),
+				fmt.Sprintf("%s", n.Building),
 				fmt.Sprintf("%s", n.Notes),
 			})
 		}

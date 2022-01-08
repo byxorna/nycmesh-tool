@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 
 	"github.com/byxorna/nycmesh-tool/pkg/app"
 	"github.com/spf13/cobra"
@@ -39,11 +40,11 @@ var deviceGetCmd = &cobra.Command{
 			return fmt.Errorf("device %s not found", deviceID)
 		}
 
-    pp, err := json.MarshalIndent(devices[0], "", "\t")
-    if err != nil {
-      return err
-    }
-    fmt.Printf("%s\n", pp)
+		pp, err := json.MarshalIndent(devices[0], "", "\t")
+		if err != nil {
+			return err
+		}
+		fmt.Printf("%s\n", pp)
 
 		return nil
 	},
@@ -64,12 +65,22 @@ var deviceListCmd = &cobra.Command{
 			return err
 		}
 
-		headers := []string{"ID", "Name", "Status" }
+		idOrder := make([]int, 0, len(devices))
+		for _, d := range devices {
+			idOrder = append(idOrder, int(d.ID))
+		}
+		sort.Ints(idOrder)
+
+		headers := []string{"ID", "Node", "Model", "Mfg", "Name", "Status"}
 		data := make([][]string, len(devices))
 
-		for _, dev := range devices {
+		for _, id := range idOrder {
+			dev := devices[id]
 			data = append(data, []string{
 				fmt.Sprintf("%d", dev.ID),
+				fmt.Sprintf("%d", dev.NodeID),
+				fmt.Sprintf("%s", dev.Type.Name),
+				fmt.Sprintf("%s", dev.Type.Manufacturer),
 				fmt.Sprintf("%s", dev.Name),
 				fmt.Sprintf("%s", dev.Status),
 			})

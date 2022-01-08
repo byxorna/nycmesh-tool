@@ -3,12 +3,12 @@ package nycmesh
 import (
 	"encoding/json"
 	"fmt"
+	uisp "github.com/byxorna/nycmesh-tool/models"
+	"github.com/byxorna/nycmesh-tool/pkg/cache"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
-uisp "github.com/byxorna/nycmesh-tool/models"
-	"github.com/byxorna/nycmesh-tool/pkg/cache"
 )
 
 var (
@@ -37,6 +37,7 @@ type Node struct {
 	Created        time.Time  `json:"create_date"`
 	Abandoned      *time.Time `json:"abandon_date,omitempty"`
 	BuildingID     int        `json:"building_id"`
+	Building       string     `json:"building"`
 	MemberID       int        `json:"member_id"`
 	Devices        []Device   `json:"devices"`
 }
@@ -54,14 +55,25 @@ type Device struct {
 	NodeID         int        `json:"node_id"`
 	Created        time.Time  `json:"create_date"`
 	Abandoned      *time.Time `json:"abandon_date,omitempty"`
+	Type           DeviceType `json:"type"`
 
-  State DeviceState
+	// TODO
+	// State DeviceState
 }
 
+type DeviceType struct {
+	ID           int     `json:"id"`
+	Name         string  `json:"name"`
+	Manufacturer string  `json:"manufacturer"`
+	Range        float64 `json:"range"`
+	Width        float64 `json:"width"`
+}
+
+// TODO unused
 // DeviceState are where we keep additional properties we can discover from various
 // external sources, like UISP, airview tables, etc.
 type DeviceState struct {
-  UISPDevice *uisp.Device
+	UISPDevice *uisp.Device
 }
 
 type NodesByID []Node
@@ -90,6 +102,25 @@ func New() (*Client, error) {
 		},
 		diskCache: dc,
 	}, nil
+}
+
+// Devices returns the list of Devices from NYCMesh API
+// TODO: should devices be cached/fetched as 1 block, or as individual entries?
+func (c *Client) Devices() (map[int]*Device, error) {
+	var body []byte
+	var err error
+
+	var devices []*Device
+	if err = json.Unmarshal(body, &devices); err != nil {
+		return nil, fmt.Errorf("unable to decode devices: %w\n%s", err, body)
+	}
+
+	m := map[int]*Device{}
+	for _, dev := range devices {
+		m[dev.ID] = dev
+	}
+
+	return m, nil
 }
 
 // TODO: this function should get cleaned up, we should not be storing
