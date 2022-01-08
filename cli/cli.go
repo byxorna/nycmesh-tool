@@ -31,19 +31,18 @@ var dryRun bool
 // name of the executable
 var exeName string = filepath.Base(os.Args[0])
 
-// logDebugf writes debug log to stdout
-func logDebugf(format string, v ...interface{}) {
-	if !debug {
-		return
-	}
-	log.Printf(format, v...)
-}
-
 // depth of recursion to construct model flags
 var maxDepth int = 5
 
 func NewClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
 	return makeClient(cmd, args)
+}
+
+func logDebugf(format string, v ...interface{}) {
+	if !debug {
+		return
+	}
+	log.Printf(format, v...)
 }
 
 // makeClient constructs a client object
@@ -74,7 +73,7 @@ func makeClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
 	r.DefaultAuthentication = auth
 
 	appCli := client.New(r, strfmt.Default)
-	logDebugf("Server url: %v://%v", scheme, hostname)
+	log.Printf("UISP url: %v://%v", scheme, hostname)
 	return appCli, nil
 }
 
@@ -262,7 +261,7 @@ func makeAuthInfoWriter(cmd *cobra.Command) (runtime.ClientAuthInfoWriter, error
 		auths = append(auths, httptransport.APIKeyAuth("x-auth-token", "header", XAuthTokenKey))
 	}
 	if len(auths) == 0 {
-		logDebugf("Warning: No auth params detected.")
+		log.Printf("Warning: No auth params detected.")
 		return nil, nil
 	}
 	// compose all auths together

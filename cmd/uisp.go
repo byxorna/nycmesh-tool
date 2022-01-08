@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/cli"
+	"github.com/go-openapi/strfmt"
 )
 
 func init() {
@@ -9,4 +10,5 @@ func init() {
 	uispCmd.Use = "uisp"
 	uispCmd.Short = "UISP API operations"
 	rootCmd.AddCommand(uispCmd)
+
 }
