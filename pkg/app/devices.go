@@ -5,8 +5,8 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/byxorna/nycmesh-tool/client/devices"
-	"github.com/byxorna/nycmesh-tool/client/sites"
+	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client/devices"
+	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client/sites"
 	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
 )
 
