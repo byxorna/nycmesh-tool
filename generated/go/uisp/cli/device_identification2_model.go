@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/byxorna/nycmesh-tool/models"
+	"github.com/byxorna/nycmesh-tool/generated/go/uisp/models"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 

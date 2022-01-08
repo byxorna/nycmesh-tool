@@ -145,7 +145,7 @@ func retrieveOperationAuthorizationGetAccessgroupsSitesGroupIDFlag(m *authorizat
 		if err != nil {
 			return err, false
 		}
-		m.GroupID = &groupIdFlagValues
+		m.GroupID = groupIdFlagValues
 
 	}
 	return nil, retAdded

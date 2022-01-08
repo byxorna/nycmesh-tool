@@ -12,6 +12,7 @@ timestamp := $(shell date +%s)
 codegen:
 	echo Generating UISP CLI
 	swagger generate cli -f ./spec/uisp_swagger.yaml --cli-app-name uisp --skip-validation --keep-spec-order -t generated/go/uisp/
+	sed -i'' -e "s|github.com/byxorna/nycmesh-tool/models|github.com/byxorna/nycmesh-tool/generated/go/uisp/models|g" generated/go/uisp/**/*.go
 
 .PHONY: go_build
 go_build: 

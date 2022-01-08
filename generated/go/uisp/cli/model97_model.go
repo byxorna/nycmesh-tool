@@ -8,7 +8,7 @@ package cli
 import (
 	"fmt"
 
-	"github.com/byxorna/nycmesh-tool/models"
+	"github.com/byxorna/nycmesh-tool/generated/go/uisp/models"
 	"github.com/spf13/cobra"
 )
 

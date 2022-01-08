@@ -228,7 +228,7 @@ func retrieveOperationInstallationsGetInstallationsDevicesUserIDFlag(m *installa
 		if err != nil {
 			return err, false
 		}
-		m.UserID = &userIdFlagValues
+		m.UserID = userIdFlagValues
 
 	}
 	return nil, retAdded
