@@ -83,18 +83,20 @@ var deviceListCmd = &cobra.Command{
 		orderedDevs := []*nycmesh.Device{}
 		for _, id := range idOrder {
 			dev := devices[id]
-			orderedDevs = append(orderedDevs, dev)
-			data = append(data, []string{
-				fmt.Sprintf("%d", dev.ID),
-				fmt.Sprintf("%d", dev.NodeID),
-				fmt.Sprintf("%s", dev.SSID),
-				fmt.Sprintf("%s", dev.Type.Name),
-				fmt.Sprintf("%s", dev.Type.Manufacturer),
-				fmt.Sprintf("%s", dev.Name),
-				fmt.Sprintf("%s", dev.Status),
-				"",
-				"",
-			})
+			if status == StatusAny || status == dev.Status {
+				orderedDevs = append(orderedDevs, dev)
+				data = append(data, []string{
+					fmt.Sprintf("%d", dev.ID),
+					fmt.Sprintf("%d", dev.NodeID),
+					fmt.Sprintf("%s", dev.SSID),
+					fmt.Sprintf("%s", dev.Type.Name),
+					fmt.Sprintf("%s", dev.Type.Manufacturer),
+					fmt.Sprintf("%s", dev.Name),
+					fmt.Sprintf("%s", dev.Status),
+					"",
+					"",
+				})
+			}
 		}
 
 		switch viper.GetString("core.format") {
@@ -115,6 +117,7 @@ var deviceListCmd = &cobra.Command{
 }
 
 func init() {
+	deviceCmd.PersistentFlags().StringVar(&status, "status", StatusActive, "filter for status")
 	deviceCmd.AddCommand(deviceListCmd)
 	deviceCmd.AddCommand(deviceGetCmd)
 	rootCmd.AddCommand(deviceCmd)

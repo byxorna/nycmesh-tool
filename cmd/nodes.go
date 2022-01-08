@@ -12,7 +12,13 @@ import (
 	"github.com/spf13/viper"
 )
 
-// nodeCmd represents the node command
+var (
+	status         string
+	StatusAny      = "any"
+	StatusActive   = "active"
+	StatusInactive = "inactive"
+)
+
 var nodeCmd = &cobra.Command{
 	Use:     "node",
 	Aliases: []string{"n", "nodes"},
@@ -86,15 +92,18 @@ var nodeListCmd = &cobra.Command{
 		orderedNodes := []*nycmesh.Node{}
 		for _, nn := range nodeNumbers {
 			n := nodes[nn]
-			orderedNodes = append(orderedNodes, &n)
-			data = append(data, []string{
-				fmt.Sprintf("%d", n.ID),
-				n.GeoURI(),
-				fmt.Sprintf("%s", n.Status),
-				fmt.Sprintf("%d", len(n.Devices)),
-				fmt.Sprintf("%s", n.Building),
-				fmt.Sprintf("%s", n.Notes),
-			})
+
+			if status == StatusAny || status == n.Status {
+				orderedNodes = append(orderedNodes, &n)
+				data = append(data, []string{
+					fmt.Sprintf("%d", n.ID),
+					n.GeoURI(),
+					fmt.Sprintf("%s", n.Status),
+					fmt.Sprintf("%d", len(n.Devices)),
+					fmt.Sprintf("%s", n.Building),
+					fmt.Sprintf("%s", n.Notes),
+				})
+			}
 		}
 
 		switch viper.GetString("core.format") {
@@ -115,6 +124,7 @@ var nodeListCmd = &cobra.Command{
 }
 
 func init() {
+	nodeCmd.PersistentFlags().StringVar(&status, "status", StatusActive, "filter for status")
 	nodeCmd.AddCommand(nodeListCmd)
 	nodeCmd.AddCommand(nodeGetCmd)
 	rootCmd.AddCommand(nodeCmd)
