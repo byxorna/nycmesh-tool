@@ -24,7 +24,7 @@ var (
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		log.Fatalf("Error: %w", err)
+		log.Fatalf("Error: %v", err)
 	}
 }
 

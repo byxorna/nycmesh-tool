@@ -38,7 +38,7 @@ var deviceGetCmd = &cobra.Command{
 
 		devices, err := a.Devices(args...)
 		if err != nil {
-			return fmt.Errorf("error getting device %s: %w", deviceID, err)
+			return fmt.Errorf("error getting device %d: %w", deviceID, err)
 		}
 
 		d, ok := devices[deviceID]
