@@ -8,6 +8,7 @@ At the moment, the tool is pretty sparse. It provides the top level `nycmesh-too
 
 - `uisp` - Full UISP API CLI
 - `node` - Display nodes from https://api.nycmesh.net/v1/nodes
+- `device` - Display devices from https://api.nycmesh.net/v1/nodes, interleaved with extended UISP data
 - `map` - Open up nodes on a map from the command line
 - `cache` - manipulate a simple on-disk cache for things like API responses, for offline access to inventory
 

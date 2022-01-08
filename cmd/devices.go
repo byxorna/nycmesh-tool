@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"sort"
+	"strconv"
 
 	"github.com/byxorna/nycmesh-tool/pkg/app"
 	"github.com/spf13/cobra"
@@ -28,19 +29,22 @@ var deviceGetCmd = &cobra.Command{
 		if len(args) != 1 || args[0] == "" {
 			return fmt.Errorf("one device identifier argument is required")
 		}
-
-		deviceID := args[0]
-
-		devices, err := a.Devices(deviceID)
+		deviceID, err := strconv.Atoi(args[0])
 		if err != nil {
-			return err
+			return fmt.Errorf("%s is not a valid device identifier: %w", args[0], err)
 		}
 
-		if len(devices) == 0 {
-			return fmt.Errorf("device %s not found", deviceID)
+		devices, err := a.Devices(args...)
+		if err != nil {
+			return fmt.Errorf("error getting device %s: %w", deviceID, err)
 		}
 
-		pp, err := json.MarshalIndent(devices[0], "", "\t")
+		d, ok := devices[deviceID]
+		if !ok {
+			return fmt.Errorf("device %d not found", deviceID)
+		}
+
+		pp, err := json.MarshalIndent(d, "", "\t")
 		if err != nil {
 			return err
 		}
@@ -71,7 +75,7 @@ var deviceListCmd = &cobra.Command{
 		}
 		sort.Ints(idOrder)
 
-		headers := []string{"ID", "Node", "Model", "Mfg", "Name", "Status"}
+		headers := []string{"ID", "Node", "SSID", "Model", "Mfg", "Name", "Status", "Freq", "ChWidth"}
 		data := make([][]string, len(devices))
 
 		for _, id := range idOrder {
@@ -79,10 +83,13 @@ var deviceListCmd = &cobra.Command{
 			data = append(data, []string{
 				fmt.Sprintf("%d", dev.ID),
 				fmt.Sprintf("%d", dev.NodeID),
+				fmt.Sprintf("%s", dev.SSID),
 				fmt.Sprintf("%s", dev.Type.Name),
 				fmt.Sprintf("%s", dev.Type.Manufacturer),
 				fmt.Sprintf("%s", dev.Name),
 				fmt.Sprintf("%s", dev.Status),
+				"",
+				"",
 			})
 		}
 

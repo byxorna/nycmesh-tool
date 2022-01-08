@@ -31,7 +31,7 @@ func (a *App) Devices(ids ...string) (map[int]*nycmesh.Device, error) {
 		for _, d := range n.Devices {
 			locald := d
 			locald.NodeID = n.ID
-			if len(idFilter) > 0 && sort.SearchInts(idFilter, n.ID) == len(idFilter) {
+			if len(idFilter) > 0 && sort.SearchInts(idFilter, d.ID) == len(idFilter) {
 				// if there is a filter provided, and the device's ID is not in the filter
 				// (i.e. return is len(idFilter)), then do not add to map
 				continue
