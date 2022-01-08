@@ -7,7 +7,9 @@ import (
 	"strconv"
 
 	"github.com/byxorna/nycmesh-tool/pkg/app"
+	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // nodeCmd represents the node command
@@ -81,8 +83,10 @@ var nodeListCmd = &cobra.Command{
 		}
 		sort.Ints(nodeNumbers)
 
+		orderedNodes := []*nycmesh.Node{}
 		for _, nn := range nodeNumbers {
 			n := nodes[nn]
+			orderedNodes = append(orderedNodes, &n)
 			data = append(data, []string{
 				fmt.Sprintf("%d", n.ID),
 				n.GeoURI(),
@@ -93,7 +97,19 @@ var nodeListCmd = &cobra.Command{
 			})
 		}
 
-		a.Tableify(headers, data)
+		switch viper.GetString("core.format") {
+		case "json":
+			pp, err := json.MarshalIndent(orderedNodes, "", "\t")
+			if err != nil {
+				return err
+			}
+			fmt.Printf("%s\n", pp)
+		case "table":
+			a.Tableify(headers, data)
+		default:
+			return fmt.Errorf("unsupported format: %s", viper.GetString("core.format"))
+		}
+
 		return nil
 	},
 }

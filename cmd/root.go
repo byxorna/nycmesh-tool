@@ -30,7 +30,8 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-
+	rootCmd.PersistentFlags().StringP("format", "f", "json", "output format (table or json)")
+	viper.BindPFlag("core.format", rootCmd.PersistentFlags().Lookup("format"))
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.nycmesh-tool.yaml)")
 }
 

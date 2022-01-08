@@ -7,7 +7,9 @@ import (
 	"strconv"
 
 	"github.com/byxorna/nycmesh-tool/pkg/app"
+	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var deviceCmd = &cobra.Command{
@@ -78,8 +80,10 @@ var deviceListCmd = &cobra.Command{
 		headers := []string{"ID", "Node", "SSID", "Model", "Mfg", "Name", "Status", "Freq", "ChWidth"}
 		data := make([][]string, len(devices))
 
+		orderedDevs := []*nycmesh.Device{}
 		for _, id := range idOrder {
 			dev := devices[id]
+			orderedDevs = append(orderedDevs, dev)
 			data = append(data, []string{
 				fmt.Sprintf("%d", dev.ID),
 				fmt.Sprintf("%d", dev.NodeID),
@@ -93,7 +97,19 @@ var deviceListCmd = &cobra.Command{
 			})
 		}
 
-		a.Tableify(headers, data)
+		switch viper.GetString("core.format") {
+		case "json":
+			pp, err := json.MarshalIndent(orderedDevs, "", "\t")
+			if err != nil {
+				return err
+			}
+			fmt.Printf("%s\n", pp)
+		case "table":
+			a.Tableify(headers, data)
+		default:
+			return fmt.Errorf("unsupported format: %s", viper.GetString("core.format"))
+		}
+
 		return nil
 	},
 }
