@@ -3,7 +3,6 @@ package app
 import (
 	"fmt"
 	"log"
-	"sort"
 	"strconv"
 
 	"github.com/byxorna/nycmesh-tool/client/devices"
@@ -16,22 +15,22 @@ func (a *App) Devices(ids ...string) (map[int]*nycmesh.Device, error) {
 		return nil, fmt.Errorf("unable to fetch devices: %w", err)
 	}
 
-	idFilter := []int{}
+	idFilter := map[int]interface{}{}
 	for _, idarg := range ids {
 		n, err := strconv.Atoi(idarg)
 		if err != nil {
 			return nil, fmt.Errorf("%s is not a valid device identifier: %w", idarg, err)
 		}
-		idFilter = append(idFilter, n)
+		idFilter[n] = true
 	}
-	sort.Ints(idFilter)
 
 	devs := map[int]*nycmesh.Device{}
 	for _, n := range nodes {
 		for _, d := range n.Devices {
 			locald := d
 			locald.NodeID = n.ID
-			if len(idFilter) > 0 && sort.SearchInts(idFilter, d.ID) == len(idFilter) {
+			_, matchesFilter := idFilter[d.ID]
+			if len(idFilter) > 0 && !matchesFilter {
 				// if there is a filter provided, and the device's ID is not in the filter
 				// (i.e. return is len(idFilter)), then do not add to map
 				continue

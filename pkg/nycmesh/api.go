@@ -125,7 +125,7 @@ func (c *Client) Devices() (map[int]*Device, error) {
 
 // TODO: this function should get cleaned up, we should not be storing
 // nodes.json as a single blob. Instead, store each node, and a list of node IDs.
-func (c *Client) Nodes() (map[int]Node, error) {
+func (c *Client) Nodes(ids ...int) (map[int]Node, error) {
 	var body []byte
 	var err error
 
@@ -151,8 +151,17 @@ func (c *Client) Nodes() (map[int]Node, error) {
 		return nil, fmt.Errorf("unable to decode nodes: %w\n%s", err, body)
 	}
 
+	idFilter := map[int]bool{}
+	for _, id := range ids {
+		idFilter[id] = true
+	}
+
 	m := map[int]Node{}
 	for _, node := range nodes {
+		if _, matchesFilter := idFilter[node.ID]; !matchesFilter && len(idFilter) > 0 {
+			// only return nodes that match provided filter if necessary
+			continue
+		}
 		m[node.ID] = node
 	}
 

@@ -75,7 +75,16 @@ var nodeListCmd = &cobra.Command{
 			return err
 		}
 
-		nodes, err := a.Nodes()
+		idArgs := []int{}
+		for _, arg := range args {
+			id, err := strconv.Atoi(arg)
+			if err != nil {
+				return fmt.Errorf("%s is not a valid node id: %w", arg, err)
+			}
+			idArgs = append(idArgs, id)
+		}
+
+		nodes, err := a.Nodes(idArgs...)
 		if err != nil {
 			return err
 		}
