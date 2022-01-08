@@ -27,7 +27,7 @@ func New(cmd *cobra.Command, args []string) (*App, error) {
 	}
 	a.diskCache = diskCache
 
-	c, err := cli.NewClient(cmd, args)
+	c, err := cli.NewClientCustom(cmd, args)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create cli: %w", err)
 	}

@@ -16,7 +16,6 @@ import (
 
 	"github.com/go-openapi/runtime"
 	httptransport "github.com/go-openapi/runtime/client"
-	"github.com/go-openapi/strfmt"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -46,32 +45,33 @@ func logDebugf(format string, v ...interface{}) {
 var maxDepth int = 5
 
 // makeClient constructs a client object
-func makeClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
-	hostname := viper.GetString("hostname")
-	scheme := viper.GetString("scheme")
-
-	r := httptransport.New(hostname, client.DefaultBasePath, []string{scheme})
-	r.SetDebug(debug)
-	// set custom producer and consumer to use the default ones
-
-	r.Consumers["application/json"] = runtime.JSONConsumer()
-
-	r.Producers["application/json"] = runtime.JSONProducer()
-
-	auth, err := makeAuthInfoWriter(cmd)
-	if err != nil {
-		return nil, err
-	}
-	r.DefaultAuthentication = auth
-
-	appCli := client.New(r, strfmt.Default)
-	logDebugf("Server url: %v://%v", scheme, hostname)
-	return appCli, nil
-}
+// disabled @byxorna, see custom.go
+//func makeClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
+//	hostname := viper.GetString("hostname")
+//	scheme := viper.GetString("scheme")
+//
+//	r := httptransport.New(hostname, client.DefaultBasePath, []string{scheme})
+//	r.SetDebug(debug)
+//	// set custom producer and consumer to use the default ones
+//
+//	r.Consumers["application/json"] = runtime.JSONConsumer()
+//
+//	r.Producers["application/json"] = runtime.JSONProducer()
+//
+//	auth, err := makeAuthInfoWriter(cmd)
+//	if err != nil {
+//		return nil, err
+//	}
+//	r.DefaultAuthentication = auth
+//
+//	appCli := client.New(r, strfmt.Default)
+//	logDebugf("Server url: %v://%v", scheme, hostname)
+//	return appCli, nil
+//}
 
 // MakeRootCmd returns the root cmd
 func MakeRootCmd() (*cobra.Command, error) {
-	//cobra.OnInitialize(initViperConfigs) // disabled by @byxorna
+	cobra.OnInitialize(initViperConfigs)
 
 	// Use executable name as the command name
 	rootCmd := &cobra.Command{

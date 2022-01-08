@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client"
 	"github.com/go-openapi/runtime"
@@ -11,8 +12,8 @@ import (
 	"github.com/spf13/viper"
 )
 
-func NewClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
-	return makeClientCustom(cmd, args)
+func NewClientCustom(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
+	return makeClient(cmd, args)
 }
 
 func MakeRootCmdCustom(use string, short string) (*cobra.Command, error) {
@@ -20,21 +21,41 @@ func MakeRootCmdCustom(use string, short string) (*cobra.Command, error) {
 		Use:   use,
 		Short: short,
 	}
+	var err error
 
-	bindFlags(rootCmd)
+	cmd := bindFlags(rootCmd)
 
-	if _, err := registerOperations(rootCmd); err != nil {
+	if cmd, err = registerOperations(rootCmd); err != nil {
 		return nil, err
 	}
 
-	return rootCmd, nil
+	return cmd, nil
 }
 
-func bindFlags(rootCmd *cobra.Command) {
-	//cobra.OnInitialize(initViperConfigs) // disabled by @byxorna
+func initViperConfigsCustom() {
+
+	// Find home directory.
+	home, err := os.UserHomeDir()
+	cobra.CheckErr(err)
+
+	viper.AddConfigPath(home)
+	viper.AddConfigPath(".")
+	viper.SetConfigType("yaml")
+	viper.SetConfigName(".nycmesh-tool")
+
+	viper.AutomaticEnv() // read in environment variables that match
+
+	// If a config file is found, read it in.
+	if err := viper.ReadInConfig(); err == nil {
+		fmt.Fprintln(os.Stderr, "Using (uisp) config file:", viper.ConfigFileUsed())
+	}
+}
+
+func bindFlags(rootCmd *cobra.Command) *cobra.Command {
+	//cobra.OnInitialize(initViperConfigsCustom)
 
 	// register basic flags
-	rootCmd.PersistentFlags().String("hostname", client.DefaultHost, "hostname of the service")
+	rootCmd.PersistentFlags().String("hostame", "uisp.mesh", "hostname of the service")
 	viper.BindPFlag("uisp.hostname", rootCmd.PersistentFlags().Lookup("hostname"))
 	rootCmd.PersistentFlags().String("scheme", client.DefaultSchemes[0], fmt.Sprintf("Choose from: %v", client.DefaultSchemes))
 	viper.BindPFlag("uisp.scheme", rootCmd.PersistentFlags().Lookup("scheme"))
@@ -51,6 +72,8 @@ func bindFlags(rootCmd *cobra.Command) {
 	rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "config file path")
 	// configure dry run flag
 	rootCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", false, "do not send the request to server")
+
+	return rootCmd
 }
 
 // registerAuthInoWriterFlagsCustom registers all flags needed to perform authentication
@@ -65,8 +88,8 @@ func registerAuthInoWriterFlagsCustom(cmd *cobra.Command) error {
 func makeAuthInfoWriterCustom(cmd *cobra.Command) (runtime.ClientAuthInfoWriter, error) {
 	auths := []runtime.ClientAuthInfoWriter{}
 	/*x-auth-token User authorization token*/
-	if viper.IsSet("x-auth-token") {
-		XAuthTokenKey := viper.GetString("x-auth-token")
+	if viper.IsSet("uisp.x-auth-token") {
+		XAuthTokenKey := viper.GetString("uisp.x-auth-token")
 		auths = append(auths, httptransport.APIKeyAuth("x-auth-token", "header", XAuthTokenKey))
 	}
 	if len(auths) == 0 {
@@ -221,8 +244,8 @@ func registerOperations(rootCmd *cobra.Command) (*cobra.Command, error) {
 	return rootCmd, nil
 }
 
-// makeClientCustom constructs a client object
-func makeClientCustom(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
+// makeClient constructs a client object
+func makeClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
 	hostname := viper.GetString("uisp.hostname")
 	scheme := viper.GetString("uisp.scheme")
 
