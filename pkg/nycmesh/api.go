@@ -21,6 +21,7 @@ var (
 // wrapper around https://github.com/meshcenter/mesh-api
 type Client struct {
 	http.Client
+	// TODO: move this cache to pkg/app.Application
 	diskCache cache.DiskCache
 }
 
