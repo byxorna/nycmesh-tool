@@ -19162,7 +19162,7 @@ definitions:
           - $ref: '#/x-alt-definitions/site'
       started:
         type: string
-        format: date
+        format: date-time
       status:
         type: string
         description: Status of the station.
@@ -19202,7 +19202,7 @@ definitions:
         type: string
       updated:
         type: string
-        format: date
+        format: date-time
     required:
       - id
   latestBackup:
@@ -19211,7 +19211,7 @@ definitions:
     properties:
       timestamp:
         type: string
-        format: date
+        format: date-time
         description: Latest backup timestamp.
         example: '2018-11-14T15:20:32.004Z'
       id:
@@ -19242,7 +19242,7 @@ definitions:
         maxLength: 300
       restartTimestamp:
         type: string
-        format: date
+        format: date-time
         example: '2018-11-14T15:20:32.004Z'
     required:
       - failedMessageDecryption
@@ -19323,7 +19323,7 @@ definitions:
         description: Current cpu load.
       createdAt:
         type: string
-        format: date
+        format: date-time
       distance:
         type: number
         description: >-
@@ -19341,7 +19341,7 @@ definitions:
         description: TRUE if device is in location mode.
       lastSeen:
         type: string
-        format: date
+        format: date-time
         description: Last seen timestamp in ISO format.
         example: '2018-11-14T15:20:32.004Z'
       powerStatus:
@@ -20300,7 +20300,7 @@ definitions:
           - $ref: '#/x-alt-definitions/site'
       started:
         type: string
-        format: date
+        format: date-time
       status:
         type: string
         description: Status of the station.
@@ -20340,7 +20340,7 @@ definitions:
         type: string
       updated:
         type: string
-        format: date
+        format: date-time
     required:
       - id
   rxChain:
@@ -20677,7 +20677,7 @@ definitions:
         example: 2
       timestamp:
         type: string
-        format: date
+        format: date-time
         example: '2018-11-14T15:20:32.004Z'
       txBytes:
         type: integer
@@ -21407,7 +21407,7 @@ definitions:
           guid: true
       lastTrafficSeen:
         type: string
-        format: date
+        format: date-time
         description: Date and time of last traffic in ISO format
         example: '2019-08-22T09:49:24.675Z'
       netflowStatus:
@@ -21774,7 +21774,7 @@ definitions:
           - $ref: '#/x-alt-definitions/site'
       started:
         type: string
-        format: date
+        format: date-time
       status:
         type: string
         description: Status of the station.
@@ -21814,7 +21814,7 @@ definitions:
         type: string
       updated:
         type: string
-        format: date
+        format: date-time
     required:
       - id
   deviceMetadata:
@@ -21875,7 +21875,7 @@ definitions:
           guid: true
       timestamp:
         type: string
-        format: date
+        format: date-time
         description: Date and time of the log creation.
         example: '2020-05-12T10:19:10.056Z'
       message:
@@ -22306,10 +22306,10 @@ definitions:
         type: number
       updatedAt:
         type: string
-        format: date
+        format: date-time
       createdAt:
         type: string
-        format: date
+        format: date-time
     required:
       - id
       - deviceId
@@ -22374,10 +22374,10 @@ definitions:
         $ref: '#/definitions/terrain'
       updatedAt:
         type: string
-        format: date
+        format: date-time
       createdAt:
         type: string
-        format: date
+        format: date-time
     required:
       - id
       - apDeviceId
@@ -22428,7 +22428,7 @@ definitions:
           - inactive
       updated:
         type: string
-        format: date
+        format: date-time
         description: Time when the site was last updated.
         example: '2018-11-14T15:20:32.004Z'
       suspended:
@@ -22503,7 +22503,7 @@ definitions:
           - inactive
       updated:
         type: string
-        format: date
+        format: date-time
         description: Time when the site was last updated.
         example: '2018-11-14T15:20:32.004Z'
       suspended:
@@ -22986,7 +22986,7 @@ definitions:
           - 7
       activeFrom:
         type: string
-        format: date
+        format: date-time
         description: Time when the service was activated.
         example: '2018-11-14T15:20:32.004Z'
       tariffId:
@@ -23209,26 +23209,26 @@ definitions:
         example: Mobile App
       createdAt:
         type: string
-        format: date
+        format: date-time
         description: Time when this token was created.
         example: '2011-10-03T14:48:00.000Z'
       lastUsed:
         type: string
-        format: date
+        format: date-time
         description: >-
           Time when this token was last used. If null then it has not been used
           yet.
         example: '2011-10-04T14:48:00.000Z'
       expiresAt:
         type: string
-        format: date
+        format: date-time
         description: >-
           Time when this token will expire unless it is renewed. If null than it
           will never expire.
         example: '2011-10-05T14:48:00.000Z'
       maxExpiresAt:
         type: string
-        format: date
+        format: date-time
         description: >-
           Latest time when the token will expire. If null then it will never
           expire.
@@ -23294,7 +23294,7 @@ definitions:
         maximum: 180
       updated:
         type: string
-        format: date
+        format: date-time
         description: Last time the location was updated.
         example: '2018-11-14T15:20:32.004Z'
     required:
@@ -23369,7 +23369,7 @@ definitions:
         example: true
       lastNewsSeenDate:
         type: string
-        format: date
+        format: date-time
         description: Last news check time in ISO format.
         example: '2018-11-14T15:20:32.004Z'
       lastReleaseNotesSeen:
@@ -23399,7 +23399,7 @@ definitions:
         example: true
       updated:
         type: string
-        format: date
+        format: date-time
         description: Last time the user was updated.
         example: '2018-11-14T15:20:32.004Z'
     required:
@@ -23769,12 +23769,12 @@ definitions:
             cidr: forbidden
       firstSeen:
         type: string
-        format: date
+        format: date-time
         description: First time this IP address was seen as a ISO 8601.
         example: '2011-10-05T14:48:00.000Z'
       lastSeen:
         type: string
-        format: date
+        format: date-time
         description: Last time this IP address was seen as a ISO 8601.
         example: '2012-10-05T14:48:00.000Z'
       upload:
@@ -24111,12 +24111,12 @@ definitions:
         minimum: 0
       updated:
         type: string
-        format: date
+        format: date-time
         description: Last time the installation device was updated.
         example: '2020-01-14T15:20:32.004Z'
       created:
         type: string
-        format: date
+        format: date-time
         description: Last time the installation device was updated.
         example: '2020-01-14T15:20:32.004Z'
     required:
@@ -24181,7 +24181,7 @@ definitions:
         $ref: '#/definitions/user%203'
       created:
         type: string
-        format: date
+        format: date-time
         description: Time when the chat message was created.
         example: '2020-01-14T15:20:32.004Z'
     required:
@@ -24212,17 +24212,17 @@ definitions:
         $ref: '#/definitions/chat'
       created:
         type: string
-        format: date
+        format: date-time
         description: Time when the installation was created.
         example: '2020-01-14T15:20:32.004Z'
       updated:
         type: string
-        format: date
+        format: date-time
         description: Time when the installation was updated.
         example: '2020-01-14T15:20:32.004Z'
       finished:
         type: string
-        format: date
+        format: date-time
         description: >-
           Time when the installation was finished. Null if the installation is
           not finished yet.
@@ -24297,7 +24297,7 @@ definitions:
           - manual
       createdAt:
         type: string
-        format: date
+        format: date-time
     required:
       - id
       - state
@@ -25572,7 +25572,7 @@ definitions:
         example: '135'
       deletedAt:
         type: string
-        format: date
+        format: date-time
         description: Time when the site was deleted in ISO format.
         example: '2018-11-14T15:20:32.004Z'
     required:
@@ -25638,7 +25638,7 @@ definitions:
           - fatal
       expiresAt:
         type: string
-        format: date
+        format: date-time
     required:
       - verbosity
       - expiresAt
@@ -27359,7 +27359,7 @@ definitions:
         example: Not enough disk space.
       time:
         type: string
-        format: date
+        format: date-time
         description: Time when the error occurred.
         example: '2019-02-07T10:18:01.000Z'
       metadata:
@@ -28604,7 +28604,7 @@ definitions:
           - UNKNOWN
       updated:
         type: string
-        format: date
+        format: date-time
       ipAddress:
         type: string
         x-format:
@@ -30056,7 +30056,7 @@ definitions:
         type: string
       timestamp:
         type: string
-        format: date
+        format: date-time
       firmwareVersion:
         $ref: '#/definitions/interface'
         x-alternatives:
@@ -30142,7 +30142,7 @@ definitions:
         description: blog post id in Ubiquiti blog
       publicationDate:
         type: string
-        format: date
+        format: date-time
         description: publication date on Ubiquiti blog
       read:
         type: boolean
@@ -30478,7 +30478,7 @@ definitions:
         type: boolean
       createdAt:
         type: string
-        format: date
+        format: date-time
       deviceId:
         type: string
         example: f7ac9cad-ea28-4390-93c8-7add010e8ee3
@@ -30518,7 +30518,7 @@ definitions:
         type: boolean
       createdAt:
         type: string
-        format: date
+        format: date-time
   Device's credentials with flags:
     type: object
     properties:
@@ -34613,26 +34613,26 @@ definitions:
         example: Mobile App
       createdAt:
         type: string
-        format: date
+        format: date-time
         description: Time when this token was created.
         example: '2011-10-03T14:48:00.000Z'
       lastUsed:
         type: string
-        format: date
+        format: date-time
         description: >-
           Time when this token was last used. If null then it has not been used
           yet.
         example: '2011-10-04T14:48:00.000Z'
       expiresAt:
         type: string
-        format: date
+        format: date-time
         description: >-
           Time when this token will expire unless it is renewed. If null than it
           will never expire.
         example: '2011-10-05T14:48:00.000Z'
       maxExpiresAt:
         type: string
-        format: date
+        format: date-time
         description: >-
           Latest time when the token will expire. If null then it will never
           expire.
@@ -36642,10 +36642,10 @@ definitions:
         $ref: '#/definitions/terrain'
       updatedAt:
         type: string
-        format: date
+        format: date-time
       createdAt:
         type: string
-        format: date
+        format: date-time
     required:
       - id
       - apDeviceId
@@ -36748,10 +36748,10 @@ definitions:
           - $ref: '#/x-alt-definitions/SimulationLink'
       updatedAt:
         type: string
-        format: date
+        format: date-time
       createdAt:
         type: string
-        format: date
+        format: date-time
     required:
       - id
       - deviceId
@@ -37324,7 +37324,7 @@ definitions:
         example: true
       lastNewsSeenDate:
         type: string
-        format: date
+        format: date-time
         description: Last news check time in ISO format.
         example: '2018-11-14T15:20:32.004Z'
       lastReleaseNotesSeen:
@@ -37354,7 +37354,7 @@ definitions:
         example: true
       updated:
         type: string
-        format: date
+        format: date-time
         description: Last time the user was updated.
         example: '2018-11-14T15:20:32.004Z'
     required:
@@ -41009,7 +41009,7 @@ definitions:
           - inactive
       updated:
         type: string
-        format: date
+        format: date-time
         description: Time when the site was last updated.
         example: '2018-11-14T15:20:32.004Z'
       suspended:
@@ -43196,7 +43196,7 @@ x-alt-definitions:
         maximum: 180
       updated:
         type: string
-        format: date
+        format: date-time
         description: Last time the location was updated.
         example: '2018-11-14T15:20:32.004Z'
     required:
@@ -43271,7 +43271,7 @@ x-alt-definitions:
         example: true
       lastNewsSeenDate:
         type: string
-        format: date
+        format: date-time
         description: Last news check time in ISO format.
         example: '2018-11-14T15:20:32.004Z'
       lastReleaseNotesSeen:
@@ -43301,7 +43301,7 @@ x-alt-definitions:
         example: true
       updated:
         type: string
-        format: date
+        format: date-time
         description: Last time the user was updated.
         example: '2018-11-14T15:20:32.004Z'
     required:
@@ -45003,7 +45003,7 @@ x-alt-definitions:
           - $ref: '#/x-alt-definitions/site'
       started:
         type: string
-        format: date
+        format: date-time
       status:
         type: string
         description: Status of the station.
@@ -45043,7 +45043,7 @@ x-alt-definitions:
         type: string
       updated:
         type: string
-        format: date
+        format: date-time
     required:
       - id
   latestBackup:
@@ -45052,7 +45052,7 @@ x-alt-definitions:
     properties:
       timestamp:
         type: string
-        format: date
+        format: date-time
         description: Latest backup timestamp.
         example: '2018-11-14T15:20:32.004Z'
       id:
@@ -45083,7 +45083,7 @@ x-alt-definitions:
         maxLength: 300
       restartTimestamp:
         type: string
-        format: date
+        format: date-time
         example: '2018-11-14T15:20:32.004Z'
     required:
       - failedMessageDecryption
@@ -45171,7 +45171,7 @@ x-alt-definitions:
         description: Current cpu load.
       createdAt:
         type: string
-        format: date
+        format: date-time
       distance:
         type: number
         description: >-
@@ -45189,7 +45189,7 @@ x-alt-definitions:
         description: TRUE if device is in location mode.
       lastSeen:
         type: string
-        format: date
+        format: date-time
         description: Last seen timestamp in ISO format.
         example: '2018-11-14T15:20:32.004Z'
       powerStatus:
@@ -46148,7 +46148,7 @@ x-alt-definitions:
           - $ref: '#/x-alt-definitions/site'
       started:
         type: string
-        format: date
+        format: date-time
       status:
         type: string
         description: Status of the station.
@@ -46188,7 +46188,7 @@ x-alt-definitions:
         type: string
       updated:
         type: string
-        format: date
+        format: date-time
     required:
       - id
   rxChain:
@@ -46525,7 +46525,7 @@ x-alt-definitions:
         example: 2
       timestamp:
         type: string
-        format: date
+        format: date-time
         example: '2018-11-14T15:20:32.004Z'
       txBytes:
         type: integer
@@ -46757,7 +46757,7 @@ x-alt-definitions:
           - inactive
       updated:
         type: string
-        format: date
+        format: date-time
         description: Time when the site was last updated.
         example: '2018-11-14T15:20:32.004Z'
       suspended:
@@ -46832,7 +46832,7 @@ x-alt-definitions:
           - inactive
       updated:
         type: string
-        format: date
+        format: date-time
         description: Time when the site was last updated.
         example: '2018-11-14T15:20:32.004Z'
       suspended:
@@ -47315,7 +47315,7 @@ x-alt-definitions:
           - 7
       activeFrom:
         type: string
-        format: date
+        format: date-time
         description: Time when the service was activated.
         example: '2018-11-14T15:20:32.004Z'
       tariffId:
@@ -47868,10 +47868,10 @@ x-alt-definitions:
         $ref: '#/x-alt-definitions/terrain'
       updatedAt:
         type: string
-        format: date
+        format: date-time
       createdAt:
         type: string
-        format: date
+        format: date-time
     required:
       - id
       - apDeviceId
@@ -47952,7 +47952,7 @@ x-alt-definitions:
         example: true
       lastNewsSeenDate:
         type: string
-        format: date
+        format: date-time
         description: Last news check time in ISO format.
         example: '2018-11-14T15:20:32.004Z'
       lastReleaseNotesSeen:
@@ -47982,7 +47982,7 @@ x-alt-definitions:
         example: true
       updated:
         type: string
-        format: date
+        format: date-time
         description: Last time the user was updated.
         example: '2018-11-14T15:20:32.004Z'
     required:
