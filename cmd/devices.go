@@ -12,6 +12,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+var filterNodeID int
+
 var deviceCmd = &cobra.Command{
 	Use:     "device",
 	Short:   "interact with devices",
@@ -83,7 +85,10 @@ var deviceListCmd = &cobra.Command{
 		orderedDevs := []*nycmesh.Device{}
 		for _, id := range idOrder {
 			dev := devices[id]
-			if status == StatusAny || status == dev.Status {
+			matchID := status == StatusAny || status == dev.Status
+			matchNode := filterNodeID == 0 || filterNodeID == dev.NodeID
+
+			if matchID && matchNode {
 				orderedDevs = append(orderedDevs, dev)
 				data = append(data, []string{
 					fmt.Sprintf("%d", dev.ID),
@@ -117,8 +122,10 @@ var deviceListCmd = &cobra.Command{
 }
 
 func init() {
-	deviceCmd.PersistentFlags().StringVar(&status, "status", StatusActive, "filter for status")
 	deviceCmd.AddCommand(deviceListCmd)
 	deviceCmd.AddCommand(deviceGetCmd)
 	rootCmd.AddCommand(deviceCmd)
+
+	deviceCmd.PersistentFlags().StringVar(&status, "status", StatusActive, "filter for status")
+	deviceListCmd.Flags().IntVar(&filterNodeID, "node", 0, "only show devices for the given node ID")
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/byxorna/nycmesh-tool/pkg/version"
 	"github.com/spf13/cobra"
@@ -23,6 +24,7 @@ var (
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
+
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatalf("Error: %v", err)
 	}
@@ -57,4 +59,17 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+func GetIntSlice(i *[]string) ([]int, error) {
+	var arr = *i
+	ret := []int{}
+	for _, str := range arr {
+		one_int, err := strconv.Atoi(str)
+		if err != nil {
+			return nil, fmt.Errorf("%s is not a valid ID format: %w", str, err)
+		}
+		ret = append(ret, one_int)
+	}
+	return ret, nil
 }
