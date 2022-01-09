@@ -33,10 +33,6 @@ func registerModelUnmsVersionFlags(depth int, cmdPrefix string, cmd *cobra.Comma
 		return err
 	}
 
-	if err := registerUnmsVersionPrerelease(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
 	if err := registerUnmsVersionUpgradeRecommendedToVersion(depth, cmdPrefix, cmd); err != nil {
 		return err
 	}
@@ -128,16 +124,6 @@ func registerUnmsVersionPatch(depth int, cmdPrefix string, cmd *cobra.Command) e
 	return nil
 }
 
-func registerUnmsVersionPrerelease(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	// warning: prerelease Prerelease3 array type is not supported by go-swagger cli yet
-
-	return nil
-}
-
 func registerUnmsVersionUpgradeRecommendedToVersion(depth int, cmdPrefix string, cmd *cobra.Command) error {
 	if depth > maxDepth {
 		return nil
@@ -186,12 +172,6 @@ func retrieveModelUnmsVersionFlags(depth int, m *models.UnmsVersion, cmdPrefix s
 		return err, false
 	}
 	retAdded = retAdded || patchAdded
-
-	err, prereleaseAdded := retrieveUnmsVersionPrereleaseFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || prereleaseAdded
 
 	err, upgradeRecommendedToVersionAdded := retrieveUnmsVersionUpgradeRecommendedToVersionFlags(depth, m, cmdPrefix, cmd)
 	if err != nil {
@@ -309,20 +289,6 @@ func retrieveUnmsVersionPatchFlags(depth int, m *models.UnmsVersion, cmdPrefix s
 		m.Patch = &patchFlagValue
 
 		retAdded = true
-	}
-
-	return nil, retAdded
-}
-
-func retrieveUnmsVersionPrereleaseFlags(depth int, m *models.UnmsVersion, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	prereleaseFlagName := fmt.Sprintf("%v.prerelease", cmdPrefix)
-	if cmd.Flags().Changed(prereleaseFlagName) {
-		// warning: prerelease array type Prerelease3 is not supported by go-swagger cli yet
 	}
 
 	return nil, retAdded

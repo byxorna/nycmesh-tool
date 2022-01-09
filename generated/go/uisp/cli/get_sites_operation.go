@@ -78,7 +78,7 @@ func registerOperationSitesGetSitesParamFlags(cmd *cobra.Command) error {
 	if err := registerOperationSitesGetSitesDeviceIDParamFlags("", cmd); err != nil {
 		return err
 	}
-	if err := registerOperationSitesGetSitesIDParamFlags_FIX("", cmd); err != nil {
+	if err := registerOperationSitesGetSitesIDParamFlags("", cmd); err != nil {
 		return err
 	}
 	if err := registerOperationSitesGetSitesIPParamFlags("", cmd); err != nil {
@@ -113,7 +113,7 @@ func registerOperationSitesGetSitesDeviceIDParamFlags(cmdPrefix string, cmd *cob
 
 	return nil
 }
-func registerOperationSitesGetSitesIDParamFlags_FIX(cmdPrefix string, cmd *cobra.Command) error {
+func registerOperationSitesGetSitesIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
 
 	idDescription := `Return only sites with these IDs.`
 

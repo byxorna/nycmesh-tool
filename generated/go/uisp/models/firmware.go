@@ -38,9 +38,6 @@ type Firmware struct {
 	// Required: true
 	Patch *float64 `json:"patch"`
 
-	// prerelease
-	Prerelease Prerelease1 `json:"prerelease,omitempty"`
-
 	// upgrade recommended to version
 	UpgradeRecommendedToVersion string `json:"upgradeRecommendedToVersion,omitempty"`
 }
@@ -58,10 +55,6 @@ func (m *Firmware) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validatePatch(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validatePrerelease(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -98,48 +91,8 @@ func (m *Firmware) validatePatch(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Firmware) validatePrerelease(formats strfmt.Registry) error {
-	if swag.IsZero(m.Prerelease) { // not required
-		return nil
-	}
-
-	if err := m.Prerelease.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("prerelease")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
-			return ce.ValidateName("prerelease")
-		}
-		return err
-	}
-
-	return nil
-}
-
-// ContextValidate validate this firmware based on the context it is used
+// ContextValidate validates this firmware based on context it is used
 func (m *Firmware) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.contextValidatePrerelease(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *Firmware) contextValidatePrerelease(ctx context.Context, formats strfmt.Registry) error {
-
-	if err := m.Prerelease.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("prerelease")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
-			return ce.ValidateName("prerelease")
-		}
-		return err
-	}
-
 	return nil
 }
 

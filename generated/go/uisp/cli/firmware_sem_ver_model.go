@@ -33,10 +33,6 @@ func registerModelFirmwareSemVerFlags(depth int, cmdPrefix string, cmd *cobra.Co
 		return err
 	}
 
-	if err := registerFirmwareSemVerPrerelease(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
 	if err := registerFirmwareSemVerUpgradeRecommendedToVersion(depth, cmdPrefix, cmd); err != nil {
 		return err
 	}
@@ -128,16 +124,6 @@ func registerFirmwareSemVerPatch(depth int, cmdPrefix string, cmd *cobra.Command
 	return nil
 }
 
-func registerFirmwareSemVerPrerelease(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	// warning: prerelease Prerelease2 array type is not supported by go-swagger cli yet
-
-	return nil
-}
-
 func registerFirmwareSemVerUpgradeRecommendedToVersion(depth int, cmdPrefix string, cmd *cobra.Command) error {
 	if depth > maxDepth {
 		return nil
@@ -186,12 +172,6 @@ func retrieveModelFirmwareSemVerFlags(depth int, m *models.FirmwareSemVer, cmdPr
 		return err, false
 	}
 	retAdded = retAdded || patchAdded
-
-	err, prereleaseAdded := retrieveFirmwareSemVerPrereleaseFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || prereleaseAdded
 
 	err, upgradeRecommendedToVersionAdded := retrieveFirmwareSemVerUpgradeRecommendedToVersionFlags(depth, m, cmdPrefix, cmd)
 	if err != nil {
@@ -309,20 +289,6 @@ func retrieveFirmwareSemVerPatchFlags(depth int, m *models.FirmwareSemVer, cmdPr
 		m.Patch = &patchFlagValue
 
 		retAdded = true
-	}
-
-	return nil, retAdded
-}
-
-func retrieveFirmwareSemVerPrereleaseFlags(depth int, m *models.FirmwareSemVer, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	prereleaseFlagName := fmt.Sprintf("%v.prerelease", cmdPrefix)
-	if cmd.Flags().Changed(prereleaseFlagName) {
-		// warning: prerelease array type Prerelease2 is not supported by go-swagger cli yet
 	}
 
 	return nil, retAdded

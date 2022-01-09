@@ -34,9 +34,6 @@ type Latest struct {
 	// patch
 	// Required: true
 	Patch *float64 `json:"patch"`
-
-	// prerelease
-	Prerelease Prerelease `json:"prerelease,omitempty"`
 }
 
 // Validate validates this latest
@@ -56,10 +53,6 @@ func (m *Latest) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validatePatch(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validatePrerelease(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -105,48 +98,8 @@ func (m *Latest) validatePatch(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Latest) validatePrerelease(formats strfmt.Registry) error {
-	if swag.IsZero(m.Prerelease) { // not required
-		return nil
-	}
-
-	if err := m.Prerelease.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("prerelease")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
-			return ce.ValidateName("prerelease")
-		}
-		return err
-	}
-
-	return nil
-}
-
-// ContextValidate validate this latest based on the context it is used
+// ContextValidate validates this latest based on context it is used
 func (m *Latest) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
-
-	if err := m.contextValidatePrerelease(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-func (m *Latest) contextValidatePrerelease(ctx context.Context, formats strfmt.Registry) error {
-
-	if err := m.Prerelease.ContextValidate(ctx, formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("prerelease")
-		} else if ce, ok := err.(*errors.CompositeError); ok {
-			return ce.ValidateName("prerelease")
-		}
-		return err
-	}
-
 	return nil
 }
 

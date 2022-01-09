@@ -23,7 +23,7 @@ func makeOperationSitesGetSitesIDCmd() (*cobra.Command, error) {
 		RunE:  runOperationSitesGetSitesID,
 	}
 
-	if err := registerOperationSitesGetSitesIDParamFlags(cmd); err != nil {
+	if err := registerOperationSitesGetSitesIDParamFlags_2(cmd); err != nil {
 		return nil, err
 	}
 
@@ -61,8 +61,8 @@ func runOperationSitesGetSitesID(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-// registerOperationSitesGetSitesIDParamFlags registers all flags needed to fill params
-func registerOperationSitesGetSitesIDParamFlags(cmd *cobra.Command) error {
+// registerOperationSitesGetSitesIDParamFlags_2 registers all flags needed to fill params
+func registerOperationSitesGetSitesIDParamFlags_2(cmd *cobra.Command) error {
 	if err := registerOperationSitesGetSitesIDIDParamFlags("", cmd); err != nil {
 		return err
 	}

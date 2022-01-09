@@ -45,7 +45,6 @@ func logDebugf(format string, v ...interface{}) {
 var maxDepth int = 5
 
 // makeClient constructs a client object
-// disabled @byxorna, see custom.go
 //func makeClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
 //	hostname := viper.GetString("hostname")
 //	scheme := viper.GetString("scheme")
@@ -80,18 +79,12 @@ func MakeRootCmd() (*cobra.Command, error) {
 
 	// register basic flags
 	rootCmd.PersistentFlags().String("hostname", client.DefaultHost, "hostname of the service")
-  viper.BindPFlag("uisp.hostname", rootCmd.PersistentFlags().Lookup("hostname"))
+	viper.BindPFlag("hostname", rootCmd.PersistentFlags().Lookup("hostname"))
 	rootCmd.PersistentFlags().String("scheme", client.DefaultSchemes[0], fmt.Sprintf("Choose from: %v", client.DefaultSchemes))
-  viper.BindPFlag("uisp.scheme", rootCmd.PersistentFlags().Lookup("scheme"))
-
-  //http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-  rootCmd.PersistentFlags().Bool("skip-verify-tls", false, fmt.Sprintf("sets &tls.Config{InsecureSkipVerify: true} in UISP HTTP Client"))
-  viper.BindPFlag("uisp.skip-verify-tls", rootCmd.PersistentFlags().Lookup("skip-verify-tls"))
+	viper.BindPFlag("scheme", rootCmd.PersistentFlags().Lookup("scheme"))
 
 	// configure debug flag
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "output debug logs")
-  viper.BindPFlag("uisp.debug", rootCmd.PersistentFlags().Lookup("debug"))
-
 	// configure config location
 	rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "config file path")
 	// configure dry run flag

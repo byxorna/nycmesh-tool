@@ -33,10 +33,6 @@ func registerModelCurrentFlags(depth int, cmdPrefix string, cmd *cobra.Command) 
 		return err
 	}
 
-	if err := registerCurrentPrerelease(depth, cmdPrefix, cmd); err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -124,16 +120,6 @@ func registerCurrentPatch(depth int, cmdPrefix string, cmd *cobra.Command) error
 	return nil
 }
 
-func registerCurrentPrerelease(depth int, cmdPrefix string, cmd *cobra.Command) error {
-	if depth > maxDepth {
-		return nil
-	}
-
-	// warning: prerelease Prerelease array type is not supported by go-swagger cli yet
-
-	return nil
-}
-
 // retrieve flags from commands, and set value in model. Return true if any flag is passed by user to fill model field.
 func retrieveModelCurrentFlags(depth int, m *models.Current, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
@@ -161,12 +147,6 @@ func retrieveModelCurrentFlags(depth int, m *models.Current, cmdPrefix string, c
 		return err, false
 	}
 	retAdded = retAdded || patchAdded
-
-	err, prereleaseAdded := retrieveCurrentPrereleaseFlags(depth, m, cmdPrefix, cmd)
-	if err != nil {
-		return err, false
-	}
-	retAdded = retAdded || prereleaseAdded
 
 	return nil, retAdded
 }
@@ -278,20 +258,6 @@ func retrieveCurrentPatchFlags(depth int, m *models.Current, cmdPrefix string, c
 		m.Patch = &patchFlagValue
 
 		retAdded = true
-	}
-
-	return nil, retAdded
-}
-
-func retrieveCurrentPrereleaseFlags(depth int, m *models.Current, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	if depth > maxDepth {
-		return nil, false
-	}
-	retAdded := false
-
-	prereleaseFlagName := fmt.Sprintf("%v.prerelease", cmdPrefix)
-	if cmd.Flags().Changed(prereleaseFlagName) {
-		// warning: prerelease array type Prerelease is not supported by go-swagger cli yet
 	}
 
 	return nil, retAdded
