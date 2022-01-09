@@ -1,5 +1,8 @@
 package cli
 
+// These functions are included in `generated/go/uisp/cli` in order to allow the generated
+// command line client to function inside a larger project.
+
 import (
 	"fmt"
 	"os"
