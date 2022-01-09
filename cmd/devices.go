@@ -104,9 +104,12 @@ var deviceListCmd = &cobra.Command{
 					nodeNumberStr = fmt.Sprintf("%d", nn)
 				}
 
-				if meshDev, ok := meshDevs[dev.NodeNumber]; ok {
-					log.Printf("found meshapi dev nn:%d from uisp device name %s", dev.NodeNumber, localdso.Identification.Name)
-					dev.MeshAPI = meshDev
+				for _, d := range meshDevs {
+					if d.Name == dev.UISP.Identification.Name && d.NodeID == dev.NodeNumber {
+						log.Printf("found meshapi dev nn:%d from uisp device name %s", dev.NodeNumber, localdso.Identification.Name)
+						dev.MeshAPIDevice = d
+						break
+					}
 				}
 
 				orderedDevs = append(orderedDevs, &dev)

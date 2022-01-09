@@ -12,9 +12,10 @@ import (
 )
 
 type FusedDevice struct {
-	NodeNumber int                          `json:"nn"`
-	MeshAPI    *nycmesh.Device              `json:"nycmesh"`
-	UISP       *models.DeviceStatusOverview `json:"uisp"`
+	NodeNumber    int                          `json:"nn"`
+	MeshAPINode   *nycmesh.Node                `json:"meshapi_node"`
+	MeshAPIDevice *nycmesh.Device              `json:"meshapi_device"`
+	UISP          *models.DeviceStatusOverview `json:"uisp_device"`
 }
 
 func (a *App) UISPDevices() ([]*models.DeviceStatusOverview, error) {
