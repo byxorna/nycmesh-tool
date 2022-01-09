@@ -16,3 +16,4 @@
 authtoken
 /bin/
 *.swp
+.nycmesh-tool.yaml

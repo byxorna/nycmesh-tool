@@ -5,8 +5,9 @@ import (
 )
 
 func init() {
-	uispCmd, _ := cli.MakeRootCmd()
-	uispCmd.Use = "uisp"
-	uispCmd.Short = "UISP API operations"
+	uispCmd, err := cli.MakeRootCmdCustom("uisp", "UISP API operations")
+	if err != nil {
+		panic(err)
+	}
 	rootCmd.AddCommand(uispCmd)
 }

@@ -3,12 +3,13 @@ package nycmesh
 import (
 	"encoding/json"
 	"fmt"
-	uisp "github.com/byxorna/nycmesh-tool/models"
-	"github.com/byxorna/nycmesh-tool/pkg/cache"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
+
+	uisp "github.com/byxorna/nycmesh-tool/generated/go/uisp/models"
+	"github.com/byxorna/nycmesh-tool/pkg/cache"
 )
 
 var (
@@ -21,6 +22,7 @@ var (
 // wrapper around https://github.com/meshcenter/mesh-api
 type Client struct {
 	http.Client
+	// TODO: move this cache to pkg/app.Application
 	diskCache cache.DiskCache
 }
 

@@ -1,0 +1,112 @@
+diff --git a/spec/uisp_swagger.yaml b/spec/uisp_swagger.yaml
+index 8a3e248..aeca006 100644
+--- a/spec/uisp_swagger.yaml
++++ b/spec/uisp_swagger.yaml
+@@ -18710,8 +18710,6 @@ definitions:
+         type: string
+       patch:
+         type: number
+-      prerelease:
+-        $ref: '#/definitions/prerelease'
+     required:
+       - major
+       - minor
+@@ -18728,8 +18726,6 @@ definitions:
+         type: string
+       patch:
+         type: number
+-      prerelease:
+-        $ref: '#/definitions/prerelease'
+     required:
+       - major
+       - minor
+@@ -18746,8 +18742,6 @@ definitions:
+         type: string
+       patch:
+         type: number
+-      prerelease:
+-        $ref: '#/definitions/prerelease'
+     required:
+       - major
+       - minor
+@@ -18764,8 +18758,6 @@ definitions:
+         type: string
+       patch:
+         type: number
+-      prerelease:
+-        $ref: '#/definitions/prerelease'
+     required:
+       - major
+       - minor
+@@ -19447,8 +19439,6 @@ definitions:
+       patch:
+         type: number
+         example: 8
+-      prerelease:
+-        $ref: '#/definitions/prerelease%201'
+       order:
+         type: string
+         example: 65546.8.0
+@@ -21186,8 +21176,6 @@ definitions:
+       patch:
+         type: number
+         example: 8
+-      prerelease:
+-        $ref: '#/definitions/prerelease%202'
+       order:
+         type: string
+         example: 65546.8.0
+@@ -24255,8 +24243,6 @@ definitions:
+       patch:
+         type: number
+         example: 8
+-      prerelease:
+-        $ref: '#/definitions/prerelease%203'
+       order:
+         type: string
+         example: 65546.8.0
+@@ -44587,8 +44573,6 @@ x-alt-definitions:
+         type: string
+       patch:
+         type: number
+-      prerelease:
+-        $ref: '#/x-alt-definitions/prerelease'
+     required:
+       - major
+       - minor
+@@ -44605,8 +44589,6 @@ x-alt-definitions:
+         type: string
+       patch:
+         type: number
+-      prerelease:
+-        $ref: '#/x-alt-definitions/prerelease'
+     required:
+       - major
+       - minor
+@@ -44623,8 +44605,6 @@ x-alt-definitions:
+         type: string
+       patch:
+         type: number
+-      prerelease:
+-        $ref: '#/x-alt-definitions/prerelease'
+     required:
+       - major
+       - minor
+@@ -44641,8 +44621,6 @@ x-alt-definitions:
+         type: string
+       patch:
+         type: number
+-      prerelease:
+-        $ref: '#/x-alt-definitions/prerelease'
+     required:
+       - major
+       - minor
+@@ -45295,8 +45273,6 @@ x-alt-definitions:
+       patch:
+         type: number
+         example: 8
+-      prerelease:
+-        $ref: '#/x-alt-definitions/prerelease%201'
+       order:
+         type: string
+         example: 65546.8.0
