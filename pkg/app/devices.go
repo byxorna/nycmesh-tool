@@ -7,10 +7,28 @@ import (
 
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client/devices"
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client/sites"
+	"github.com/byxorna/nycmesh-tool/generated/go/uisp/models"
 	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
 )
 
-func (a *App) Devices(ids ...string) (map[int]*nycmesh.Device, error) {
+type FusedDevice struct {
+	NodeNumber    int                          `json:"nn"`
+	MeshAPINode   *nycmesh.Node                `json:"meshapi_node"`
+	MeshAPIDevice *nycmesh.Device              `json:"meshapi_device"`
+	UISP          *models.DeviceStatusOverview `json:"uisp_device"`
+}
+
+func (a *App) UISPDevices() ([]*models.DeviceStatusOverview, error) {
+	log.Printf("UISPDevices()")
+	ok, err := a.UISPAPI.Devices.GetDevices(devices.NewGetDevicesParams(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return ok.Payload, nil
+}
+
+func (a *App) MeshAPIDevices(ids ...string) (map[int]*nycmesh.Device, error) {
 	nodes, err := a.Nodes()
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch devices: %w", err)
