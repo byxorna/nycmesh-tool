@@ -33218,8 +33218,6 @@ definitions:
     properties:
       address:
         type: string
-        optional:
-          - address
         x-alternatives:
           - type: string
           - type: string
@@ -33252,8 +33250,6 @@ definitions:
         type: string
       sets:
         type: string
-        optional:
-          - sets
         x-alternatives:
           - type: string
           - $ref: '#/x-alt-definitions/sets'
@@ -33262,8 +33258,6 @@ definitions:
     properties:
       address:
         type: string
-        optional:
-          - address
         x-alternatives:
           - type: string
           - type: string
@@ -33296,8 +33290,6 @@ definitions:
         type: string
       sets:
         type: string
-        optional:
-          - sets
         x-alternatives:
           - type: string
           - $ref: '#/x-alt-definitions/sets'
@@ -33579,8 +33571,6 @@ definitions:
           - ttl-zero-during-transit
         required:
           - icmpType
-        optional:
-          - icmpType
         x-alternatives:
           - type: string
             enum:
@@ -33649,8 +33639,6 @@ definitions:
           - unknown-header-type
           - unknown-option
         required:
-          - icmpv6Type
-        optional:
           - icmpv6Type
         x-alternatives:
           - type: string
@@ -39071,14 +39059,10 @@ definitions:
     properties:
       id:
         type: number
-        optional:
-          - id
         x-alternatives:
           - type: number
       key:
         type: string
-        optional:
-          - key
         x-alternatives:
           - type: string
   authKeysMD5 1:
@@ -39102,8 +39086,6 @@ definitions:
           - 'off'
       authKey:
         type: string
-        optional:
-          - authKey
         x-alternatives:
           - type: string
       authKeysMD5:
@@ -39424,8 +39406,6 @@ definitions:
           - ttl-zero-during-transit
         required:
           - icmpType
-        optional:
-          - icmpType
         x-alternatives:
           - type: string
             enum:
@@ -39494,8 +39474,6 @@ definitions:
           - unknown-header-type
           - unknown-option
         required:
-          - icmpv6Type
-        optional:
           - icmpv6Type
         x-alternatives:
           - type: string
@@ -39629,8 +39607,6 @@ definitions:
           - ttl-zero-during-transit
         required:
           - icmpType
-        optional:
-          - icmpType
         x-alternatives:
           - type: string
             enum:
@@ -39699,8 +39675,6 @@ definitions:
           - unknown-header-type
           - unknown-option
         required:
-          - icmpv6Type
-        optional:
           - icmpv6Type
         x-alternatives:
           - type: string
@@ -41359,22 +41333,16 @@ definitions:
         type: string
         minLength: 4
         maxLength: 64
-        optional:
-          - password
         x-alternatives:
           - type: string
             minLength: 4
             maxLength: 64
       verificationCode:
         type: string
-        optional:
-          - verificationCode
         x-alternatives:
           - type: string
       totpAuthSecret:
         type: string
-        optional:
-          - totpAuthSecret
         x-alternatives:
           - type: string
     required:
@@ -42632,14 +42600,10 @@ definitions:
     properties:
       id:
         type: number
-        optional:
-          - id
         x-alternatives:
           - type: number
       key:
         type: string
-        optional:
-          - key
         x-alternatives:
           - type: string
   authKeysMD5 2:
@@ -42663,8 +42627,6 @@ definitions:
           - 'off'
       authKey:
         type: string
-        optional:
-          - authKey
         x-alternatives:
           - type: string
       authKeysMD5:
@@ -42873,14 +42835,10 @@ definitions:
     properties:
       id:
         type: number
-        optional:
-          - id
         x-alternatives:
           - type: number
       key:
         type: string
-        optional:
-          - key
         x-alternatives:
           - type: string
   authKeysMD5 3:
@@ -42904,8 +42862,6 @@ definitions:
           - 'off'
       authKey:
         type: string
-        optional:
-          - authKey
         x-alternatives:
           - type: string
       authKeysMD5:
