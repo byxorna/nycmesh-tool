@@ -3,11 +3,12 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"sort"
+	"log"
+	"regexp"
 	"strconv"
 
+	"github.com/byxorna/nycmesh-tool/generated/go/uisp/models"
 	"github.com/byxorna/nycmesh-tool/pkg/app"
-	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -38,12 +39,12 @@ var deviceGetCmd = &cobra.Command{
 			return fmt.Errorf("%s is not a valid device identifier: %w", args[0], err)
 		}
 
-		devices, err := a.Devices(args...)
+		devs, err := a.MeshAPIDevices(args...)
 		if err != nil {
 			return fmt.Errorf("error getting device %d: %w", deviceID, err)
 		}
 
-		d, ok := devices[deviceID]
+		d, ok := devs[deviceID]
 		if !ok {
 			return fmt.Errorf("device %d not found", deviceID)
 		}
@@ -68,39 +69,71 @@ var deviceListCmd = &cobra.Command{
 			return err
 		}
 
-		devices, err := a.Devices(args...)
+		// fetch all mesh-api devices
+		meshDevs, err := a.MeshAPIDevices(args...)
 		if err != nil {
-			return err
+			return fmt.Errorf("error fetching mesh-api devices: %w", err)
 		}
 
-		idOrder := make([]int, 0, len(devices))
-		for _, d := range devices {
-			idOrder = append(idOrder, int(d.ID))
+		// fetch all UISP devices
+		uispDevs, err := a.UISPDevices()
+		if err != nil {
+			return fmt.Errorf("error fetching UISP devices: %w", err)
 		}
-		sort.Ints(idOrder)
+		headers := []string{"Name", "NN", "MAC", "Model", "Type", "Site", "IP", "Firmware", "Frequency", "ChWidth", "LinkScore%"}
+		data := make([][]string, len(meshDevs))
 
-		headers := []string{"ID", "Node", "SSID", "Model", "Mfg", "Name", "Status", "Freq", "ChWidth"}
-		data := make([][]string, len(devices))
+		orderedDevs := []*app.FusedDevice{}
 
-		orderedDevs := []*nycmesh.Device{}
-		for _, id := range idOrder {
-			dev := devices[id]
-			matchID := status == StatusAny || status == dev.Status
-			matchNode := filterNodeID == 0 || filterNodeID == dev.NodeID
+		{
+			for _, dso := range uispDevs {
+				localdso := dso
+				dev := app.FusedDevice{
+					UISP: localdso,
+				}
 
-			if matchID && matchNode {
-				orderedDevs = append(orderedDevs, dev)
-				data = append(data, []string{
-					fmt.Sprintf("%d", dev.ID),
-					fmt.Sprintf("%d", dev.NodeID),
-					fmt.Sprintf("%s", dev.SSID),
-					fmt.Sprintf("%s", dev.Type.Name),
-					fmt.Sprintf("%s", dev.Type.Manufacturer),
-					fmt.Sprintf("%s", dev.Name),
-					fmt.Sprintf("%s", dev.Status),
-					"",
-					"",
-				})
+				// fields we explicitly extract for table view
+				var name, nodeNumberStr, devType, mac, model, site, ip, fw, freq, chwidth, linkScore string
+
+				nn, err := getNNFromUISPDevice(localdso)
+				if err != nil {
+					//return fmt.Errorf("err nn: %s: %w", localdso.Identification.Name, err)
+					// ignore node number extraction errors, continue on
+				} else {
+					dev.NodeNumber = nn
+					nodeNumberStr = fmt.Sprintf("%d", nn)
+				}
+
+				if meshDev, ok := meshDevs[dev.NodeNumber]; ok {
+					log.Printf("found meshapi dev nn:%d from uisp device name %s", dev.NodeNumber, localdso.Identification.Name)
+					dev.MeshAPI = meshDev
+				}
+
+				orderedDevs = append(orderedDevs, &dev)
+
+				if dso.Identification != nil {
+					name = dso.Identification.Name
+					devType = dso.Identification.Type
+					mac = dso.Identification.Mac
+					model = dso.Identification.Model
+					fw = dso.Identification.FirmwareVersion
+					if dso.Identification.Site != nil {
+						site = dso.Identification.Site.Name
+					}
+					if dso.IPAddress != nil {
+						ip = *dso.IPAddress
+					}
+
+					if dso.Overview != nil {
+						freq = fmt.Sprintf("%.0f", dso.Overview.Frequency)
+						chwidth = fmt.Sprintf("%.0f", dso.Overview.ChannelWidth)
+						if dso.Overview.LinkScore != nil && dso.Overview.LinkScore.Score != nil {
+							linkScore = fmt.Sprintf("%.0f", float64(100.0)*(*dso.Overview.LinkScore.Score))
+						}
+					}
+				}
+
+				data = append(data, []string{name, nodeNumberStr, mac, model, devType, site, ip, fw, freq, chwidth, linkScore})
 			}
 		}
 
@@ -119,6 +152,30 @@ var deviceListCmd = &cobra.Command{
 
 		return nil
 	},
+}
+
+func getNNFromUISPDevice(d *models.DeviceStatusOverview) (int, error) {
+	extracter := regexp.MustCompile(`nycmesh-(?:[^\d]+-)?(\d{3,6})\b`)
+	var n string
+	if d.Identification != nil {
+		n = d.Identification.Name
+	}
+	if extracter.MatchString(n) {
+		res := extracter.FindStringSubmatch(n)
+		var match string
+		switch len(res) {
+		case 2:
+			match = res[1]
+		case 3:
+			match = res[2]
+		}
+		nn, err := strconv.Atoi(match)
+		if err != nil {
+			return 0, fmt.Errorf("unable to parse %s to nn %s to int: %w", n, match, err)
+		}
+		return nn, nil
+	}
+	return 0, fmt.Errorf("unable to derive nn from %s", n)
 }
 
 func init() {
