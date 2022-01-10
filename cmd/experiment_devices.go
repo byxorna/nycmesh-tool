@@ -30,12 +30,14 @@ var expDeviceListCmd = &cobra.Command{
 		}
 
 		// fetch all mesh-api devices
+		log.Printf("loading mesh-api devices...")
 		meshDevs, err := a.MeshAPIDevices(args...)
 		if err != nil {
 			return fmt.Errorf("error fetching mesh-api devices: %w", err)
 		}
 
 		// fetch all UISP devices
+		log.Printf("loading UISP devices...")
 		uispDevs, err := a.UISPDevices()
 		if err != nil {
 			return fmt.Errorf("error fetching UISP devices: %w", err)

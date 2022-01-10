@@ -29,7 +29,7 @@ func (a *App) UISPDevices() ([]*models.DeviceStatusOverview, error) {
 }
 
 func (a *App) MeshAPIDevices(ids ...string) (map[int]*nycmesh.Device, error) {
-	nodes, err := a.Nodes()
+	nodes, err := a.MeshAPIClient.Nodes()
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch devices: %w", err)
 	}

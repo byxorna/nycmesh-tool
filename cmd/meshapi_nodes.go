@@ -36,10 +36,10 @@ var nodeGetCmd = &cobra.Command{
 		}
 
 		if len(args) != 1 {
-			return fmt.Errorf("one device identifier argument is required")
+			return fmt.Errorf("one (and only one) device ID argument is required")
 		}
 
-		nodes, err := a.Nodes()
+		nodes, err := a.MeshAPINodes()
 		if err != nil {
 			return err
 		}
@@ -75,16 +75,7 @@ var nodeListCmd = &cobra.Command{
 			return err
 		}
 
-		idArgs := []int{}
-		for _, arg := range args {
-			id, err := strconv.Atoi(arg)
-			if err != nil {
-				return fmt.Errorf("%s is not a valid node id: %w", arg, err)
-			}
-			idArgs = append(idArgs, id)
-		}
-
-		nodes, err := a.Nodes(idArgs...)
+		nodes, err := a.MeshAPINodes(args...)
 		if err != nil {
 			return err
 		}

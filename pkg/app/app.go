@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/cli"
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client"
@@ -13,7 +14,7 @@ import (
 
 type App struct {
 	*client.UISPAPI
-	*nycmesh.Client
+	MeshAPIClient *nycmesh.Client
 
 	// TODO: wire this up as a general caching layer, instead of if being in nycmesh.Client?
 	diskCache cache.DiskCache
@@ -38,10 +39,36 @@ func New(cmd *cobra.Command, args []string) (*App, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unable to create nycmesh client: %w", err)
 	}
-	a.Client = nycmeshClient
+	a.MeshAPIClient = nycmeshClient
 	return &a, nil
 }
 
 func VersionString() string {
 	return fmt.Sprintf("%s (commit:%s branch:%s built:%s)", version.GitDescribe, version.GitCommit, version.GitBranch, version.BuildDate)
+}
+
+func (a *App) MeshAPINodes(ids ...string) (map[int]nycmesh.Node, error) {
+	var idInts []int
+	if len(ids) > 0 {
+		idFilter, err := getIDFilter(ids)
+		if err != nil {
+			return nil, err
+		}
+		for i := range idFilter {
+			idInts = append(idInts, i)
+		}
+	}
+	return a.MeshAPIClient.Nodes(idInts...)
+}
+
+func getIDFilter(args []string) (map[int]interface{}, error) {
+	idFilter := map[int]interface{}{}
+	for _, idarg := range args {
+		n, err := strconv.Atoi(idarg)
+		if err != nil {
+			return nil, fmt.Errorf("%s is not a valid mesh-api ID: %w", idarg, err)
+		}
+		idFilter[n] = true
+	}
+	return idFilter, nil
 }
