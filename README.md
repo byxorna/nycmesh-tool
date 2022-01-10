@@ -7,28 +7,24 @@ nycmesh-tool CLI
 At the moment, the tool is pretty sparse. It provides the top level `nycmesh-tool` command, with subcommands for:
 
 - `uisp` - Full UISP API CLI
-- `node` - Display nodes from https://api.nycmesh.net/v1/nodes
-- `device` - Display devices from https://api.nycmesh.net/v1/nodes, interleaved with extended UISP data
+- `meshapi` - Interact with https://github.com/meshcenter/mesh-api
+  - `node` - Display nodes from https://api.nycmesh.net/v1/nodes
+  - `device` - Display devices from https://api.nycmesh.net/v1/nodes
 - `map` - Open up nodes on a map from the command line
 - `cache` - manipulate a simple on-disk cache for things like API responses, for offline access to inventory
+- `experiment` - Experimental commands. Here be dragons!
+  - `devices` - display fused device data, created by joining UISP data with mesh-api data. Useful for further `jq` processing.
 
-Coming soon:
 
-- `setSectorFrequency` - set sector frequency (WIP)
-  - suggest device frequency changes based on observed RF
+# Releases
 
-# Get It
+See [releases](https://github.com/byxorna/nycmesh-tool/releases) for binary downloads, and [./RELEASE.md](RELEASE.md) for more information.
 
-See [releases](https://github.com/byxorna/nycmesh-tool/releases)
+# Hacking
 
-# UISP API Commands
+See [./HACKING.md](HACKING.md)
 
-Invoke the tool:
-
-```
-$ ./bin/nycmesh-tool uisp authorization getUser
-$ ./bin/nycmesh-tool uisp  devices getDevices --hostname=uisp.mesh --scheme=https  --debug --skip-verify-tls
-```
+# Config
 
 By default (`--config`) we read `.nycmesh-tool.yaml` for global flags for the tool. You could pass these parameters on the CLI, or store them in `~/.nycmesh-tool.yaml` (or `.`):
 
@@ -38,14 +34,24 @@ uisp:
   x-auth-token: xxx # get this from https://uisp.mesh/nms/user/login or scripts/uisp-user-token.sh
   hostname: uisp.mesh
   scheme: https
-  skip-verify-tls: false
+  skip-verify-tls: false # true needed for self-signed certs
   debug: true
 ```
 
-# Hacking
+## UISP API Commands
 
-See [./HACKING.md](HACKING.md)
+To test your connection to UISP works:
 
-# Releases
+```
+$ ./bin/nycmesh-tool uisp authorization getUser
+{"userId":null,"username":"gabeconradi"}
+```
 
-See [./RELEASE.md](RELEASE.md)
+Or, see how many devices are in the API:
+
+```
+$ ./bin/nycmesh-tool uisp devices getDevices --hostname=uisp.mesh --scheme=https  --debug --skip-verify-tls |jq length
+1293
+```
+
+
