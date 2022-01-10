@@ -6,7 +6,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/byxorna/nycmesh-tool/pkg/version"
+	"github.com/byxorna/nycmesh-tool/pkg/app"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -15,9 +15,12 @@ var cfgFile string
 
 var (
 	rootCmd = &cobra.Command{
-		Use:     "nycmesh-tool",
-		Short:   "NYC Mesh tool to help run the network",
-		Version: version.GitCommit,
+		Use:   "nycmesh-tool",
+		Short: "NYC Mesh tool provides CLI access to UISP, mesh-api, and more",
+		Long: `NYC Mesh tool provides an intuitive CLI that wraps the UISP API,
+    mesh-api (https://github.com/meshcenter/mesh-api), as well as various
+    business logic to operate mesh networks at scale`,
+		Version: app.VersionString(),
 	}
 )
 

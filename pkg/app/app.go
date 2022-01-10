@@ -7,6 +7,7 @@ import (
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client"
 	"github.com/byxorna/nycmesh-tool/pkg/cache"
 	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
+	"github.com/byxorna/nycmesh-tool/pkg/version"
 	"github.com/spf13/cobra"
 )
 
@@ -39,4 +40,8 @@ func New(cmd *cobra.Command, args []string) (*App, error) {
 	}
 	a.Client = nycmeshClient
 	return &a, nil
+}
+
+func VersionString() string {
+	return fmt.Sprintf("%s (commit:%s branch:%s built:%s)", version.GitDescribe, version.GitCommit, version.GitBranch, version.BuildDate)
 }

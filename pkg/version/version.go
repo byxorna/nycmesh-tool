@@ -1,6 +1,8 @@
 package version
 
 var (
-	GitCommit string = "unknown"
-	BuildDate string
+	GitCommit   string = "unknown"
+	GitBranch   string = "unknown"
+	GitDescribe string
+	BuildDate   string
 )
