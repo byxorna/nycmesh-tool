@@ -19,7 +19,6 @@ type FusedDevice struct {
 }
 
 func (a *App) UISPDevices() ([]*models.DeviceStatusOverview, error) {
-	log.Printf("UISPDevices()")
 	ok, err := a.UISPAPI.Devices.GetDevices(devices.NewGetDevicesParams(), nil)
 	if err != nil {
 		return nil, err

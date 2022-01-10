@@ -29,11 +29,20 @@ var expDeviceListCmd = &cobra.Command{
 			return err
 		}
 
+		// --- load necessary data ---
+
 		// fetch all mesh-api devices
 		log.Printf("loading mesh-api devices...")
-		meshDevs, err := a.MeshAPIDevices(args...)
+		meshDevs, err := a.MeshAPIDevices()
 		if err != nil {
 			return fmt.Errorf("error fetching mesh-api devices: %w", err)
+		}
+
+		// fetch all mesh-api nodes
+		log.Printf("loading mesh-api nodes...")
+		meshNodes, err := a.MeshAPINodes()
+		if err != nil {
+			return fmt.Errorf("error fetching mesh-api nodes: %w", err)
 		}
 
 		// fetch all UISP devices
@@ -42,6 +51,9 @@ var expDeviceListCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("error fetching UISP devices: %w", err)
 		}
+
+		// --- field extraction for display ---
+
 		headers := []string{"Name", "NN", "MAC", "Model", "Type", "Site", "IP", "Firmware", "Frequency", "ChWidth", "LinkScore%"}
 		data := make([][]string, len(meshDevs))
 
@@ -59,18 +71,31 @@ var expDeviceListCmd = &cobra.Command{
 
 				nn, err := getNNFromUISPDevice(localdso)
 				if err != nil {
-					//return fmt.Errorf("err nn: %s: %w", localdso.Identification.Name, err)
 					// ignore node number extraction errors, continue on
 				} else {
 					dev.NodeNumber = nn
 					nodeNumberStr = fmt.Sprintf("%d", nn)
-				}
+					if node, ok := meshNodes[nn]; ok {
+						dev.MeshAPINode = &node
 
-				for _, d := range meshDevs {
-					if d.Name == dev.UISP.Identification.Name && d.NodeID == dev.NodeNumber {
-						log.Printf("found meshapi dev nn:%d from uisp device name %s", dev.NodeNumber, localdso.Identification.Name)
-						dev.MeshAPIDevice = d
-						break
+						// now, we try to _best effort_ identify which device in mesh-api matches
+						// which UISP device. This is super haxx right now, because the best key
+						// we have to join the structs together is whether or not the SSID field
+						// in both structs is populated.
+						// NOTE: previously I was thinking about using mac address to perform this
+						// join, but discovered that SNMP/black box devices in UISP do not have
+						// mac addresses
+						// If we dont know what device in mesh-api a UISP device matches with, we
+						// leave output field `"meshapi_device": null` in the FusedDevice struct
+						for _, d := range node.Devices {
+							locald := d
+							if dev.UISP.Attributes != nil && dev.UISP.Attributes.Ssid != "" && d.SSID == dev.UISP.Attributes.Ssid {
+								log.Printf("matched UISP device %s to mesh-api device %d by ssid=%s", dev.UISP.Identification.Name, locald.ID, locald.SSID)
+								dev.MeshAPIDevice = &locald
+								break
+							}
+						}
+
 					}
 				}
 
@@ -101,6 +126,8 @@ var expDeviceListCmd = &cobra.Command{
 				data = append(data, []string{name, nodeNumberStr, mac, model, devType, site, ip, fw, freq, chwidth, linkScore})
 			}
 		}
+
+		// --- render output ---
 
 		switch viper.GetString("core.format") {
 		case "json":
