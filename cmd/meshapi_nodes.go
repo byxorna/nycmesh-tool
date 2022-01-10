@@ -106,7 +106,7 @@ var nodeListCmd = &cobra.Command{
 				orderedNodes = append(orderedNodes, &n)
 				data = append(data, []string{
 					fmt.Sprintf("%d", n.ID),
-					n.GeoURI(),
+					nycmesh.GeoURI(n.Latitude, n.Longitude, n.AltitudeMeters),
 					fmt.Sprintf("%s", n.Status),
 					fmt.Sprintf("%d", len(n.Devices)),
 					fmt.Sprintf("%s", n.Building),

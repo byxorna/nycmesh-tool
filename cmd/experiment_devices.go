@@ -13,53 +13,13 @@ import (
 	"github.com/spf13/viper"
 )
 
-var filterNodeID int
-
-var deviceCmd = &cobra.Command{
+var expDeviceCmd = &cobra.Command{
 	Use:     "device",
 	Short:   "interact with devices",
 	Aliases: []string{"d", "devices"},
 }
 
-var deviceGetCmd = &cobra.Command{
-	Use:     "show",
-	Aliases: []string{"get", "s", "g"},
-	Short:   "show a device",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		a, err := app.New(cmd, args)
-		if err != nil {
-			return err
-		}
-
-		if len(args) != 1 || args[0] == "" {
-			return fmt.Errorf("one device identifier argument is required")
-		}
-		deviceID, err := strconv.Atoi(args[0])
-		if err != nil {
-			return fmt.Errorf("%s is not a valid device identifier: %w", args[0], err)
-		}
-
-		devs, err := a.MeshAPIDevices(args...)
-		if err != nil {
-			return fmt.Errorf("error getting device %d: %w", deviceID, err)
-		}
-
-		d, ok := devs[deviceID]
-		if !ok {
-			return fmt.Errorf("device %d not found", deviceID)
-		}
-
-		pp, err := json.MarshalIndent(d, "", "\t")
-		if err != nil {
-			return err
-		}
-		fmt.Printf("%s\n", pp)
-
-		return nil
-	},
-}
-
-var deviceListCmd = &cobra.Command{
+var expDeviceListCmd = &cobra.Command{
 	Use:     "list",
 	Short:   "list devices",
 	Aliases: []string{"find", "l", "f"},
@@ -182,10 +142,9 @@ func getNNFromUISPDevice(d *models.DeviceStatusOverview) (int, error) {
 }
 
 func init() {
-	deviceCmd.AddCommand(deviceListCmd)
-	deviceCmd.AddCommand(deviceGetCmd)
-	meshapiCmd.AddCommand(deviceCmd)
+	expDeviceCmd.AddCommand(expDeviceListCmd)
+	experimentCmd.AddCommand(expDeviceCmd)
 
-	deviceCmd.PersistentFlags().StringVar(&status, "status", StatusActive, "filter for status")
-	deviceListCmd.Flags().IntVar(&filterNodeID, "node", 0, "only show devices for the given node ID")
+	expDeviceCmd.PersistentFlags().StringVar(&status, "status", StatusActive, "filter for status")
+	expDeviceListCmd.Flags().IntVar(&filterNodeID, "node", 0, "only show devices for the given node ID")
 }

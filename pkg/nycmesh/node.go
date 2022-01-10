@@ -4,6 +4,6 @@ import (
 	"fmt"
 )
 
-func (n *Node) GeoURI() string {
-	return fmt.Sprintf("geo:%f,%f,%.0f", n.Latitude, n.Longitude, n.AltitudeMeters)
+func GeoURI(lat float64, long float64, altMeters float64) string {
+	return fmt.Sprintf("geo:%f,%f,%.0f", lat, long, altMeters)
 }
