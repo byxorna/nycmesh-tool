@@ -136,5 +136,5 @@ func init() {
 	nodeCmd.PersistentFlags().StringVar(&status, "status", StatusActive, "filter for status")
 	nodeCmd.AddCommand(nodeListCmd)
 	nodeCmd.AddCommand(nodeGetCmd)
-	rootCmd.AddCommand(nodeCmd)
+	meshapiCmd.AddCommand(nodeCmd)
 }

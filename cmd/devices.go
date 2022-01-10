@@ -184,7 +184,7 @@ func getNNFromUISPDevice(d *models.DeviceStatusOverview) (int, error) {
 func init() {
 	deviceCmd.AddCommand(deviceListCmd)
 	deviceCmd.AddCommand(deviceGetCmd)
-	rootCmd.AddCommand(deviceCmd)
+	meshapiCmd.AddCommand(deviceCmd)
 
 	deviceCmd.PersistentFlags().StringVar(&status, "status", StatusActive, "filter for status")
 	deviceListCmd.Flags().IntVar(&filterNodeID, "node", 0, "only show devices for the given node ID")
