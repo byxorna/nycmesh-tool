@@ -1,12 +1,16 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
+	"runtime"
 	"strconv"
+	"time"
 
 	"github.com/byxorna/nycmesh-tool/pkg/app"
+	"github.com/byxorna/nycmesh-tool/pkg/selfupdate"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -28,9 +32,40 @@ var (
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 
+	// TODO: dont exhaust github rate limit by checking each invocation
+	_ = checkForUpdate()
+
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatalf("Error: %v", err)
 	}
+}
+
+func checkForUpdate() error {
+	if c, err := selfupdate.NewUpdaterGithub(); err == nil {
+		log.Printf("checking for update...")
+		ctx, cancelFunc := context.WithTimeout(context.Background(), 3*time.Second)
+		defer cancelFunc()
+
+		releaseAssetName := fmt.Sprintf("%s-%s-%s", rootCmd.Use, runtime.GOOS, runtime.GOARCH)
+		r, err := c.HasNewerRelease(ctx, releaseAssetName)
+
+		switch err {
+		case selfupdate.ErrConnectionError:
+			log.Print("connection error, skipping version check")
+		case selfupdate.ErrNoNewRelease:
+			log.Print("no new release available")
+		case nil:
+			if r.DownloadURL != "" {
+				log.Printf("🎉 %s is available! Download it with 'curl -o $HOME/bin/ %s'", r.TagName, r.DownloadURL)
+			} else {
+				// probably, we dont have builds available for this releaseAssetName
+				log.Printf("🥳 %s is available, but I didnt find a release asset named '%s'. See %s for available builds", releaseAssetName, r.TagName, r.URL)
+			}
+		default:
+			log.Print(err.Error())
+		}
+	}
+	return nil
 }
 
 func init() {
