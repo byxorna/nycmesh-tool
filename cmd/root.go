@@ -47,6 +47,9 @@ func checkForUpdate() error {
 		defer cancelFunc()
 
 		releaseAssetName := fmt.Sprintf("%s-%s-%s", rootCmd.Use, runtime.GOOS, runtime.GOARCH)
+		if runtime.GOOS == "windows" {
+			releaseAssetName = fmt.Sprintf("%s.exe", releaseAssetName)
+		}
 		r, err := c.HasNewerRelease(ctx, releaseAssetName)
 
 		switch err {
@@ -56,7 +59,8 @@ func checkForUpdate() error {
 			log.Print("no new release available")
 		case nil:
 			if r.DownloadURL != "" {
-				log.Printf("🎉 %s is available! Download it with 'curl -o $HOME/bin/ %s'", r.TagName, r.DownloadURL)
+				binName := fmt.Sprintf(`$HOME/bin/%s`, releaseAssetName)
+				log.Printf(`🎉 %s is available! Download it with 'curl -o %s "%s" && chmod +x %s'`, binName, r.TagName, r.DownloadURL, binName)
 			} else {
 				// probably, we dont have builds available for this releaseAssetName
 				log.Printf("🥳 %s is available, but I didnt find a release asset named '%s'. See %s for available builds", releaseAssetName, r.TagName, r.URL)
