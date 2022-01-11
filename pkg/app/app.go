@@ -44,7 +44,7 @@ func New(cmd *cobra.Command, args []string) (*App, error) {
 }
 
 func VersionString() string {
-	return fmt.Sprintf("%s (commit:%s branch:%s built:%s)", version.GitDescribe, version.GitCommit, version.GitBranch, version.BuildDate)
+	return fmt.Sprintf("%s (commit:%s branch:%s built:%s)", version.Release, version.GitCommit, version.GitBranch, version.BuildDate)
 }
 
 func (a *App) MeshAPINodes(ids ...string) (map[int]nycmesh.Node, error) {
