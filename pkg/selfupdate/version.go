@@ -59,7 +59,7 @@ func (c *Client) HasNewerRelease(ctx context.Context, releaseAssetName string) (
 			if exeStat.ModTime().After(rel.Published) {
 				// assuming local binary built newer than release, you
 				// are running a newer build than released
-				return nil, fmt.Errorf("new release %s found, but running executable (%s) is modified more recently", rel.TagName, version.Release)
+				return nil, fmt.Errorf("running executable is release %s, which is newer than available release %s", version.Release, rel.TagName)
 			}
 		}
 	}
