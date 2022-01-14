@@ -1,4 +1,4 @@
-package nycmesh
+package meshapi
 
 import (
 	"encoding/json"

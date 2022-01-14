@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/byxorna/nycmesh-tool/pkg/app"
-	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
+	"github.com/byxorna/nycmesh-tool/pkg/meshapi"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -77,7 +77,7 @@ var deviceListCmd = &cobra.Command{
 		headers := []string{"NN", "Name", "ID", "SSID", "Mfg", "Model", "Geo", "Status", "Notes"}
 		data := make([][]string, len(meshDevs))
 
-		allDevList := []*nycmesh.Device{}
+		allDevList := []*meshapi.Device{}
 		for _, d := range meshDevs {
 			locald := d
 			allDevList = append(allDevList, locald)
@@ -96,7 +96,7 @@ var deviceListCmd = &cobra.Command{
 		case "table":
 			for _, d := range allDevList {
 				// populate table columns
-				data = append(data, []string{fmt.Sprintf("%d", d.NodeID), d.Name, fmt.Sprintf("%d", d.ID), d.SSID, d.Type.Manufacturer, d.Type.Name, nycmesh.GeoURI(d.Latitude, d.Longitude, d.AltitudeMeters), d.Status, d.Notes})
+				data = append(data, []string{fmt.Sprintf("%d", d.NodeID), d.Name, fmt.Sprintf("%d", d.ID), d.SSID, d.Type.Manufacturer, d.Type.Name, meshapi.GeoURI(d.Latitude, d.Longitude, d.AltitudeMeters), d.Status, d.Notes})
 			}
 			a.Tableify(headers, data)
 		default:

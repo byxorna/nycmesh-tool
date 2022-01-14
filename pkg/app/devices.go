@@ -8,13 +8,13 @@ import (
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client/devices"
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client/sites"
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/models"
-	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
+	"github.com/byxorna/nycmesh-tool/pkg/meshapi"
 )
 
 type FusedDevice struct {
 	NodeNumber    int                          `json:"nn"`
-	MeshAPINode   *nycmesh.Node                `json:"meshapi_node"`
-	MeshAPIDevice *nycmesh.Device              `json:"meshapi_device"`
+	MeshAPINode   *meshapi.Node                `json:"meshapi_node"`
+	MeshAPIDevice *meshapi.Device              `json:"meshapi_device"`
 	UISP          *models.DeviceStatusOverview `json:"uisp_device"`
 }
 
@@ -27,7 +27,7 @@ func (a *App) UISPDevices() ([]*models.DeviceStatusOverview, error) {
 	return ok.Payload, nil
 }
 
-func (a *App) MeshAPIDevices(ids ...string) (map[int]*nycmesh.Device, error) {
+func (a *App) MeshAPIDevices(ids ...string) (map[int]*meshapi.Device, error) {
 	nodes, err := a.MeshAPIClient.Nodes()
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch devices: %w", err)
@@ -42,7 +42,7 @@ func (a *App) MeshAPIDevices(ids ...string) (map[int]*nycmesh.Device, error) {
 		idFilter[n] = true
 	}
 
-	devs := map[int]*nycmesh.Device{}
+	devs := map[int]*meshapi.Device{}
 	for _, n := range nodes {
 		for _, d := range n.Devices {
 			locald := d
@@ -70,7 +70,7 @@ func (a *App) MeshAPIDevices(ids ...string) (map[int]*nycmesh.Device, error) {
 }
 
 // joinWithUISPData takes an unaugmented map of devices, and populates UISP fields
-func (a *App) joinWithUISPData(devs map[int]*nycmesh.Device) (map[int]*nycmesh.Device, error) {
+func (a *App) joinWithUISPData(devs map[int]*meshapi.Device) (map[int]*meshapi.Device, error) {
 	interval := "day"
 	sitesok, err := a.UISPAPI.Sites.GetSites(sites.NewGetSitesParams().WithDefaults(), nil)
 	if err != nil {

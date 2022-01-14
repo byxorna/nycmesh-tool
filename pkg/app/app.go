@@ -7,16 +7,16 @@ import (
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/cli"
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client"
 	"github.com/byxorna/nycmesh-tool/pkg/cache"
-	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
+	"github.com/byxorna/nycmesh-tool/pkg/meshapi"
 	"github.com/byxorna/nycmesh-tool/pkg/version"
 	"github.com/spf13/cobra"
 )
 
 type App struct {
 	*client.UISPAPI
-	MeshAPIClient *nycmesh.Client
+	MeshAPIClient *meshapi.Client
 
-	// TODO: wire this up as a general caching layer, instead of if being in nycmesh.Client?
+	// TODO: wire this up as a general caching layer, instead of if being in meshapi.Client?
 	diskCache cache.DiskCache
 }
 
@@ -35,7 +35,7 @@ func New(cmd *cobra.Command, args []string) (*App, error) {
 	}
 	a.UISPAPI = c
 
-	nycmeshClient, err := nycmesh.New()
+	nycmeshClient, err := meshapi.New()
 	if err != nil {
 		return nil, fmt.Errorf("unable to create nycmesh client: %w", err)
 	}
@@ -47,7 +47,7 @@ func VersionString() string {
 	return fmt.Sprintf("%s (commit:%s branch:%s built:%s)", version.Release, version.GitCommit, version.GitBranch, version.BuildDate)
 }
 
-func (a *App) MeshAPINodes(ids ...string) (map[int]nycmesh.Node, error) {
+func (a *App) MeshAPINodes(ids ...string) (map[int]meshapi.Node, error) {
 	var idInts []int
 	if len(ids) > 0 {
 		idFilter, err := getIDFilter(ids)
