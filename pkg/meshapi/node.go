@@ -38,27 +38,13 @@ func (s NodesByID) Less(i, j int) bool {
 	return s[i].ID < s[j].ID
 }
 
-// TODO: this function should get cleaned up, we should not be storing
-// nodes.json as a single blob. Instead, store each node, and a list of node IDs.
-func (c *Client) Nodes(ids ...int) (map[int]Node, error) {
+func (c *Client) Nodes() ([]Node, error) {
 	var body []byte
 	var err error
 
-	if !c.diskCache.Has("nodes") {
-		body, err := c.do_body("GET", path+"/nodes", map[string]string{})
-		if err != nil {
-			return nil, fmt.Errorf("Unable to fetch nodes: %w", err)
-		}
-
-		err = c.diskCache.Write("nodes", body)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	body, err = c.diskCache.Read("nodes")
+	body, err = c.do_body("GET", path+"/nodes", map[string]string{})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Unable to fetch nodes: %w", err)
 	}
 
 	var nodes []Node
@@ -66,19 +52,5 @@ func (c *Client) Nodes(ids ...int) (map[int]Node, error) {
 		return nil, fmt.Errorf("unable to decode nodes: %w\n%s", err, body)
 	}
 
-	idFilter := map[int]bool{}
-	for _, id := range ids {
-		idFilter[id] = true
-	}
-
-	m := map[int]Node{}
-	for _, node := range nodes {
-		if _, matchesFilter := idFilter[node.ID]; !matchesFilter && len(idFilter) > 0 {
-			// only return nodes that match provided filter if necessary
-			continue
-		}
-		m[node.ID] = node
-	}
-
-	return m, nil
+	return nodes, nil
 }

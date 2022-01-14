@@ -1,8 +1,6 @@
 package meshapi
 
 import (
-	"encoding/json"
-	"fmt"
 	"time"
 )
 
@@ -44,23 +42,4 @@ func (s DevicesByID) Swap(i, j int) {
 
 func (s DevicesByID) Less(i, j int) bool {
 	return s[i].ID < s[j].ID
-}
-
-// Devices returns the list of Devices from NYCMesh API
-// TODO: should devices be cached/fetched as 1 block, or as individual entries?
-func (c *Client) Devices() (map[int]*Device, error) {
-	var body []byte
-	var err error
-
-	var devices []*Device
-	if err = json.Unmarshal(body, &devices); err != nil {
-		return nil, fmt.Errorf("unable to decode devices: %w\n%s", err, body)
-	}
-
-	m := map[int]*Device{}
-	for _, dev := range devices {
-		m[dev.ID] = dev
-	}
-
-	return m, nil
 }

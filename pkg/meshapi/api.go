@@ -69,6 +69,7 @@ func (c *Client) do(method, endpoint string, params map[string]string) (*http.Re
 }
 
 // GeoURI is a utility format helper to create a geo URI string from lat/lon/alt
+// TODO: find a better home for this?
 func GeoURI(lat float64, long float64, altMeters float64) string {
 	return fmt.Sprintf("geo:%f,%f,%.0f", lat, long, altMeters)
 }

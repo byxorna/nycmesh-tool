@@ -28,11 +28,6 @@ func (a *App) UISPDevices() ([]*models.DeviceStatusOverview, error) {
 }
 
 func (a *App) MeshAPIDevices(ids ...string) (map[int]*meshapi.Device, error) {
-	nodes, err := a.MeshAPIClient.Nodes()
-	if err != nil {
-		return nil, fmt.Errorf("unable to fetch devices: %w", err)
-	}
-
 	idFilter := map[int]interface{}{}
 	for _, idarg := range ids {
 		n, err := strconv.Atoi(idarg)
@@ -40,6 +35,11 @@ func (a *App) MeshAPIDevices(ids ...string) (map[int]*meshapi.Device, error) {
 			return nil, fmt.Errorf("%s is not a valid device identifier: %w", idarg, err)
 		}
 		idFilter[n] = true
+	}
+
+	nodes, err := a.MeshAPINodes()
+	if err != nil {
+		return nil, err
 	}
 
 	devs := map[int]*meshapi.Device{}
@@ -57,14 +57,6 @@ func (a *App) MeshAPIDevices(ids ...string) (map[int]*meshapi.Device, error) {
 			devs[d.ID] = &locald
 		}
 	}
-
-	/*
-				modifiedDevs, err := a.joinWithUISPData(devs)
-				if err != nil {
-					return nil, fmt.Errorf("error joining uisp data with devices: %w", err)
-				}
-		    return modifiedDevs, nil
-	*/
 
 	return devs, nil
 }
@@ -122,34 +114,4 @@ func ByteCountIEC(b int64) string {
 	}
 	return fmt.Sprintf("%.1f %ciB",
 		float64(b)/float64(div), "KMGTPE"[exp])
-}
-
-// TODO(gabe): implement me
-func (a *App) ListSectorsByFrequency() error {
-	params := devices.NewGetDevicesParams()
-	devs, err := a.UISPAPI.Devices.GetDevices(params, nil)
-	if err != nil {
-		return fmt.Errorf("unable to get devices: %w", err)
-	}
-	fmt.Printf("res: %+v\n", devs)
-	for _, d := range devs.Payload {
-		fmt.Printf("%+v\n", d)
-	}
-	return nil
-}
-
-// TODO(gabe): implement me
-func (a *App) SetSectorFrequency(frequency string, devids ...[]string) error {
-	log.Printf("setSectorFrequency called: freq:%s devs:%v\n", frequency, devids)
-
-	params := devices.NewGetDevicesParams()
-	devs, err := a.UISPAPI.Devices.GetDevices(params, nil)
-	if err != nil {
-		return err
-	}
-	fmt.Printf("res: %+v\n", devs)
-	for _, d := range devs.Payload {
-		fmt.Printf("%+v\n", d)
-	}
-	return fmt.Errorf("TODO implement me")
 }
