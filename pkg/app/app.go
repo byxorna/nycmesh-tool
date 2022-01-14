@@ -48,6 +48,10 @@ func VersionString() string {
 	return fmt.Sprintf("%s (commit:%s branch:%s built:%s)", version.Release, version.GitCommit, version.GitBranch, version.BuildDate)
 }
 
+func (a *App) MeshAPIKML() ([]byte, error) {
+	return a.MeshAPIClient.KML()
+}
+
 func (a *App) MeshAPINodes(ids ...string) (map[int]meshapi.Node, error) {
 	var idInts []int
 	if len(ids) > 0 {
