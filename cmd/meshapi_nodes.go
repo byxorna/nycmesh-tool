@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/byxorna/nycmesh-tool/pkg/app"
-	"github.com/byxorna/nycmesh-tool/pkg/nycmesh"
+	"github.com/byxorna/nycmesh-tool/pkg/meshapi"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -89,7 +89,7 @@ var nodeListCmd = &cobra.Command{
 		}
 		sort.Ints(nodeNumbers)
 
-		orderedNodes := []*nycmesh.Node{}
+		orderedNodes := []*meshapi.Node{}
 		for _, nn := range nodeNumbers {
 			n := nodes[nn]
 
@@ -97,7 +97,7 @@ var nodeListCmd = &cobra.Command{
 				orderedNodes = append(orderedNodes, &n)
 				data = append(data, []string{
 					fmt.Sprintf("%d", n.ID),
-					nycmesh.GeoURI(n.Latitude, n.Longitude, n.AltitudeMeters),
+					meshapi.GeoURI(n.Latitude, n.Longitude, n.AltitudeMeters),
 					fmt.Sprintf("%s", n.Status),
 					fmt.Sprintf("%d", len(n.Devices)),
 					fmt.Sprintf("%s", n.Building),
