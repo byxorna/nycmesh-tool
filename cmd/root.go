@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/byxorna/nycmesh-tool/pkg/app"
+	"github.com/byxorna/nycmesh-tool/pkg/version"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -59,8 +60,9 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+		log.Printf("config file: %s", viper.ConfigFileUsed())
 	}
+	log.Printf("binary release %s, built %s", version.Release, version.BuildDate)
 }
 
 func GetIntSlice(i *[]string) ([]int, error) {

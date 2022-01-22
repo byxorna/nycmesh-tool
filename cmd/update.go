@@ -21,7 +21,7 @@ var (
 		Use:   "check",
 		Short: "Check for tool updates by querying github releases",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			log.Printf("checking for updates")
+			log.Print("checking for updates")
 			_ = checkForUpdate()
 			return nil
 		},
