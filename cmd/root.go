@@ -31,10 +31,6 @@ var (
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-
-	// TODO: dont exhaust github rate limit by checking each invocation
-	_ = checkForUpdate()
-
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatalf("Error: %v", err)
 	}
@@ -42,7 +38,7 @@ func Execute() {
 
 func checkForUpdate() error {
 	if c, err := selfupdate.NewUpdaterGithub(); err == nil {
-		log.Printf("checking for update...")
+		log.Printf("checking for updates")
 		ctx, cancelFunc := context.WithTimeout(context.Background(), 3*time.Second)
 		defer cancelFunc()
 
@@ -54,9 +50,9 @@ func checkForUpdate() error {
 
 		switch err {
 		case selfupdate.ErrConnectionError:
-			log.Print("connection error, skipping version check")
+			log.Printf("update check failed: %s", err.Error())
 		case selfupdate.ErrNoNewRelease:
-			log.Print("no new release available")
+			log.Printf("up to date! (%s)", r.TagName)
 		case nil:
 			if r.DownloadURL != "" {
 				binName := fmt.Sprintf(`$HOME/bin/%s`, releaseAssetName)
@@ -66,7 +62,7 @@ func checkForUpdate() error {
 				log.Printf("🥳 %s is available, but I didnt find a release asset named '%s'. See %s for available builds", releaseAssetName, r.TagName, r.URL)
 			}
 		default:
-			log.Print(err.Error())
+			log.Printf("update error: %s", err.Error())
 		}
 	}
 	return nil
@@ -77,6 +73,12 @@ func init() {
 	rootCmd.PersistentFlags().StringP("format", "f", "json", "output format (table or json)")
 	viper.BindPFlag("core.format", rootCmd.PersistentFlags().Lookup("format"))
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.nycmesh-tool.yaml)")
+
+	rootCmd.PersistentPostRun = func(cmd *cobra.Command, args []string) {
+		// if execution was successful, lets try to check for an update
+		// TODO: dont exhaust github rate limit by checking each invocation
+		_ = checkForUpdate()
+	}
 }
 
 // initConfig reads in config file and ENV variables if set.
