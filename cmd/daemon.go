@@ -6,6 +6,7 @@ import (
 
 	"github.com/byxorna/nycmesh-tool/pkg/app"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -34,6 +35,8 @@ var (
 )
 
 func init() {
-	// TODO: add pidfile, etc type flags?
+	daemonCmd.Flags().Bool("dfs-event-detection", true, "enable DFS event detection feature")
+	viper.BindPFlag("feature.dfs-event-detection", daemonCmd.Flags().Lookup("dfs-event-detection"))
+
 	rootCmd.AddCommand(daemonCmd)
 }
