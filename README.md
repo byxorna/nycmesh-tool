@@ -12,6 +12,8 @@ At the moment, the tool is pretty sparse. It provides the top level `nycmesh-too
   - `device` - Display devices from https://api.nycmesh.net/v1/nodes
 - `map` - Open up nodes on a map from the command line
 - `cache` - manipulate a simple on-disk cache for things like API responses, for offline access to inventory
+- `daemon` - launch a daemon to do stuff (current features include:)
+  - Sector DFS watch: notify hub slack channels when DFS events occur
 - `experiment` - Experimental commands. Here be dragons!
   - `devices` - display fused device data, created by joining UISP data with mesh-api data. Useful for further `jq` processing.
 

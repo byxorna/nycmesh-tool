@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"log"
 
 	"github.com/byxorna/nycmesh-tool/pkg/app"
@@ -18,7 +19,7 @@ var (
 			}
 
 			log.Print("launching daemon...")
-			errs := a.RunDaemon()
+			errs := a.RunDaemon(context.Background())
 			if len(errs) > 0 {
 				log.Printf("daemon reported %d errors", len(errs))
 
