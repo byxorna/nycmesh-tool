@@ -74,7 +74,6 @@ var (
 */
 
 func (a *App) coroutineLogWatch(ctx context.Context) error {
-	log.Printf("dfs watch: start")
 
 	ctxDone := ctx.Done()
 	wg := sync.WaitGroup{}
@@ -104,6 +103,7 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 	wg.Add(1)
 	go func() {
 		dfsMessageRegex := regexp.MustCompile(`\bchanged frequency due to DFS detection\b`)
+		log.Printf("watching for DFS events with `%v`", dfsMessageRegex)
 		//dfsMessageRegex := regexp.MustCompile(`\bhas been disconnected\b`)
 		for {
 			select {
@@ -118,6 +118,7 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 				}
 			}
 		}
+		log.Printf("dfs watch: end")
 		wg.Done()
 	}()
 
@@ -136,7 +137,6 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 	}()
 
 	wg.Wait()
-	log.Printf("dfs watch: end")
 	return nil
 }
 
