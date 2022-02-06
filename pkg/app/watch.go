@@ -31,9 +31,9 @@ type LogEvent struct {
 	LogEventUISP
 }
 
-func (a *App) WatchLogs(ctx context.Context, dstCh chan<- LogEvent) error {
+func (a *App) WatchLogs(ctx context.Context, since time.Time, dstCh chan<- LogEvent) error {
 	qPeriod := float64(logQueryPeriod.Milliseconds())
-	var latestLogTimestampObserved time.Time
+	latestLogTimestampObserved := since // this in effect forces us to drop any messages we fetch from before this time
 
 	for {
 		select {

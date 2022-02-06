@@ -14,7 +14,8 @@ At the moment, the tool is pretty sparse. It provides the top level `nycmesh-too
 - `cache` - manipulate a simple on-disk cache for things like API responses, for offline access to inventory
 - `experiment` - Experimental commands. Here be dragons!
   - `devices` - display fused device data, created by joining UISP data with mesh-api data. Useful for further `jq` processing.
-
+- `watch`
+  - `logs` - easy interface to watch UISP logs in real(ish) time
 
 # Releases
 

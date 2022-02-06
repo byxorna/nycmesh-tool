@@ -2,13 +2,17 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/byxorna/nycmesh-tool/pkg/app"
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
 var (
+	watchSince time.Duration
+
 	watchCmd = &cobra.Command{
 		Use:   "watch",
 		Short: "keep an eye on events happening in the mesh",
@@ -29,13 +33,29 @@ var (
 			logCh := make(chan app.LogEvent, 10)
 
 			go func() {
+				errColor := color.New(color.FgRed).SprintFunc()
+				warnColor := color.New(color.FgYellow).SprintFunc()
+				levelColor := func(level string, in string) string {
+					switch level {
+					case "warning":
+						return fmt.Sprintf("%s", warnColor(in))
+					case "error":
+						return fmt.Sprintf("%s", errColor(in))
+					default:
+						return in
+					}
+				}
 				// as log events are produced by the watcher, print em out in a nice format
 				for le := range logCh {
-					fmt.Printf("%s\t%s\t%s\n", le.Time.Local().Format(time.RFC3339), *le.Level, *le.Message)
+					switch {
+					default:
+						fmt.Printf("%s\t%s\t%s\n", le.Time.Local().Format(time.RFC3339), levelColor(*le.Level, *le.Level), *le.Message)
+					}
 				}
 			}()
 
-			if err := a.WatchLogs(cmd.Context(), logCh); err != nil {
+			log.Printf("watching logs since %s ago", watchSince)
+			if err := a.WatchLogs(cmd.Context(), time.Now().Add(-(watchSince)), logCh); err != nil {
 				return fmt.Errorf("log watch failed: %w", err)
 			}
 			return nil
@@ -52,6 +72,8 @@ var (
 )
 
 func init() {
+	watchLogsCmd.Flags().DurationVar(&watchSince, "since", time.Minute*15, "Begin watching for events this far in the past")
+
 	watchCmd.AddCommand(watchLogsCmd)
 	watchCmd.AddCommand(watchOutagesCmd)
 	rootCmd.AddCommand(watchCmd)
