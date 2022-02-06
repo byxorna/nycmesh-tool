@@ -58,11 +58,11 @@ func (a *App) WatchLogs(ctx context.Context, dstCh chan<- LogEvent) error {
 						time.Sleep(logFetchErrorBackoff)
 						continue
 					}
+					fetchedLogEvents := []LogEvent{}
 
 					//log.Printf("got pg %.0f items %d, pagination page=%d pages=%d total=%d", params.Page, len(res.Payload.Items), *res.Payload.Pagination.Page, *res.Payload.Pagination.Pages, *res.Payload.Pagination.Total)
 
 					// collect events, and send them to the dstCh
-					// TODO: sort them reverse, so we write oldest first?
 					for _, l := range res.Payload.Items {
 						if ets, err := time.Parse(time.RFC3339, l.Timestamp.String()); err != nil {
 							log.Printf("unable to parse timestamp: %s %s", l.Timestamp, err.Error())
@@ -76,14 +76,25 @@ func (a *App) WatchLogs(ctx context.Context, dstCh chan<- LogEvent) error {
 								latestLogTimestampObserved = logevent.Time
 							}
 							if logevent.Time.After(mustBeNewerThan) {
-								dstCh <- logevent
+								fetchedLogEvents = append(fetchedLogEvents, logevent)
 							}
 							//otherwise, drop the log by not emitting it, it has already been seen
 						}
 					}
 
 					if res.Payload.Pagination.Pages != nil && float64(*res.Payload.Pagination.Pages) == params.Page {
-						// all done, lets wrap up
+						// all done with pagination, lets wrap up this fetch
+
+						// first, reverse the events, because they come from UISP newest to oldest
+						for i, j := 0, len(fetchedLogEvents)-1; i < j; i, j = i+1, j-1 {
+							fetchedLogEvents[i], fetchedLogEvents[j] = fetchedLogEvents[j], fetchedLogEvents[i]
+						}
+
+						// dump the log events into our destination channel in the right order
+						for _, logevent := range fetchedLogEvents {
+							dstCh <- logevent
+						}
+
 						return nil
 					}
 
