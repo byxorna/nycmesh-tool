@@ -33,3 +33,19 @@ func GetNNFromDeviceName(name string) (int, error) {
 func GetNNFromUISPDevice(d *models.DeviceStatusOverview) (int, error) {
 	return GetNNFromDeviceName(d.Identification.Name)
 }
+
+// typically the UISP name for our sites follows a convention like "Prospect Heights - 3461"
+func GetNNFromSiteName(name string) (int, error) {
+
+	extracter := regexp.MustCompile(`(?:.+) - (\d{3,6})\b`)
+	if extracter.MatchString(name) {
+		res := extracter.FindStringSubmatch(name)
+		match := res[1]
+		nn, err := strconv.Atoi(match)
+		if err != nil {
+			return 0, fmt.Errorf("unable to parse %s to nn %s to int: %w", name, match, err)
+		}
+		return nn, nil
+	}
+	return 0, fmt.Errorf("unable to derive nn from %s", name)
+}

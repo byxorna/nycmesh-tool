@@ -11,7 +11,8 @@ import (
 )
 
 var (
-	watchSince time.Duration
+	watchSince   time.Duration
+	watchOnlyNNs []int
 
 	watchCmd = &cobra.Command{
 		Use:   "watch",
@@ -33,11 +34,14 @@ var (
 			logCh := make(chan app.LogEvent, 10)
 
 			go func() {
-				errColor := color.New(color.FgRed).SprintFunc()
-				warnColor := color.New(color.FgYellow).SprintFunc()
+				errColor := color.New(color.FgHiRed).SprintFunc()
+				infoColor := color.New(color.FgHiGreen).SprintFunc()
+				warnColor := color.New(color.FgHiYellow).SprintFunc()
 				hiWhiteColor := color.New(color.FgHiWhite).SprintFunc()
 				levelColor := func(level string, in string) string {
 					switch level {
+					case "info":
+						return fmt.Sprintf("%s", infoColor(in))
 					case "warning":
 						return fmt.Sprintf("%s", warnColor(in))
 					case "error":
@@ -48,12 +52,20 @@ var (
 				}
 				// as log events are produced by the watcher, print em out in a nice format
 				for le := range logCh {
-					switch {
-					default:
-						var nnstr string
-						if le.NN > 0 {
-							nnstr = fmt.Sprintf("nn:%s", hiWhiteColor(fmt.Sprintf("%d", le.NN)))
+					var nnstr string
+					if le.NN > 0 {
+						nnstr = fmt.Sprintf("nn:%s", hiWhiteColor(fmt.Sprintf("%d", le.NN)))
+					}
+
+					filterMatch := true
+					if len(watchOnlyNNs) > 0 {
+						filterMatch = false
+						for _, nn := range watchOnlyNNs {
+							filterMatch = (filterMatch || nn == le.NN)
 						}
+					}
+
+					if filterMatch {
 						fmt.Printf("%s\t%s\t%s\t%s\n", le.Time.Local().Format(time.RFC3339), levelColor(*le.Level, *le.Level), nnstr, *le.Message)
 					}
 				}
@@ -78,8 +90,10 @@ var (
 
 func init() {
 	watchLogsCmd.Flags().DurationVar(&watchSince, "since", time.Minute*15, "Begin watching for events this far in the past")
+	watchLogsCmd.Flags().IntSliceVar(&watchOnlyNNs, "nn", []int{}, "filter logs for only those concerning devices/sites for these NNs (WARNING: this filter is performed clientside)")
 
 	watchCmd.AddCommand(watchLogsCmd)
 	watchCmd.AddCommand(watchOutagesCmd)
+
 	rootCmd.AddCommand(watchCmd)
 }

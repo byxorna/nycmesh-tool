@@ -85,6 +85,14 @@ func (a *App) WatchLogs(ctx context.Context, since time.Time, dstCh chan<- LogEv
 								}
 							}
 
+							if logevent.Site != nil {
+								// try to find NN from device name
+								if nn, err := GetNNFromSiteName(*logevent.Site.Name); err == nil && logevent.NN == 0 {
+									logevent.NN = nn
+								}
+
+							}
+
 							if logevent.Time.After(mustBeNewerThan) {
 								fetchedLogEvents = append(fetchedLogEvents, logevent)
 							}
