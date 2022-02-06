@@ -16,7 +16,8 @@ At the moment, the tool is pretty sparse. It provides the top level `nycmesh-too
   - Sector DFS watch: notify hub slack channels when DFS events occur
 - `experiment` - Experimental commands. Here be dragons!
   - `devices` - display fused device data, created by joining UISP data with mesh-api data. Useful for further `jq` processing.
-
+- `watch`
+  - `logs` - easy interface to watch UISP logs in real(ish) time
 
 # Releases
 
