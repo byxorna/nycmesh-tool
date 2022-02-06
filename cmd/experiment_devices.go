@@ -4,10 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"regexp"
-	"strconv"
 
-	"github.com/byxorna/nycmesh-tool/generated/go/uisp/models"
 	"github.com/byxorna/nycmesh-tool/pkg/app"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -69,7 +66,7 @@ var expDeviceListCmd = &cobra.Command{
 				// fields we explicitly extract for table view
 				var name, nodeNumberStr, devType, mac, model, site, ip, fw, freq, chwidth, linkScore string
 
-				nn, err := getNNFromUISPDevice(localdso)
+				nn, err := app.GetNNFromUISPDevice(localdso)
 				if err != nil {
 					// ignore node number extraction errors, continue on
 				} else {
@@ -144,30 +141,6 @@ var expDeviceListCmd = &cobra.Command{
 
 		return nil
 	},
-}
-
-func getNNFromUISPDevice(d *models.DeviceStatusOverview) (int, error) {
-	extracter := regexp.MustCompile(`nycmesh-(?:[^\d]+-)?(\d{3,6})\b`)
-	var n string
-	if d.Identification != nil {
-		n = d.Identification.Name
-	}
-	if extracter.MatchString(n) {
-		res := extracter.FindStringSubmatch(n)
-		var match string
-		switch len(res) {
-		case 2:
-			match = res[1]
-		case 3:
-			match = res[2]
-		}
-		nn, err := strconv.Atoi(match)
-		if err != nil {
-			return 0, fmt.Errorf("unable to parse %s to nn %s to int: %w", n, match, err)
-		}
-		return nn, nil
-	}
-	return 0, fmt.Errorf("unable to derive nn from %s", n)
 }
 
 func init() {
