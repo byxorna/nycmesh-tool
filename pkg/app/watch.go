@@ -28,6 +28,7 @@ type LogEventUISP models.Model9 // -_- generated code suxxx, why this confusing 
 
 type LogEvent struct {
 	Time time.Time
+	NN   int
 	LogEventUISP
 }
 
@@ -71,10 +72,19 @@ func (a *App) WatchLogs(ctx context.Context, since time.Time, dstCh chan<- LogEv
 								Time:         ets,
 								LogEventUISP: LogEventUISP(*l),
 							}
+
 							if logevent.Time.After(latestLogTimestampObserved) {
 								// record the latest event we have seen
 								latestLogTimestampObserved = logevent.Time
 							}
+
+							if logevent.Device != nil {
+								// try to find NN from device name
+								if nn, err := GetNNFromDeviceName(logevent.Device.Name); err == nil && logevent.NN == 0 {
+									logevent.NN = nn
+								}
+							}
+
 							if logevent.Time.After(mustBeNewerThan) {
 								fetchedLogEvents = append(fetchedLogEvents, logevent)
 							}

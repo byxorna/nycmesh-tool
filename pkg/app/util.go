@@ -10,14 +10,10 @@ import (
 
 // TODO: write unit tests for this function
 // TODO: make this use other device fields (model?) to help identify
-func GetNNFromUISPDevice(d *models.DeviceStatusOverview) (int, error) {
+func GetNNFromDeviceName(name string) (int, error) {
 	extracter := regexp.MustCompile(`nycmesh-(?:[^\d]+-)?(\d{3,6})\b`)
-	var n string
-	if d.Identification != nil {
-		n = d.Identification.Name
-	}
-	if extracter.MatchString(n) {
-		res := extracter.FindStringSubmatch(n)
+	if extracter.MatchString(name) {
+		res := extracter.FindStringSubmatch(name)
 		var match string
 		switch len(res) {
 		case 2:
@@ -27,9 +23,13 @@ func GetNNFromUISPDevice(d *models.DeviceStatusOverview) (int, error) {
 		}
 		nn, err := strconv.Atoi(match)
 		if err != nil {
-			return 0, fmt.Errorf("unable to parse %s to nn %s to int: %w", n, match, err)
+			return 0, fmt.Errorf("unable to parse %s to nn %s to int: %w", name, match, err)
 		}
 		return nn, nil
 	}
-	return 0, fmt.Errorf("unable to derive nn from %s", n)
+	return 0, fmt.Errorf("unable to derive nn from %s", name)
+}
+
+func GetNNFromUISPDevice(d *models.DeviceStatusOverview) (int, error) {
+	return GetNNFromDeviceName(d.Identification.Name)
 }

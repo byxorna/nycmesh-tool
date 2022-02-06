@@ -35,6 +35,7 @@ var (
 			go func() {
 				errColor := color.New(color.FgRed).SprintFunc()
 				warnColor := color.New(color.FgYellow).SprintFunc()
+				hiWhiteColor := color.New(color.FgHiWhite).SprintFunc()
 				levelColor := func(level string, in string) string {
 					switch level {
 					case "warning":
@@ -49,7 +50,11 @@ var (
 				for le := range logCh {
 					switch {
 					default:
-						fmt.Printf("%s\t%s\t%s\n", le.Time.Local().Format(time.RFC3339), levelColor(*le.Level, *le.Level), *le.Message)
+						var nnstr string
+						if le.NN > 0 {
+							nnstr = fmt.Sprintf("nn:%s", hiWhiteColor(fmt.Sprintf("%d", le.NN)))
+						}
+						fmt.Printf("%s\t%s\t%s\t%s\n", le.Time.Local().Format(time.RFC3339), levelColor(*le.Level, *le.Level), nnstr, *le.Message)
 					}
 				}
 			}()
