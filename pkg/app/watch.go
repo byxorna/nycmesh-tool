@@ -24,7 +24,12 @@ var (
 	logQueryPeriod = time.Hour * 1
 )
 
-type LogEvent models.Model9 // -_- generated code suxxx, why this confusing name
+type LogEventUISP models.Model9 // -_- generated code suxxx, why this confusing name
+
+type LogEvent struct {
+	Time time.Time
+	LogEventUISP
+}
 
 func (a *App) WatchLogs(ctx context.Context, dstCh chan<- LogEvent) error {
 	qPeriod := float64(logQueryPeriod.Milliseconds())
@@ -62,12 +67,16 @@ func (a *App) WatchLogs(ctx context.Context, dstCh chan<- LogEvent) error {
 						if ets, err := time.Parse(time.RFC3339, l.Timestamp.String()); err != nil {
 							log.Printf("unable to parse timestamp: %s %s", l.Timestamp, err.Error())
 						} else {
-							if ets.After(latestLogTimestampObserved) {
-								// record the latest event we have seen
-								latestLogTimestampObserved = ets
+							logevent := LogEvent{
+								Time:         ets,
+								LogEventUISP: LogEventUISP(*l),
 							}
-							if ets.After(mustBeNewerThan) {
-								dstCh <- LogEvent(*l)
+							if logevent.Time.After(latestLogTimestampObserved) {
+								// record the latest event we have seen
+								latestLogTimestampObserved = logevent.Time
+							}
+							if logevent.Time.After(mustBeNewerThan) {
+								dstCh <- logevent
 							}
 							//otherwise, drop the log by not emitting it, it has already been seen
 						}

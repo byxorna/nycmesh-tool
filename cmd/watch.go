@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/byxorna/nycmesh-tool/pkg/app"
 	"github.com/spf13/cobra"
@@ -30,10 +31,10 @@ var (
 			go func() {
 				// as log events are produced by the watcher, print em out in a nice format
 				for le := range logCh {
-					fmt.Printf("%v %v %v\n", le.Timestamp, *le.Level, *le.Message)
+					fmt.Printf("%s\t%s\t%s\n", le.Time.Local().Format(time.RFC3339), *le.Level, *le.Message)
 				}
 			}()
-			//
+
 			if err := a.WatchLogs(cmd.Context(), logCh); err != nil {
 				return fmt.Errorf("log watch failed: %w", err)
 			}
