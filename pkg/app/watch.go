@@ -28,6 +28,7 @@ type LogEvent models.Model9 // -_- generated code suxxx, why this confusing name
 
 func (a *App) WatchLogs(ctx context.Context, dstCh chan<- LogEvent) error {
 	qPeriod := float64(logQueryPeriod.Milliseconds())
+	var latestLogTimestampObserved time.Time
 
 	for {
 		select {
@@ -35,7 +36,8 @@ func (a *App) WatchLogs(ctx context.Context, dstCh chan<- LogEvent) error {
 			return fmt.Errorf("cancelled by context")
 		case <-time.After(logFetchInterval):
 			// fetch more logs, and handle pagination
-			fetchLogsOnce := func(dstCh chan<- LogEvent) error {
+			fetchLogsOnce := func(latestTimestampSeen *time.Time, dstCh chan<- LogEvent) error {
+				mustBeNewerThan := *latestTimestampSeen
 				params := logs.NewGetLogsParams().
 					WithDefaults().
 					WithContext(ctx).
@@ -52,18 +54,27 @@ func (a *App) WatchLogs(ctx context.Context, dstCh chan<- LogEvent) error {
 						continue
 					}
 
-					log.Printf("got pg %.0f items %d, pagination page=%d pages=%d total=%d", params.Page, len(res.Payload.Items), *res.Payload.Pagination.Page, *res.Payload.Pagination.Pages, *res.Payload.Pagination.Total)
+					//log.Printf("got pg %.0f items %d, pagination page=%d pages=%d total=%d", params.Page, len(res.Payload.Items), *res.Payload.Pagination.Page, *res.Payload.Pagination.Pages, *res.Payload.Pagination.Total)
 
 					// collect events, and send them to the dstCh
 					// TODO: sort them reverse, so we write oldest first?
 					for _, l := range res.Payload.Items {
-						//log.Printf("sending %+v", LogEvent(*l))
-						dstCh <- LogEvent(*l)
+						if ets, err := time.Parse(time.RFC3339, l.Timestamp.String()); err != nil {
+							log.Printf("unable to parse timestamp: %s %s", l.Timestamp, err.Error())
+						} else {
+							if ets.After(latestLogTimestampObserved) {
+								// record the latest event we have seen
+								latestLogTimestampObserved = ets
+							}
+							if ets.After(mustBeNewerThan) {
+								dstCh <- LogEvent(*l)
+							}
+							//otherwise, drop the log by not emitting it, it has already been seen
+						}
 					}
 
 					if res.Payload.Pagination.Pages != nil && float64(*res.Payload.Pagination.Pages) == params.Page {
 						// all done, lets wrap up
-						log.Printf("reached end of pagination")
 						return nil
 					}
 
@@ -72,10 +83,9 @@ func (a *App) WatchLogs(ctx context.Context, dstCh chan<- LogEvent) error {
 				}
 			}
 
-			if err := fetchLogsOnce(dstCh); err != nil {
+			if err := fetchLogsOnce(&latestLogTimestampObserved, dstCh); err != nil {
 				log.Printf("fetching logs failed: %s", err.Error())
 			}
-			log.Printf("fetching logs CLOSE")
 
 		}
 	}

@@ -33,7 +33,7 @@ var (
 					fmt.Printf("%v %v %v\n", le.Timestamp, *le.Level, *le.Message)
 				}
 			}()
-
+			//
 			if err := a.WatchLogs(cmd.Context(), logCh); err != nil {
 				return fmt.Errorf("log watch failed: %w", err)
 			}
