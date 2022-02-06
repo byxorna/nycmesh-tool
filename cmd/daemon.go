@@ -37,6 +37,7 @@ var (
 func init() {
 	daemonCmd.Flags().Bool("dfs-event-detection", true, "enable DFS event detection feature")
 	viper.BindPFlag("feature.dfs-event-detection", daemonCmd.Flags().Lookup("dfs-event-detection"))
-
+	daemonCmd.Flags().String("slack-token", "slack.token", "specify the slack.token to connect with slack")
+	viper.BindPFlag("slack.token", daemonCmd.Flags().Lookup("slack-token"))
 	rootCmd.AddCommand(daemonCmd)
 }

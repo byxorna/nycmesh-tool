@@ -39,6 +39,10 @@ uisp:
   scheme: https
   skip-verify-tls: false # true needed for self-signed certs
   debug: true
+
+# note: the slack key is optional, and only useful if you are running `daemon`
+# slack:
+#   token: "put your bot token here"
 ```
 
 ## UISP API Commands
