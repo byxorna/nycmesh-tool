@@ -19,9 +19,8 @@ var (
 	// 1000 logs from UISP is about 1Mb JSON, roughly
 	logFetchCount = float64(1000)
 
-	// each time we ask for logs, we ask for an interval (period in uisp api)
-	// thats represented in milliseconds, from 1 hour up to ?
-	logQueryPeriod = time.Hour * 1
+	MinLogQueryPeriod = float64(time.Hour.Milliseconds())
+	MaxLogQueryPeriod = float64((24 * 365 * time.Hour).Milliseconds())
 )
 
 type LogEventUISP models.Model9 // -_- generated code suxxx, why this confusing name
@@ -33,15 +32,24 @@ type LogEvent struct {
 }
 
 func (a *App) WatchLogs(ctx context.Context, since time.Time, dstCh chan<- LogEvent) error {
-	qPeriod := float64(logQueryPeriod.Milliseconds())
+	initialQueryPeriod := float64(time.Now().Sub(since).Milliseconds())
 	latestLogTimestampObserved := since // this in effect forces us to drop any messages we fetch from before this time
 
+	qPeriod := initialQueryPeriod
 	for {
+		if qPeriod < MinLogQueryPeriod {
+			qPeriod = MinLogQueryPeriod
+		}
+		if qPeriod > MaxLogQueryPeriod {
+			qPeriod = MaxLogQueryPeriod
+		}
+
 		select {
 		case <-ctx.Done():
 			return fmt.Errorf("cancelled by context")
 		case <-time.After(logFetchInterval):
 			// fetch more logs, and handle pagination
+			//params.SetPeriod(&MinLogQueryPeriod)
 			fetchLogsOnce := func(latestTimestampSeen *time.Time, dstCh chan<- LogEvent) error {
 				mustBeNewerThan := *latestTimestampSeen
 				params := logs.NewGetLogsParams().
@@ -113,6 +121,9 @@ func (a *App) WatchLogs(ctx context.Context, since time.Time, dstCh chan<- LogEv
 							dstCh <- logevent
 						}
 
+						// decrement the period to minimum, so subsequent queries will not do as much
+						// damage to UISP API
+						qPeriod = MinLogQueryPeriod
 						return nil
 					}
 

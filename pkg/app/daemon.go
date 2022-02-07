@@ -80,6 +80,8 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 	rawLogsCh := make(chan LogEvent, 10)
 	dfsEventCh := make(chan LogEvent)
 
+	initialQueryPeriod := (time.Hour * 24 * 2)
+
 	// start up the log producer, which pushes events into rawLogsCh
 	wg.Add(1)
 	go func() {
@@ -88,8 +90,8 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 			case <-ctxDone:
 				break
 			default:
-				// we start watching logs since 24h ago, so we catch any recent events
-				if err := a.WatchLogs(ctx, time.Now().Add(-(time.Hour * 24)), rawLogsCh); err != nil {
+				log.Printf("initial log query window is %s", initialQueryPeriod)
+				if err := a.WatchLogs(ctx, time.Now().Add(-initialQueryPeriod), rawLogsCh); err != nil {
 					log.Printf("unable to watch logs: %w", err)
 					log.Printf("retrying log watch after %s backoff", daemonWatchFailureBackoff)
 					time.Sleep(daemonWatchFailureBackoff)
@@ -103,8 +105,8 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 	wg.Add(1)
 	go func() {
 		dfsMessageRegex := regexp.MustCompile(`\bchanged frequency due to DFS detection\b`)
+		//disconnectRegex := regexp.MustCompile(`\bhas been disconnected\b`)
 		log.Printf("watching for DFS events with `%v`", dfsMessageRegex)
-		//dfsMessageRegex := regexp.MustCompile(`\bhas been disconnected\b`)
 		for {
 			select {
 			case <-ctxDone:
@@ -113,7 +115,7 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 				t := rawLog.Tags
 				sort.Strings(t)
 
-				if rawLog.Message != nil && dfsMessageRegex.MatchString(*rawLog.Message) && sort.SearchStrings(t, "device-state") != len(t) {
+				if rawLog.Message != nil && dfsMessageRegex.MatchString(*rawLog.Message) { // && sort.SearchStrings(t, "device-state") != len(t) {
 					dfsEventCh <- rawLog
 				}
 			}
