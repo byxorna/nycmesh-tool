@@ -92,7 +92,7 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 			default:
 				log.Printf("initial log query window is %s", initialQueryPeriod)
 				if err := a.WatchLogs(ctx, time.Now().Add(-initialQueryPeriod), rawLogsCh); err != nil {
-					log.Printf("unable to watch logs: %w", err)
+					log.Printf("unable to watch logs: %s", err.Error())
 					log.Printf("retrying log watch after %s backoff", daemonWatchFailureBackoff)
 					time.Sleep(daemonWatchFailureBackoff)
 				}
@@ -120,7 +120,7 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 				}
 			}
 		}
-		log.Printf("dfs watch: end")
+
 		wg.Done()
 	}()
 
