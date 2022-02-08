@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"regexp"
 	"sort"
@@ -117,7 +118,7 @@ func (a *App) logConsumerDFSEventDetector(ctx context.Context, wg *sync.WaitGrou
 				break
 			case dfsEvent := <-dfsEventCh:
 				log.Printf("DFS event detected at nn:%d on %s: %s", dfsEvent.NN, dfsEvent.Timestamp, *dfsEvent.Message)
-				if !a.config.EnableSlack {
+				if !a.config.Daemon.EnableSlack {
 					log.Printf("slack support disabled via --enable-slack=false")
 					continue
 				}
@@ -160,7 +161,7 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 	logFountain := make(chan LogEvent, 10)
 
 	logConsumers := []func(context.Context, *sync.WaitGroup, <-chan LogEvent){}
-	if a.config.DaemonConfig.DFSEventDetection {
+	if a.config.Daemon.DFSEventDetection {
 		logConsumers = append(logConsumers, a.logConsumerDFSEventDetector)
 	}
 
@@ -176,6 +177,13 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 }
 
 func (a *App) RunDaemon(daemonCtx context.Context) (errs []error) {
+	encodedConfig, err := json.Marshal(a.config)
+	if err != nil {
+		return []error{err}
+	}
+
+	log.Printf("daemon config: %s", encodedConfig)
+
 	coroutines := []func(context.Context) error{
 		a.coroutineLogWatch,
 	}

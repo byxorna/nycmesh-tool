@@ -28,7 +28,13 @@ type App struct {
 }
 
 func New(cmd *cobra.Command, args []string) (*App, error) {
-	a := App{config: NewConfig()}
+	a := App{}
+
+	cfg, err := NewConfig()
+	if err != nil {
+		return nil, err
+	}
+	a.config = cfg
 
 	diskCache, err := cache.NewDiskVCache()
 	if err != nil {
@@ -48,8 +54,8 @@ func New(cmd *cobra.Command, args []string) (*App, error) {
 	}
 	a.MeshAPIClient = nycmeshClient
 
-	if a.config.EnableSlack {
-		a.Slack = slack.New(a.config.slackToken)
+	if a.config.Daemon.EnableSlack {
+		a.Slack = slack.New(a.config.Slack.token)
 	}
 	return &a, nil
 }

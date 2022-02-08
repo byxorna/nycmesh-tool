@@ -1,25 +1,44 @@
 package app
 
-import "github.com/spf13/viper"
+import (
+	"github.com/spf13/viper"
+)
 
 type Config struct {
-	slackToken   string
-	outputFormat string
-	DaemonConfig
+	Core   CoreConfig   `json:"core"`
+	Slack  SlackConfig  `json:"slack"`
+	Daemon DaemonConfig `json:"daemon"`
+}
+
+type SlackConfig struct {
+	token string `json:"token"`
+}
+
+type CoreConfig struct {
+	OutputFormat string `json:"format"`
 }
 
 type DaemonConfig struct {
-	DFSEventDetection bool
-	EnableSlack       bool
+	DFSEventDetection bool `json:"dfs-event-detection"`
+	EnableSlack       bool `json:"enable-slack"`
 }
 
-func NewConfig() *Config {
-	return &Config{
-		outputFormat: viper.GetString("core.format"),
-		slackToken:   viper.GetString("slack.token"),
-		DaemonConfig: DaemonConfig{
+func NewConfig() (*Config, error) {
+	// TODO: there is surely a more clever way to get this struct populated via
+	// viper.Unmarshal, but I cannot be troubled to figure out the proper struct tags
+	// or why yaml bugs like https://github.com/spf13/viper/issues/338 matter
+	cfg := &Config{
+		Core: CoreConfig{
+			OutputFormat: viper.GetString("core.format"),
+		},
+		Slack: SlackConfig{
+			token: viper.GetString("slack.token"),
+		},
+		Daemon: DaemonConfig{
 			DFSEventDetection: viper.GetBool("daemon.dfs-event-detection"),
 			EnableSlack:       viper.GetBool("daemon.enable-slack"),
 		},
 	}
+
+	return cfg, nil
 }
