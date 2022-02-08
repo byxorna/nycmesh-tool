@@ -121,14 +121,15 @@ func (a *App) logConsumerDFSEventDetector(ctx context.Context, wg *sync.WaitGrou
 					log.Printf("slack support disabled via --enable-slack=false")
 					continue
 				}
-				slackChannelID, err := lookupSlackChannelIDFromNN(dfsEvent.NN)
 
+				slackChannel, err := lookupSlackChannelIDFromNN(dfsEvent.NN)
 				if err != nil {
 					log.Printf("Unable to resolve slack channel: %s", err.Error())
-					log.Printf("Skipping sending slack notification for nn:%d", dfsEvent.NN)
-					continue
+					log.Printf("Using default monitoring channel %s", DefaultMonitoringChannel)
+					slackChannel = DefaultMonitoringChannel
 				}
-				log.Printf("notifying slack channel %s of DFS on nn:%d %s", slackChannelID, dfsEvent.NN, dfsEvent.Device.Name)
+
+				log.Printf("notifying slack channel %s of DFS on nn:%d %s", slackChannel, dfsEvent.NN, dfsEvent.Device.Name)
 				go func() {
 					// TODO: add buttons to link out to UISP for the device triggering the event
 					attachment := slack.Attachment{
@@ -137,7 +138,7 @@ func (a *App) logConsumerDFSEventDetector(ctx context.Context, wg *sync.WaitGrou
 					}
 
 					channelID, timestamp, err := a.Slack.PostMessage(
-						slackChannelID,
+						slackChannel,
 						slack.MsgOptionText("nothing here", false),
 						slack.MsgOptionAttachments(attachment),
 						slack.MsgOptionAsUser(true), // Add this if you want that the bot would post message as a user, otherwise it will send response using the default slackbot
