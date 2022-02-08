@@ -78,75 +78,125 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 	ctxDone := ctx.Done()
 	wg := sync.WaitGroup{}
 	rawLogsCh := make(chan LogEvent, 10)
-	dfsEventCh := make(chan LogEvent)
+	logConsumerChannels := map[string]chan LogEvent{}
 
 	initialQueryPeriod := (time.Hour * 24 * 2)
 
-	// start up the log producer, which pushes events into rawLogsCh
-	wg.Add(1)
-	go func() {
-		for {
-			select {
-			case <-ctxDone:
-				break
-			default:
-				log.Printf("initial log query window is %s", initialQueryPeriod)
-				if err := a.WatchLogs(ctx, time.Now().Add(-initialQueryPeriod), rawLogsCh); err != nil {
-					log.Printf("unable to watch logs: %s", err.Error())
-					log.Printf("retrying log watch after %s backoff", daemonWatchFailureBackoff)
-					time.Sleep(daemonWatchFailureBackoff)
+	startLogProducer := func() {
+		// start up the log producer, which pushes events into rawLogsCh
+		wg.Add(1)
+		go func() {
+			for {
+				select {
+				case <-ctxDone:
+					break
+				default:
+					log.Printf("initial log query window is %s", initialQueryPeriod)
+					if err := a.WatchLogs(ctx, time.Now().Add(-initialQueryPeriod), rawLogsCh); err != nil {
+						log.Printf("unable to watch logs: %s", err.Error())
+						log.Printf("retrying log watch after %s backoff", daemonWatchFailureBackoff)
+						time.Sleep(daemonWatchFailureBackoff)
+					}
 				}
 			}
-		}
-		wg.Done()
-	}()
 
-	// start up the DFS detection consumer, that filters events for DFS events, and emits them to dfsEventCh
-	wg.Add(1)
-	go func() {
-		dfsMessageRegex := regexp.MustCompile(`\bchanged frequency due to DFS detection\b`)
-		//disconnectRegex := regexp.MustCompile(`\bhas been disconnected\b`)
-		log.Printf("watching for DFS events with `%v`", dfsMessageRegex)
-		for {
-			select {
-			case <-ctxDone:
-				break
-			case rawLog := <-rawLogsCh:
-				t := rawLog.Tags
-				sort.Strings(t)
+			close(rawLogsCh)
+			wg.Done()
+		}()
+	}
 
-				if rawLog.Message != nil && dfsMessageRegex.MatchString(*rawLog.Message) { // && sort.SearchStrings(t, "device-state") != len(t) {
-					dfsEventCh <- rawLog
+	startLogConsumerMultiplexer := func() {
+		// create a multiplexer, so for each consumer that cares about logs, we make a new channel and send
+		// each log to each consumer
+
+		wg.Add(1)
+		go func() {
+			defer func() {
+				for _, ch := range logConsumerChannels {
+					close(ch)
+				}
+				wg.Done()
+			}()
+
+			for {
+				select {
+				case <-ctxDone:
+					break
+				case rawLog := <-rawLogsCh:
+					// multiplex this log to all our logConsumerChannels
+					for _, consumerCh := range logConsumerChannels {
+						consumerCh <- rawLog
+					}
 				}
 			}
-		}
+		}()
+	}
 
-		wg.Done()
-	}()
+	createDFSEventDetector := func(logsCh <-chan LogEvent) {
+		dfsEventCh := make(chan LogEvent)
+		// start up the DFS detection consumer, that filters events for DFS events, and emits them to dfsEventCh
+		wg.Add(1)
+		go func() {
+			defer func() {
+				close(dfsEventCh)
+				wg.Done()
+			}()
 
-	// read from dfsEventCh, log events as we see them
-	wg.Add(1)
-	go func() {
-		for {
-			select {
-			case <-ctxDone:
-				break
-			case dfsEvent := <-dfsEventCh:
-				log.Printf("DFS event detected at nn:%d: %s", dfsEvent.NN, *dfsEvent.Message)
+			dfsMessageRegex := regexp.MustCompile(`\bchanged frequency due to DFS detection\b`)
+			//disconnectRegex := regexp.MustCompile(`\bhas been disconnected\b`)
+			log.Printf("watching for DFS events with `%v`", dfsMessageRegex)
+			for {
+				select {
+				case <-ctxDone:
+					break
+				case rawLog := <-logsCh:
+					t := rawLog.Tags
+					sort.Strings(t)
+
+					if rawLog.Message != nil && dfsMessageRegex.MatchString(*rawLog.Message) { // && sort.SearchStrings(t, "device-state") != len(t) {
+						dfsEventCh <- rawLog
+					}
+				}
 			}
-		}
-		wg.Done()
-	}()
+
+		}()
+
+		// read from dfsEventCh, log events as we see them
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for {
+				select {
+				case <-ctxDone:
+					break
+				case dfsEvent := <-dfsEventCh:
+					log.Printf("DFS event detected at nn:%d on %s: %s", dfsEvent.NN, dfsEvent.Timestamp, *dfsEvent.Message)
+				}
+			}
+		}()
+	}
+
+	logWatchers := map[string]func(<-chan LogEvent){}
+	if a.config.DaemonConfig.DFSEventDetection {
+		id := "dfs"
+		logConsumerChannels[id] = make(chan LogEvent)
+		logWatchers[id] = createDFSEventDetector
+	}
+
+	startLogProducer()
+	startLogConsumerMultiplexer()
+	for id, startCoroutine := range logWatchers {
+		// create the log watchers, giving them their own channel to listen on for logs
+		startCoroutine(logConsumerChannels[id])
+	}
 
 	wg.Wait()
 	return nil
 }
 
 func (a *App) RunDaemon(daemonCtx context.Context) (errs []error) {
-	coroutines := []func(context.Context) error{}
-
-	if a.config.DFSEventDetection {
-		coroutines = append(coroutines, a.coroutineLogWatch)
+	coroutines := []func(context.Context) error{
+		a.coroutineLogWatch,
 	}
 
 	errCh := make(chan error)
