@@ -6,6 +6,7 @@ var (
 	// TODO: make this mapping dynamic
 	NNToSlackChannel = map[int]string{
 		//713:  "CAZ4V9E0P",   // #sn3
+		//713:  "C02HZLLH85R", // #hub-clay-5712
 		5712: "C02HZLLH85R", // #hub-clay-5712
 	}
 )
