@@ -19,10 +19,12 @@ type App struct {
 
 	// TODO: wire this up as a general caching layer, instead of if being in meshapi.Client?
 	diskCache cache.DiskCache
+
+	config *Config
 }
 
 func New(cmd *cobra.Command, args []string) (*App, error) {
-	a := App{}
+	a := App{config: NewConfig()}
 
 	diskCache, err := cache.NewDiskVCache()
 	if err != nil {

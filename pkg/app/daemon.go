@@ -143,9 +143,10 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 }
 
 func (a *App) RunDaemon(daemonCtx context.Context) (errs []error) {
-	coroutines := []func(context.Context) error{
-		// NOTE(gabe): define all tasks that should run within the context of the daemon here
-		a.coroutineLogWatch,
+	coroutines := []func(context.Context) error{}
+
+	if a.config.DFSEventDetection {
+		coroutines = append(coroutines, a.coroutineLogWatch)
 	}
 
 	errCh := make(chan error)
