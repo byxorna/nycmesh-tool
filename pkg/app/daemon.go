@@ -74,17 +74,17 @@ var (
 */
 
 func (a *App) coroutineLogWatch(ctx context.Context) error {
-
-	ctxDone := ctx.Done()
 	wg := sync.WaitGroup{}
-	rawLogsCh := make(chan LogEvent, 10)
+	logFountain := make(chan LogEvent, 10)
 	logConsumerChannels := map[string]chan LogEvent{}
 
 	initialQueryPeriod := (time.Hour * 24 * 2)
 
-	startLogProducer := func() {
-		// start up the log producer, which pushes events into rawLogsCh
+	startLogProducer := func(ctx context.Context, wg *sync.WaitGroup, ch chan<- LogEvent) {
+		// start up the log producer, which pushes events into ch
 		wg.Add(1)
+		ctxDone := ctx.Done()
+
 		go func() {
 			for {
 				select {
@@ -92,7 +92,7 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 					break
 				default:
 					log.Printf("initial log query window is %s", initialQueryPeriod)
-					if err := a.WatchLogs(ctx, time.Now().Add(-initialQueryPeriod), rawLogsCh); err != nil {
+					if err := a.WatchLogs(ctx, time.Now().Add(-initialQueryPeriod), ch); err != nil {
 						log.Printf("unable to watch logs: %s", err.Error())
 						log.Printf("retrying log watch after %s backoff", daemonWatchFailureBackoff)
 						time.Sleep(daemonWatchFailureBackoff)
@@ -100,16 +100,17 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 				}
 			}
 
-			close(rawLogsCh)
+			close(ch)
 			wg.Done()
 		}()
 	}
 
-	startLogConsumerMultiplexer := func() {
+	startLogConsumerMultiplexer := func(ctx context.Context, wg *sync.WaitGroup, srcCh <-chan LogEvent) {
 		// create a multiplexer, so for each consumer that cares about logs, we make a new channel and send
 		// each log to each consumer
-
 		wg.Add(1)
+		ctxDone := ctx.Done()
+
 		go func() {
 			defer func() {
 				for _, ch := range logConsumerChannels {
@@ -122,20 +123,21 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 				select {
 				case <-ctxDone:
 					break
-				case rawLog := <-rawLogsCh:
+				case evt := <-srcCh:
 					// multiplex this log to all our logConsumerChannels
 					for _, consumerCh := range logConsumerChannels {
-						consumerCh <- rawLog
+						consumerCh <- evt
 					}
 				}
 			}
 		}()
 	}
 
-	createDFSEventDetector := func(logsCh <-chan LogEvent) {
+	createDFSEventDetector := func(wg *sync.WaitGroup, logsCh <-chan LogEvent) {
 		dfsEventCh := make(chan LogEvent)
 		// start up the DFS detection consumer, that filters events for DFS events, and emits them to dfsEventCh
 		wg.Add(1)
+		ctxDone := ctx.Done()
 		go func() {
 			defer func() {
 				close(dfsEventCh)
@@ -143,7 +145,7 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 			}()
 
 			dfsMessageRegex := regexp.MustCompile(`\bchanged frequency due to DFS detection\b`)
-			//disconnectRegex := regexp.MustCompile(`\bhas been disconnected\b`)
+			//dfsMessageRegex := regexp.MustCompile(`\bhas been disconnected\b`)
 			log.Printf("watching for DFS events with `%v`", dfsMessageRegex)
 			for {
 				select {
@@ -176,18 +178,18 @@ func (a *App) coroutineLogWatch(ctx context.Context) error {
 		}()
 	}
 
-	logWatchers := map[string]func(<-chan LogEvent){}
+	logWatchers := map[string]func(*sync.WaitGroup, <-chan LogEvent){}
 	if a.config.DaemonConfig.DFSEventDetection {
 		id := "dfs"
 		logConsumerChannels[id] = make(chan LogEvent)
 		logWatchers[id] = createDFSEventDetector
 	}
 
-	startLogProducer()
-	startLogConsumerMultiplexer()
+	startLogProducer(ctx, &wg, logFountain)
+	startLogConsumerMultiplexer(ctx, &wg, logFountain)
 	for id, startCoroutine := range logWatchers {
 		// create the log watchers, giving them their own channel to listen on for logs
-		startCoroutine(logConsumerChannels[id])
+		startCoroutine(&wg, logConsumerChannels[id])
 	}
 
 	wg.Wait()
