@@ -7,6 +7,8 @@ import (
 	"sort"
 	"sync"
 	"time"
+
+	"github.com/slack-go/slack"
 )
 
 var (
@@ -106,7 +108,6 @@ func (a *App) logConsumerDFSEventDetector(ctx context.Context, wg *sync.WaitGrou
 	}()
 
 	// read from dfsEventCh, log events as we see them
-	// TODO: this is where we will bolt in the slack support for notifying channels when events are detected
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -116,6 +117,36 @@ func (a *App) logConsumerDFSEventDetector(ctx context.Context, wg *sync.WaitGrou
 				break
 			case dfsEvent := <-dfsEventCh:
 				log.Printf("DFS event detected at nn:%d on %s: %s", dfsEvent.NN, dfsEvent.Timestamp, *dfsEvent.Message)
+				if a.config.EnableSlack {
+					slackChannelID, err := lookupSlackChannelIDFromNN(dfsEvent.NN)
+
+					if err != nil {
+						log.Printf("Unable to resolve slack channel: %s", err.Error())
+						log.Printf("Skipping sending slack notification for nn:%d", dfsEvent.NN)
+						continue
+					}
+					log.Printf("notifying slack channel %s of DFS on nn:%d %s", slackChannelID, dfsEvent.NN, dfsEvent.Device.Name)
+					go func() {
+						// TODO: add buttons to link out to UISP for the device triggering the event
+						attachment := slack.Attachment{
+							Pretext: ":warning:",
+							Text:    *dfsEvent.Message,
+						}
+
+						channelID, timestamp, err := a.Slack.PostMessage(
+							slackChannelID,
+							slack.MsgOptionText("nothing here", false),
+							slack.MsgOptionAttachments(attachment),
+							slack.MsgOptionAsUser(true), // Add this if you want that the bot would post message as a user, otherwise it will send response using the default slackbot
+						)
+						if err != nil {
+							log.Printf("Slack error: %s\n", err.Error())
+							return
+						} else {
+							log.Printf("Message successfully sent to channel %s at %s", channelID, timestamp)
+						}
+					}()
+				}
 			}
 		}
 	}()
