@@ -10,19 +10,31 @@ import (
 	"github.com/byxorna/nycmesh-tool/pkg/cache"
 	"github.com/byxorna/nycmesh-tool/pkg/meshapi"
 	"github.com/byxorna/nycmesh-tool/pkg/version"
+	"github.com/slack-go/slack"
 	"github.com/spf13/cobra"
 )
 
 type App struct {
 	*client.UISPAPI
+
+	Slack *slack.Client
+
 	MeshAPIClient *meshapi.Client
 
 	// TODO: wire this up as a general caching layer, instead of if being in meshapi.Client?
 	diskCache cache.DiskCache
+
+	config *Config
 }
 
 func New(cmd *cobra.Command, args []string) (*App, error) {
 	a := App{}
+
+	cfg, err := NewConfig()
+	if err != nil {
+		return nil, err
+	}
+	a.config = cfg
 
 	diskCache, err := cache.NewDiskVCache()
 	if err != nil {
@@ -41,6 +53,10 @@ func New(cmd *cobra.Command, args []string) (*App, error) {
 		return nil, fmt.Errorf("unable to create nycmesh client: %w", err)
 	}
 	a.MeshAPIClient = nycmeshClient
+
+	if a.config.Daemon.EnableSlack {
+		a.Slack = slack.New(a.config.Slack.token)
+	}
 	return &a, nil
 }
 
