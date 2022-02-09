@@ -1,4 +1,4 @@
-# Releases
+# Release
 
 ## Create a release
 
@@ -12,3 +12,9 @@ _or..., if you are more manually inclined:_
 
 - `git tag -a v0.3.5`
 - `git push origin --tags`
+
+## Docker Images
+
+See `.github/workflows` for builds.
+
+See `byxorna/nycmesh-tool` on [Docker Hub](https://hub.docker.com/repository/docker/byxorna/nycmesh-tool/tags?page=1&ordering=last_updated).
