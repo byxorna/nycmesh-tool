@@ -23,6 +23,8 @@ At the moment, the tool is pretty sparse. It provides the top level `nycmesh-too
 
 See [releases](https://github.com/byxorna/nycmesh-tool/releases) for binary downloads, and [./RELEASE.md](RELEASE.md) for more information.
 
+Builds of Docker images are created for each release, and pushed to `byxorna/nycmesh-tool`. [byxorna/nycmesh-tool on Docker Hub](https://hub.docker.com/repository/docker/byxorna/nycmesh-tool/tags?page=1&ordering=last_updated)
+
 # Hacking
 
 See [./HACKING.md](HACKING.md)
