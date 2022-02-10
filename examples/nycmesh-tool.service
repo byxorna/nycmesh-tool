@@ -1,0 +1,16 @@
+# /etc/systemd/system/nycmesh-tool.service
+# https://github.com/byxorna/nycmesh-tool
+
+[Unit]
+Description=nycmesh-tool daemon
+After=network.target
+
+[Service]
+User=daemon
+Group=
+ExecStart=nycmesh-tool-linux-amd64 daemon
+Type=simple
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
