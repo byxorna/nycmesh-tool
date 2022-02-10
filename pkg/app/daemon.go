@@ -9,6 +9,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client/authorization"
 	"github.com/slack-go/slack"
 )
 
@@ -182,6 +183,13 @@ func (a *App) RunDaemon(daemonCtx context.Context) (errs []error) {
 		return []error{err}
 	}
 
+	uispUser, err := a.UISPAPI.Authorization.GetUser(authorization.NewGetUserParams(), nil)
+	if err != nil {
+		log.Printf("unable to fetch current user from UISP API: %s", err.Error())
+		return []error{err}
+	}
+
+	log.Printf("logged into UISP as %s", uispUser.Payload.Username)
 	log.Printf("daemon config: %s", encodedConfig)
 
 	coroutines := []func(context.Context) error{
