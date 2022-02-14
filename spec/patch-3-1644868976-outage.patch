@@ -1,0 +1,33 @@
+--- spec/_uisp_swagger_patched.yaml	2022-02-14 14:47:38.088474961 -0500
++++ patch/_uisp_swagger_patched.yaml	2022-02-14 15:02:11.427966098 -0500
+@@ -21999,7 +21999,7 @@
+         type: string
+     required:
+       - alias
+-  Model 11:
++  Outage:
+     type: object
+     properties:
+       id:
+@@ -22035,10 +22035,10 @@
+       - aggregatedTime
+       - ongoing
+       - inProgress
+-  items 1:
++  outageList:
+     type: array
+     items:
+-      $ref: '#/definitions/Model%2011'
++      $ref: '#/definitions/Outage'
+   Outages:
+     type: object
+     properties:
+@@ -22047,7 +22047,7 @@
+       aggregation:
+         $ref: '#/definitions/aggregation%201'
+       items:
+-        $ref: '#/definitions/items%201'
++        $ref: '#/definitions/outageList'
+   antenna 2:
+     type: object
+     properties:

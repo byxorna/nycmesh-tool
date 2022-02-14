@@ -38,6 +38,9 @@ func runOperationGatewaysGetGatewaysID(cmd *cobra.Command, args []string) error 
 	}
 	// retrieve flag values from cmd and fill params
 	params := gateways.NewGetGatewaysIDParams()
+	if err, _ := retrieveOperationGatewaysGetGatewaysIDIDFlag(params, "", cmd); err != nil {
+		return err
+	}
 	if dryRun {
 
 		logDebugf("dry-run flag specified. Skip sending request.")
@@ -57,7 +60,49 @@ func runOperationGatewaysGetGatewaysID(cmd *cobra.Command, args []string) error 
 
 // registerOperationGatewaysGetGatewaysIDParamFlags registers all flags needed to fill params
 func registerOperationGatewaysGetGatewaysIDParamFlags(cmd *cobra.Command) error {
+	if err := registerOperationGatewaysGetGatewaysIDIDParamFlags("", cmd); err != nil {
+		return err
+	}
 	return nil
+}
+
+func registerOperationGatewaysGetGatewaysIDIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
+
+	idDescription := `Required. `
+
+	var idFlagName string
+	if cmdPrefix == "" {
+		idFlagName = "id"
+	} else {
+		idFlagName = fmt.Sprintf("%v.id", cmdPrefix)
+	}
+
+	var idFlagDefault string
+
+	_ = cmd.PersistentFlags().String(idFlagName, idFlagDefault, idDescription)
+
+	return nil
+}
+
+func retrieveOperationGatewaysGetGatewaysIDIDFlag(m *gateways.GetGatewaysIDParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+	retAdded := false
+	if cmd.Flags().Changed("id") {
+
+		var idFlagName string
+		if cmdPrefix == "" {
+			idFlagName = "id"
+		} else {
+			idFlagName = fmt.Sprintf("%v.id", cmdPrefix)
+		}
+
+		idFlagValue, err := cmd.Flags().GetString(idFlagName)
+		if err != nil {
+			return err, false
+		}
+		m.ID = idFlagValue
+
+	}
+	return nil, retAdded
 }
 
 // parseOperationGatewaysGetGatewaysIDResult parses request result and return the string content

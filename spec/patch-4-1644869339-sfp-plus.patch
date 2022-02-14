@@ -1,0 +1,32 @@
+--- spec/_uisp_swagger_patched.yaml	2022-02-14 15:07:06.124631989 -0500
++++ patch/_uisp_swagger_patched.yaml	2022-02-14 15:08:34.462353127 -0500
+@@ -28840,12 +28840,12 @@
+         type: boolean
+   vlanId:
+     type: object
+-  sfp+1:
++  sfpPlus1:
+     type: object
+     properties:
+       vlanNative:
+         type: number
+-  sfp+2:
++  sfpPlus2:
+     type: object
+     properties:
+       vlanNative:
+@@ -28863,10 +28863,10 @@
+   interface 1:
+     type: object
+     properties:
+-      sfp+1:
+-        $ref: '#/definitions/sfp%2B1'
+-      sfp+2:
+-        $ref: '#/definitions/sfp%2B2'
++      sfpPlus1:
++        $ref: '#/definitions/sfpPlus1'
++      sfpPlus2:
++        $ref: '#/definitions/sfpPlus2'
+       sfp1:
+         $ref: '#/definitions/sfp1'
+       sfp2:

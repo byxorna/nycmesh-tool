@@ -9,61 +9,61 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/byxorna/nycmesh-tool/generated/go/uisp/models"
+  "github.com/byxorna/nycmesh-tool/generated/go/uisp/models"
 	"github.com/go-openapi/swag"
 
 	"github.com/spf13/cobra"
 )
 
-// Schema cli for Model11
+// Schema cli for Outage
 
 // register flags to command
-func registerModelModel11Flags(depth int, cmdPrefix string, cmd *cobra.Command) error {
+func registerModelOutageFlags(depth int, cmdPrefix string, cmd *cobra.Command) error {
 
-	if err := registerModel11AggregatedTime(depth, cmdPrefix, cmd); err != nil {
+	if err := registerOutageAggregatedTime(depth, cmdPrefix, cmd); err != nil {
 		return err
 	}
 
-	if err := registerModel11Device(depth, cmdPrefix, cmd); err != nil {
+	if err := registerOutageDevice(depth, cmdPrefix, cmd); err != nil {
 		return err
 	}
 
-	if err := registerModel11DeviceMetadata(depth, cmdPrefix, cmd); err != nil {
+	if err := registerOutageDeviceMetadata(depth, cmdPrefix, cmd); err != nil {
 		return err
 	}
 
-	if err := registerModel11EndTimestamp(depth, cmdPrefix, cmd); err != nil {
+	if err := registerOutageEndTimestamp(depth, cmdPrefix, cmd); err != nil {
 		return err
 	}
 
-	if err := registerModel11ID(depth, cmdPrefix, cmd); err != nil {
+	if err := registerOutageID(depth, cmdPrefix, cmd); err != nil {
 		return err
 	}
 
-	if err := registerModel11InProgress(depth, cmdPrefix, cmd); err != nil {
+	if err := registerOutageInProgress(depth, cmdPrefix, cmd); err != nil {
 		return err
 	}
 
-	if err := registerModel11Ongoing(depth, cmdPrefix, cmd); err != nil {
+	if err := registerOutageOngoing(depth, cmdPrefix, cmd); err != nil {
 		return err
 	}
 
-	if err := registerModel11Site(depth, cmdPrefix, cmd); err != nil {
+	if err := registerOutageSite(depth, cmdPrefix, cmd); err != nil {
 		return err
 	}
 
-	if err := registerModel11StartTimestamp(depth, cmdPrefix, cmd); err != nil {
+	if err := registerOutageStartTimestamp(depth, cmdPrefix, cmd); err != nil {
 		return err
 	}
 
-	if err := registerModel11Type(depth, cmdPrefix, cmd); err != nil {
+	if err := registerOutageType(depth, cmdPrefix, cmd); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func registerModel11AggregatedTime(depth int, cmdPrefix string, cmd *cobra.Command) error {
+func registerOutageAggregatedTime(depth int, cmdPrefix string, cmd *cobra.Command) error {
 	if depth > maxDepth {
 		return nil
 	}
@@ -84,7 +84,7 @@ func registerModel11AggregatedTime(depth int, cmdPrefix string, cmd *cobra.Comma
 	return nil
 }
 
-func registerModel11Device(depth int, cmdPrefix string, cmd *cobra.Command) error {
+func registerOutageDevice(depth int, cmdPrefix string, cmd *cobra.Command) error {
 	if depth > maxDepth {
 		return nil
 	}
@@ -103,7 +103,7 @@ func registerModel11Device(depth int, cmdPrefix string, cmd *cobra.Command) erro
 	return nil
 }
 
-func registerModel11DeviceMetadata(depth int, cmdPrefix string, cmd *cobra.Command) error {
+func registerOutageDeviceMetadata(depth int, cmdPrefix string, cmd *cobra.Command) error {
 	if depth > maxDepth {
 		return nil
 	}
@@ -122,7 +122,7 @@ func registerModel11DeviceMetadata(depth int, cmdPrefix string, cmd *cobra.Comma
 	return nil
 }
 
-func registerModel11EndTimestamp(depth int, cmdPrefix string, cmd *cobra.Command) error {
+func registerOutageEndTimestamp(depth int, cmdPrefix string, cmd *cobra.Command) error {
 	if depth > maxDepth {
 		return nil
 	}
@@ -143,7 +143,7 @@ func registerModel11EndTimestamp(depth int, cmdPrefix string, cmd *cobra.Command
 	return nil
 }
 
-func registerModel11ID(depth int, cmdPrefix string, cmd *cobra.Command) error {
+func registerOutageID(depth int, cmdPrefix string, cmd *cobra.Command) error {
 	if depth > maxDepth {
 		return nil
 	}
@@ -164,7 +164,7 @@ func registerModel11ID(depth int, cmdPrefix string, cmd *cobra.Command) error {
 	return nil
 }
 
-func registerModel11InProgress(depth int, cmdPrefix string, cmd *cobra.Command) error {
+func registerOutageInProgress(depth int, cmdPrefix string, cmd *cobra.Command) error {
 	if depth > maxDepth {
 		return nil
 	}
@@ -185,7 +185,7 @@ func registerModel11InProgress(depth int, cmdPrefix string, cmd *cobra.Command) 
 	return nil
 }
 
-func registerModel11Ongoing(depth int, cmdPrefix string, cmd *cobra.Command) error {
+func registerOutageOngoing(depth int, cmdPrefix string, cmd *cobra.Command) error {
 	if depth > maxDepth {
 		return nil
 	}
@@ -206,7 +206,7 @@ func registerModel11Ongoing(depth int, cmdPrefix string, cmd *cobra.Command) err
 	return nil
 }
 
-func registerModel11Site(depth int, cmdPrefix string, cmd *cobra.Command) error {
+func registerOutageSite(depth int, cmdPrefix string, cmd *cobra.Command) error {
 	if depth > maxDepth {
 		return nil
 	}
@@ -225,7 +225,7 @@ func registerModel11Site(depth int, cmdPrefix string, cmd *cobra.Command) error 
 	return nil
 }
 
-func registerModel11StartTimestamp(depth int, cmdPrefix string, cmd *cobra.Command) error {
+func registerOutageStartTimestamp(depth int, cmdPrefix string, cmd *cobra.Command) error {
 	if depth > maxDepth {
 		return nil
 	}
@@ -246,7 +246,7 @@ func registerModel11StartTimestamp(depth int, cmdPrefix string, cmd *cobra.Comma
 	return nil
 }
 
-func registerModel11Type(depth int, cmdPrefix string, cmd *cobra.Command) error {
+func registerOutageType(depth int, cmdPrefix string, cmd *cobra.Command) error {
 	if depth > maxDepth {
 		return nil
 	}
@@ -279,64 +279,64 @@ func registerModel11Type(depth int, cmdPrefix string, cmd *cobra.Command) error 
 }
 
 // retrieve flags from commands, and set value in model. Return true if any flag is passed by user to fill model field.
-func retrieveModelModel11Flags(depth int, m *models.Model11, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveModelOutageFlags(depth int, m *models.Outage, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
 
-	err, aggregatedTimeAdded := retrieveModel11AggregatedTimeFlags(depth, m, cmdPrefix, cmd)
+	err, aggregatedTimeAdded := retrieveOutageAggregatedTimeFlags(depth, m, cmdPrefix, cmd)
 	if err != nil {
 		return err, false
 	}
 	retAdded = retAdded || aggregatedTimeAdded
 
-	err, deviceAdded := retrieveModel11DeviceFlags(depth, m, cmdPrefix, cmd)
+	err, deviceAdded := retrieveOutageDeviceFlags(depth, m, cmdPrefix, cmd)
 	if err != nil {
 		return err, false
 	}
 	retAdded = retAdded || deviceAdded
 
-	err, deviceMetadataAdded := retrieveModel11DeviceMetadataFlags(depth, m, cmdPrefix, cmd)
+	err, deviceMetadataAdded := retrieveOutageDeviceMetadataFlags(depth, m, cmdPrefix, cmd)
 	if err != nil {
 		return err, false
 	}
 	retAdded = retAdded || deviceMetadataAdded
 
-	err, endTimestampAdded := retrieveModel11EndTimestampFlags(depth, m, cmdPrefix, cmd)
+	err, endTimestampAdded := retrieveOutageEndTimestampFlags(depth, m, cmdPrefix, cmd)
 	if err != nil {
 		return err, false
 	}
 	retAdded = retAdded || endTimestampAdded
 
-	err, idAdded := retrieveModel11IDFlags(depth, m, cmdPrefix, cmd)
+	err, idAdded := retrieveOutageIDFlags(depth, m, cmdPrefix, cmd)
 	if err != nil {
 		return err, false
 	}
 	retAdded = retAdded || idAdded
 
-	err, inProgressAdded := retrieveModel11InProgressFlags(depth, m, cmdPrefix, cmd)
+	err, inProgressAdded := retrieveOutageInProgressFlags(depth, m, cmdPrefix, cmd)
 	if err != nil {
 		return err, false
 	}
 	retAdded = retAdded || inProgressAdded
 
-	err, ongoingAdded := retrieveModel11OngoingFlags(depth, m, cmdPrefix, cmd)
+	err, ongoingAdded := retrieveOutageOngoingFlags(depth, m, cmdPrefix, cmd)
 	if err != nil {
 		return err, false
 	}
 	retAdded = retAdded || ongoingAdded
 
-	err, siteAdded := retrieveModel11SiteFlags(depth, m, cmdPrefix, cmd)
+	err, siteAdded := retrieveOutageSiteFlags(depth, m, cmdPrefix, cmd)
 	if err != nil {
 		return err, false
 	}
 	retAdded = retAdded || siteAdded
 
-	err, startTimestampAdded := retrieveModel11StartTimestampFlags(depth, m, cmdPrefix, cmd)
+	err, startTimestampAdded := retrieveOutageStartTimestampFlags(depth, m, cmdPrefix, cmd)
 	if err != nil {
 		return err, false
 	}
 	retAdded = retAdded || startTimestampAdded
 
-	err, typeAdded := retrieveModel11TypeFlags(depth, m, cmdPrefix, cmd)
+	err, typeAdded := retrieveOutageTypeFlags(depth, m, cmdPrefix, cmd)
 	if err != nil {
 		return err, false
 	}
@@ -345,7 +345,7 @@ func retrieveModelModel11Flags(depth int, m *models.Model11, cmdPrefix string, c
 	return nil, retAdded
 }
 
-func retrieveModel11AggregatedTimeFlags(depth int, m *models.Model11, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveOutageAggregatedTimeFlags(depth int, m *models.Outage, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	if depth > maxDepth {
 		return nil, false
 	}
@@ -373,7 +373,7 @@ func retrieveModel11AggregatedTimeFlags(depth int, m *models.Model11, cmdPrefix 
 	return nil, retAdded
 }
 
-func retrieveModel11DeviceFlags(depth int, m *models.Model11, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveOutageDeviceFlags(depth int, m *models.Outage, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	if depth > maxDepth {
 		return nil, false
 	}
@@ -400,7 +400,7 @@ func retrieveModel11DeviceFlags(depth int, m *models.Model11, cmdPrefix string, 
 	return nil, retAdded
 }
 
-func retrieveModel11DeviceMetadataFlags(depth int, m *models.Model11, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveOutageDeviceMetadataFlags(depth int, m *models.Outage, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	if depth > maxDepth {
 		return nil, false
 	}
@@ -427,7 +427,7 @@ func retrieveModel11DeviceMetadataFlags(depth int, m *models.Model11, cmdPrefix 
 	return nil, retAdded
 }
 
-func retrieveModel11EndTimestampFlags(depth int, m *models.Model11, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveOutageEndTimestampFlags(depth int, m *models.Outage, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	if depth > maxDepth {
 		return nil, false
 	}
@@ -455,7 +455,7 @@ func retrieveModel11EndTimestampFlags(depth int, m *models.Model11, cmdPrefix st
 	return nil, retAdded
 }
 
-func retrieveModel11IDFlags(depth int, m *models.Model11, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveOutageIDFlags(depth int, m *models.Outage, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	if depth > maxDepth {
 		return nil, false
 	}
@@ -483,7 +483,7 @@ func retrieveModel11IDFlags(depth int, m *models.Model11, cmdPrefix string, cmd 
 	return nil, retAdded
 }
 
-func retrieveModel11InProgressFlags(depth int, m *models.Model11, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveOutageInProgressFlags(depth int, m *models.Outage, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	if depth > maxDepth {
 		return nil, false
 	}
@@ -511,7 +511,7 @@ func retrieveModel11InProgressFlags(depth int, m *models.Model11, cmdPrefix stri
 	return nil, retAdded
 }
 
-func retrieveModel11OngoingFlags(depth int, m *models.Model11, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveOutageOngoingFlags(depth int, m *models.Outage, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	if depth > maxDepth {
 		return nil, false
 	}
@@ -539,7 +539,7 @@ func retrieveModel11OngoingFlags(depth int, m *models.Model11, cmdPrefix string,
 	return nil, retAdded
 }
 
-func retrieveModel11SiteFlags(depth int, m *models.Model11, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveOutageSiteFlags(depth int, m *models.Outage, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	if depth > maxDepth {
 		return nil, false
 	}
@@ -566,7 +566,7 @@ func retrieveModel11SiteFlags(depth int, m *models.Model11, cmdPrefix string, cm
 	return nil, retAdded
 }
 
-func retrieveModel11StartTimestampFlags(depth int, m *models.Model11, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveOutageStartTimestampFlags(depth int, m *models.Outage, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	if depth > maxDepth {
 		return nil, false
 	}
@@ -594,7 +594,7 @@ func retrieveModel11StartTimestampFlags(depth int, m *models.Model11, cmdPrefix 
 	return nil, retAdded
 }
 
-func retrieveModel11TypeFlags(depth int, m *models.Model11, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+func retrieveOutageTypeFlags(depth int, m *models.Outage, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	if depth > maxDepth {
 		return nil, false
 	}

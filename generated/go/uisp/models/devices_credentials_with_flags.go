@@ -14,9 +14,9 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// DevicesCredentialsWithFlags device s credentials with flags
+// DevicesCredentialsWithFlags devices credentials with flags
 //
-// swagger:model Device's credentials with flags
+// swagger:model Devices credentials with flags
 type DevicesCredentialsWithFlags struct {
 
 	// credentials
@@ -27,7 +27,7 @@ type DevicesCredentialsWithFlags struct {
 	IsPassphraseMissing bool `json:"isPassphraseMissing,omitempty"`
 }
 
-// Validate validates this device s credentials with flags
+// Validate validates this devices credentials with flags
 func (m *DevicesCredentialsWithFlags) Validate(formats strfmt.Registry) error {
 	var res []error
 
@@ -61,7 +61,7 @@ func (m *DevicesCredentialsWithFlags) validateCredentials(formats strfmt.Registr
 	return nil
 }
 
-// ContextValidate validate this device s credentials with flags based on the context it is used
+// ContextValidate validate this devices credentials with flags based on the context it is used
 func (m *DevicesCredentialsWithFlags) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 

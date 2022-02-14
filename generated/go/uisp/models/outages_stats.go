@@ -14,13 +14,13 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// Items1 items 1
+// OutagesStats outages stats
 //
-// swagger:model items 1
-type Items1 []*Model11
+// swagger:model outages_stats
+type OutagesStats []*Coordinates
 
-// Validate validates this items 1
-func (m Items1) Validate(formats strfmt.Registry) error {
+// Validate validates this outages stats
+func (m OutagesStats) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	for i := 0; i < len(m); i++ {
@@ -47,8 +47,8 @@ func (m Items1) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this items 1 based on the context it is used
-func (m Items1) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this outages stats based on the context it is used
+func (m OutagesStats) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	for i := 0; i < len(m); i++ {

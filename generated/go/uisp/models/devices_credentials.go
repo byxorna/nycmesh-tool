@@ -14,9 +14,9 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// DevicesCredentials device s credentials
+// DevicesCredentials devices credentials
 //
-// swagger:model Device's credentials
+// swagger:model Devices credentials
 type DevicesCredentials struct {
 
 	// created at
@@ -33,7 +33,7 @@ type DevicesCredentials struct {
 	Username string `json:"username,omitempty"`
 }
 
-// Validate validates this device s credentials
+// Validate validates this devices credentials
 func (m *DevicesCredentials) Validate(formats strfmt.Registry) error {
 	var res []error
 
@@ -59,7 +59,7 @@ func (m *DevicesCredentials) validateCreatedAt(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validates this device s credentials based on context it is used
+// ContextValidate validates this devices credentials based on context it is used
 func (m *DevicesCredentials) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	return nil
 }

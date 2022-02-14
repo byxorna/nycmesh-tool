@@ -15,10 +15,10 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// Model11 model 11
+// Outage outage
 //
-// swagger:model Model 11
-type Model11 struct {
+// swagger:model Outage
+type Outage struct {
 
 	// aggregated time
 	// Required: true
@@ -59,8 +59,8 @@ type Model11 struct {
 	Type string `json:"type,omitempty"`
 }
 
-// Validate validates this model 11
-func (m *Model11) Validate(formats strfmt.Registry) error {
+// Validate validates this outage
+func (m *Outage) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.validateAggregatedTime(formats); err != nil {
@@ -109,7 +109,7 @@ func (m *Model11) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Model11) validateAggregatedTime(formats strfmt.Registry) error {
+func (m *Outage) validateAggregatedTime(formats strfmt.Registry) error {
 
 	if err := validate.Required("aggregatedTime", "body", m.AggregatedTime); err != nil {
 		return err
@@ -122,7 +122,7 @@ func (m *Model11) validateAggregatedTime(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Model11) validateDevice(formats strfmt.Registry) error {
+func (m *Outage) validateDevice(formats strfmt.Registry) error {
 	if swag.IsZero(m.Device) { // not required
 		return nil
 	}
@@ -141,7 +141,7 @@ func (m *Model11) validateDevice(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Model11) validateDeviceMetadata(formats strfmt.Registry) error {
+func (m *Outage) validateDeviceMetadata(formats strfmt.Registry) error {
 	if swag.IsZero(m.DeviceMetadata) { // not required
 		return nil
 	}
@@ -160,7 +160,7 @@ func (m *Model11) validateDeviceMetadata(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Model11) validateEndTimestamp(formats strfmt.Registry) error {
+func (m *Outage) validateEndTimestamp(formats strfmt.Registry) error {
 
 	if err := validate.Required("endTimestamp", "body", m.EndTimestamp); err != nil {
 		return err
@@ -169,7 +169,7 @@ func (m *Model11) validateEndTimestamp(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Model11) validateID(formats strfmt.Registry) error {
+func (m *Outage) validateID(formats strfmt.Registry) error {
 
 	if err := validate.Required("id", "body", m.ID); err != nil {
 		return err
@@ -178,7 +178,7 @@ func (m *Model11) validateID(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Model11) validateInProgress(formats strfmt.Registry) error {
+func (m *Outage) validateInProgress(formats strfmt.Registry) error {
 
 	if err := validate.Required("inProgress", "body", m.InProgress); err != nil {
 		return err
@@ -187,7 +187,7 @@ func (m *Model11) validateInProgress(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Model11) validateOngoing(formats strfmt.Registry) error {
+func (m *Outage) validateOngoing(formats strfmt.Registry) error {
 
 	if err := validate.Required("ongoing", "body", m.Ongoing); err != nil {
 		return err
@@ -196,7 +196,7 @@ func (m *Model11) validateOngoing(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Model11) validateSite(formats strfmt.Registry) error {
+func (m *Outage) validateSite(formats strfmt.Registry) error {
 	if swag.IsZero(m.Site) { // not required
 		return nil
 	}
@@ -215,7 +215,7 @@ func (m *Model11) validateSite(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *Model11) validateStartTimestamp(formats strfmt.Registry) error {
+func (m *Outage) validateStartTimestamp(formats strfmt.Registry) error {
 
 	if err := validate.Required("startTimestamp", "body", m.StartTimestamp); err != nil {
 		return err
@@ -224,7 +224,7 @@ func (m *Model11) validateStartTimestamp(formats strfmt.Registry) error {
 	return nil
 }
 
-var model11TypeTypePropEnum []interface{}
+var outageTypeTypePropEnum []interface{}
 
 func init() {
 	var res []string
@@ -232,28 +232,28 @@ func init() {
 		panic(err)
 	}
 	for _, v := range res {
-		model11TypeTypePropEnum = append(model11TypeTypePropEnum, v)
+		outageTypeTypePropEnum = append(outageTypeTypePropEnum, v)
 	}
 }
 
 const (
 
-	// Model11TypeOutage captures enum value "outage"
-	Model11TypeOutage string = "outage"
+	// OutageTypeOutage captures enum value "outage"
+	OutageTypeOutage string = "outage"
 
-	// Model11TypeUnreachable captures enum value "unreachable"
-	Model11TypeUnreachable string = "unreachable"
+	// OutageTypeUnreachable captures enum value "unreachable"
+	OutageTypeUnreachable string = "unreachable"
 )
 
 // prop value enum
-func (m *Model11) validateTypeEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, model11TypeTypePropEnum, true); err != nil {
+func (m *Outage) validateTypeEnum(path, location string, value string) error {
+	if err := validate.EnumCase(path, location, value, outageTypeTypePropEnum, true); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (m *Model11) validateType(formats strfmt.Registry) error {
+func (m *Outage) validateType(formats strfmt.Registry) error {
 	if swag.IsZero(m.Type) { // not required
 		return nil
 	}
@@ -266,8 +266,8 @@ func (m *Model11) validateType(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this model 11 based on the context it is used
-func (m *Model11) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this outage based on the context it is used
+func (m *Outage) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	if err := m.contextValidateDevice(ctx, formats); err != nil {
@@ -288,7 +288,7 @@ func (m *Model11) ContextValidate(ctx context.Context, formats strfmt.Registry) 
 	return nil
 }
 
-func (m *Model11) contextValidateDevice(ctx context.Context, formats strfmt.Registry) error {
+func (m *Outage) contextValidateDevice(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Device != nil {
 		if err := m.Device.ContextValidate(ctx, formats); err != nil {
@@ -304,7 +304,7 @@ func (m *Model11) contextValidateDevice(ctx context.Context, formats strfmt.Regi
 	return nil
 }
 
-func (m *Model11) contextValidateDeviceMetadata(ctx context.Context, formats strfmt.Registry) error {
+func (m *Outage) contextValidateDeviceMetadata(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.DeviceMetadata != nil {
 		if err := m.DeviceMetadata.ContextValidate(ctx, formats); err != nil {
@@ -320,7 +320,7 @@ func (m *Model11) contextValidateDeviceMetadata(ctx context.Context, formats str
 	return nil
 }
 
-func (m *Model11) contextValidateSite(ctx context.Context, formats strfmt.Registry) error {
+func (m *Outage) contextValidateSite(ctx context.Context, formats strfmt.Registry) error {
 
 	if m.Site != nil {
 		if err := m.Site.ContextValidate(ctx, formats); err != nil {
@@ -337,7 +337,7 @@ func (m *Model11) contextValidateSite(ctx context.Context, formats strfmt.Regist
 }
 
 // MarshalBinary interface implementation
-func (m *Model11) MarshalBinary() ([]byte, error) {
+func (m *Outage) MarshalBinary() ([]byte, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -345,8 +345,8 @@ func (m *Model11) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (m *Model11) UnmarshalBinary(b []byte) error {
-	var res Model11
+func (m *Outage) UnmarshalBinary(b []byte) error {
+	var res Outage
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}

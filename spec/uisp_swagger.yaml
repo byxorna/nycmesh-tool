@@ -3,10 +3,8 @@ basePath: /nms/api/v2.1
 info:
   title: UISP API
   version: 1.0.0
-  description: >-
-    You can authorize calls with x-auth-token by clicking the button on the
-    right.
-        You can get this token on endpoint /user/login
+  description: "You can authorize calls with x-auth-token by clicking the button on\
+    \ the right.\n    You can get this token on endpoint /user/login"
 tags:
   - name: Authorization
     description: Login and user authorization.
@@ -15,13 +13,13 @@ tags:
   - name: Server
     description: UNMS settings with SMTP configuration, SSL and backups configuration.
   - name: Sites
-    description: >-
-      Manage sites and clients (former endpoints), their pictures and network
+    description: Manage sites and clients (former endpoints), their pictures and network
       structure.
   - name: Devices
     description: Configuration and monitoring for all devices.
   - name: Tasks
-    description: View, start or cancel UNMS background tasks, for example firmware upgrade.
+    description: View, start or cancel UNMS background tasks, for example firmware
+      upgrade.
   - name: Logs
     description: View devices log lines.
   - name: Outages
@@ -576,8 +574,7 @@ paths:
           description: Internal Server Error
   /sites:
     get:
-      summary: >-
-        List of sites in UISP. Only some combinations of query parameters are
+      summary: List of sites in UISP. Only some combinations of query parameters are
         valid.
       operationId: getSites
       parameters:
@@ -617,17 +614,15 @@ paths:
           in: query
           required: false
         - type: boolean
-          description: >-
-            If true, returns only sites that are bound with CRM. If false,
-            returns only sites that are not bound with CRM. Can be used only
-            with "type" parameter.
+          description: If true, returns only sites that are bound with CRM. If false,
+            returns only sites that are not bound with CRM. Can be used only with
+            "type" parameter.
           name: ucrm
           in: query
           required: false
         - type: boolean
-          description: >-
-            Include CRM client and service details. Can be used with any other
-            parameter.
+          description: Include CRM client and service details. Can be used with any
+            other parameter.
           name: ucrmDetails
           in: query
           required: false
@@ -1463,15 +1458,13 @@ paths:
           description: Internal Server Error
   /devices/unknown:
     get:
-      summary: >-
-        Get unknown client devices (based on detected network traffic) ordered
+      summary: Get unknown client devices (based on detected network traffic) ordered
         by total traffic.
       operationId: getDevicesUnknown
       parameters:
         - type: number
-          description: >-
-            Get only devices that produced at least this amount of traffic (in
-            bytes).
+          description: Get only devices that produced at least this amount of traffic
+            (in bytes).
           default: 102400
           minimum: 0
           name: minTraffic
@@ -1602,6 +1595,13 @@ paths:
     get:
       summary: Get gateway detail
       operationId: getGatewaysId
+      parameters:
+        - type: string
+          x-format:
+            guid: true
+          name: id
+          in: path
+          required: true
       produces:
         - application/json
       tags:
@@ -1707,9 +1707,7 @@ paths:
           description: Internal Server Error
   /installations/devices:
     get:
-      summary: >-
-        Get devices registered for installation ordered by current user's
-        location.
+      summary: Get devices registered for installation ordered by current user's location.
       operationId: getInstallationsDevices
       parameters:
         - type: number
@@ -3780,9 +3778,7 @@ paths:
           description: Successful
   /devices/erouters/{id}:
     get:
-      summary: >-
-        Return EdgeRouter detail. [Deprecated in favor of route GET
-        /nms/api/v2.1/devices/{id}/detail]
+      summary: Return EdgeRouter detail. [Deprecated in favor of route GET /nms/api/v2.1/devices/{id}/detail]
       operationId: getDevicesEroutersId
       parameters:
         - type: string
@@ -3896,8 +3892,7 @@ paths:
       operationId: getDevicesMacMac
       parameters:
         - type: string
-          pattern: >-
-            ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+          pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
           name: mac
           in: path
           required: true
@@ -4135,9 +4130,7 @@ paths:
           description: Internal Server Error
   /devices/uisprs/{id}:
     get:
-      summary: >-
-        Return UISPR detail. [Deprecated in favor of route GET
-        /nms/api/v2.1/devices/{id}/detail]
+      summary: Return UISPR detail. [Deprecated in favor of route GET /nms/api/v2.1/devices/{id}/detail]
       operationId: getDevicesUisprsId
       parameters:
         - type: string
@@ -4715,10 +4708,6 @@ paths:
           name: id
           in: path
           required: true
-        - type: object
-          required: true
-          name: payload
-          in: path
       produces:
         - application/json
       tags:
@@ -4876,8 +4865,7 @@ paths:
           description: Internal Server Error
   /devices/{deviceId}/mac-table-refresh:
     get:
-      summary: >-
-        Fetch mac table from device and save to UISP. [EdgeSwitch, EdgeRouter,
+      summary: Fetch mac table from device and save to UISP. [EdgeSwitch, EdgeRouter,
         AirMax, UISPRouter, UISPSwitch, AirFiber]
       operationId: getDevicesDeviceidMactablerefresh
       parameters:
@@ -5042,6 +5030,13 @@ paths:
     get:
       summary: Get device's discovery status.
       operationId: getDiscoveryStatusDeviceid
+      parameters:
+        - type: string
+          x-format:
+            guid: true
+          name: deviceId
+          in: path
+          required: true
       produces:
         - application/json
       tags:
@@ -5506,9 +5501,8 @@ paths:
           description: Internal Server Error
   /sites/{siteId}/slastats:
     get:
-      summary: >-
-        Get SLA stats for a subscriber. This endpoint's purpose is ISP and SLA
-        score debugging.
+      summary: Get SLA stats for a subscriber. This endpoint's purpose is ISP and
+        SLA score debugging.
       operationId: getSitesSiteidSlastats
       parameters:
         - type: string
@@ -5891,7 +5885,7 @@ paths:
       responses:
         '200':
           schema:
-            $ref: '#/definitions/Device''s%20credentials%20with%20flags'
+            $ref: '#/definitions/Devices%20credentials%20with%20flags'
           description: Successful
         '400':
           schema:
@@ -6320,9 +6314,7 @@ paths:
           description: Internal Server Error
   /devices/airmaxes/{id}/system:
     get:
-      summary: >-
-        Get AirMax system config. [Deprecated in favor of route GET
-        /nms/api/v2.1/devices/{id}/system]
+      summary: Get AirMax system config. [Deprecated in favor of route GET /nms/api/v2.1/devices/{id}/system]
       operationId: getDevicesAirmaxesIdSystem
       parameters:
         - type: string
@@ -6610,9 +6602,8 @@ paths:
           description: Internal Server Error
   /devices/eswitches/{id}/system:
     get:
-      summary: >-
-        Get EdgeSwitch system configuration. [Deprecated in favor of route GET
-        /nms/api/v2.1/devices/{id}/system]
+      summary: Get EdgeSwitch system configuration. [Deprecated in favor of route
+        GET /nms/api/v2.1/devices/{id}/system]
       operationId: getDevicesEswitchesIdSystem
       parameters:
         - type: string
@@ -7030,9 +7021,8 @@ paths:
           description: Not Implemented
   /devices/toughswitches/{id}/system:
     get:
-      summary: >-
-        Get ToughSwitch system configuration. [Deprecated in favor of route GET
-        /nms/api/v2.1/devices/{id}/system]
+      summary: Get ToughSwitch system configuration. [Deprecated in favor of route
+        GET /nms/api/v2.1/devices/{id}/system]
       operationId: getDevicesToughswitchesIdSystem
       parameters:
         - type: string
@@ -7113,9 +7103,8 @@ paths:
           description: Internal Server Error
   /devices/uispss/{id}/system:
     get:
-      summary: >-
-        Get UISP Switch system configuration. [Deprecated in favor of route GET
-        /nms/api/v2.1/devices/{id}/system]
+      summary: Get UISP Switch system configuration. [Deprecated in favor of route
+        GET /nms/api/v2.1/devices/{id}/system]
       operationId: getDevicesUispssIdSystem
       parameters:
         - type: string
@@ -7773,8 +7762,7 @@ paths:
           in: path
           required: true
         - type: string
-          pattern: >-
-            ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+          pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
           name: mac
           in: path
           required: true
@@ -8090,9 +8078,8 @@ paths:
           description: Internal Server Error
   /devices/aircubes/{id}/config/system:
     get:
-      summary: |-
-        Get AirCube system config. This API endpoint is DEPRECATED.
-              Please refer to '/nms/api/v2.1/devices/aircubes/{id}/system' instead.
+      summary: "Get AirCube system config. This API endpoint is DEPRECATED.\n    \
+        \  Please refer to '/nms/api/v2.1/devices/aircubes/{id}/system' instead."
       operationId: getDevicesAircubesIdConfigSystem
       parameters:
         - type: string
@@ -8131,9 +8118,8 @@ paths:
             $ref: '#/definitions/Error'
           description: Internal Server Error
     put:
-      summary: |-
-        Update AirCube system settings. This API endpoint is DEPRECATED.
-              Please refer to '/nms/api/v2.1/devices/aircubes/{id}/system' instead.
+      summary: "Update AirCube system settings. This API endpoint is DEPRECATED.\n\
+        \      Please refer to '/nms/api/v2.1/devices/aircubes/{id}/system' instead."
       operationId: putDevicesAircubesIdConfigSystem
       parameters:
         - type: string
@@ -8177,9 +8163,8 @@ paths:
           description: Internal Server Error
   /devices/aircubes/{id}/config/wireless:
     get:
-      summary: |-
-        Get AirCube wireless config. This API endpoint is DEPRECATED.
-                Please refer to '/nms/api/v2.1/devices/aircubes/{id}/wireless' instead.
+      summary: "Get AirCube wireless config. This API endpoint is DEPRECATED.\n  \
+        \      Please refer to '/nms/api/v2.1/devices/aircubes/{id}/wireless' instead."
       operationId: getDevicesAircubesIdConfigWireless
       parameters:
         - type: string
@@ -8218,9 +8203,8 @@ paths:
             $ref: '#/definitions/Error'
           description: Internal Server Error
     put:
-      summary: |-
-        Update AirCube wireless config. This API endpoint is DEPRECATED.
-              Please refer to '/nms/api/v2.1/devices/aircubes/{id}/wireless' instead.
+      summary: "Update AirCube wireless config. This API endpoint is DEPRECATED.\n\
+        \      Please refer to '/nms/api/v2.1/devices/aircubes/{id}/wireless' instead."
       operationId: putDevicesAircubesIdConfigWireless
       parameters:
         - type: string
@@ -8264,9 +8248,8 @@ paths:
           description: Internal Server Error
   /devices/aircubes/{id}/config/network:
     get:
-      summary: |-
-        Get AirCube network config. This API endpoint is DEPRECATED.
-              Please refer to '/nms/api/v2.1/devices/aircubes/{id}/network' instead.
+      summary: "Get AirCube network config. This API endpoint is DEPRECATED.\n   \
+        \   Please refer to '/nms/api/v2.1/devices/aircubes/{id}/network' instead."
       operationId: getDevicesAircubesIdConfigNetwork
       parameters:
         - type: string
@@ -8305,9 +8288,8 @@ paths:
             $ref: '#/definitions/Error'
           description: Internal Server Error
     put:
-      summary: |-
-        Update AirCube network config. This API endpoint is DEPRECATED.
-              Please refer to '/nms/api/v2.1/devices/aircubes/{id}/network' instead.
+      summary: "Update AirCube network config. This API endpoint is DEPRECATED.\n\
+        \      Please refer to '/nms/api/v2.1/devices/aircubes/{id}/network' instead."
       operationId: putDevicesAircubesIdConfigNetwork
       parameters:
         - type: string
@@ -8454,9 +8436,7 @@ paths:
           description: Successful
   /devices/erouters/{id}/router/routes:
     get:
-      summary: >-
-        Get all routes. [Deprecated in favor of route GET
-        /nms/api/v2.1/devices/{id}/router/routes]
+      summary: Get all routes. [Deprecated in favor of route GET /nms/api/v2.1/devices/{id}/router/routes]
       operationId: getDevicesEroutersIdRouterRoutes
       parameters:
         - type: string
@@ -8496,10 +8476,8 @@ paths:
           description: Internal Server Error
       deprecated: true
     post:
-      summary: |2-
-
-                Create new static route. [Deprecated in favor of route POST /nms/api/v2.1/devices/{id}/router/routes]
-              
+      summary: "\n        Create new static route. [Deprecated in favor of route POST\
+        \ /nms/api/v2.1/devices/{id}/router/routes]\n      "
       operationId: postDevicesEroutersIdRouterRoutes
       parameters:
         - type: string
@@ -8543,9 +8521,7 @@ paths:
           description: Internal Server Error
       deprecated: true
     put:
-      summary: >-
-        Edit static route. [Deprecated in favor of route PUT
-        /nms/api/v2.1/devices/{id}/router/routes]
+      summary: Edit static route. [Deprecated in favor of route PUT /nms/api/v2.1/devices/{id}/router/routes]
       operationId: putDevicesEroutersIdRouterRoutes
       parameters:
         - type: string
@@ -8590,9 +8566,7 @@ paths:
       deprecated: true
   /devices/erouters/{id}/router/ospf:
     get:
-      summary: >-
-        Get OSPF configuration. [Deprecated in favor of route GET
-        /nms/api/v2.1/devices/{id}/router/ospf]
+      summary: Get OSPF configuration. [Deprecated in favor of route GET /nms/api/v2.1/devices/{id}/router/ospf]
       operationId: getDevicesEroutersIdRouterOspf
       parameters:
         - type: string
@@ -8632,10 +8606,8 @@ paths:
           description: Internal Server Error
       deprecated: true
     put:
-      summary: |2-
-
-                Update OSPF configuration. [Deprecated in favor of route PUT /nms/api/v2.1/devices/{id}/router/ospf]
-              
+      summary: "\n        Update OSPF configuration. [Deprecated in favor of route\
+        \ PUT /nms/api/v2.1/devices/{id}/router/ospf]\n      "
       operationId: putDevicesEroutersIdRouterOspf
       parameters:
         - type: string
@@ -9283,11 +9255,9 @@ paths:
     post:
       summary: Create DHCP IP address lease.
       operationId: postDevicesUisprsIdDhcpLeases
-      description: |2-
-
-                Request does accept payload with "leaseId" property, to match api,
-                but the id is ignored and it will be created from mac and ip.
-              
+      description: "\n        Request does accept payload with \"leaseId\" property,\
+        \ to match api,\n        but the id is ignored and it will be created from\
+        \ mac and ip.\n      "
       parameters:
         - type: string
           x-format:
@@ -9371,7 +9341,8 @@ paths:
     post:
       summary: Create new DHCP server.
       operationId: postDevicesUisprsIdDhcpServers
-      description: If no "name" property in payload specified, it will be create from uuid.
+      description: If no "name" property in payload specified, it will be create from
+        uuid.
       parameters:
         - type: string
           x-format:
@@ -9414,9 +9385,7 @@ paths:
           description: Internal Server Error
   /devices/uisprs/{id}/router/routes:
     get:
-      summary: >-
-        Get all routes. [Deprecated in favor of route GET
-        /nms/api/v2.1/devices/{id}/router/routes]
+      summary: Get all routes. [Deprecated in favor of route GET /nms/api/v2.1/devices/{id}/router/routes]
       operationId: getDevicesUisprsIdRouterRoutes
       parameters:
         - type: string
@@ -9456,10 +9425,8 @@ paths:
           description: Internal Server Error
       deprecated: true
     post:
-      summary: |2-
-
-                Create new static route. [Deprecated in favor of route POST /nms/api/v2.1/devices/{id}/router/routes]
-              
+      summary: "\n        Create new static route. [Deprecated in favor of route POST\
+        \ /nms/api/v2.1/devices/{id}/router/routes]\n      "
       operationId: postDevicesUisprsIdRouterRoutes
       parameters:
         - type: string
@@ -9503,9 +9470,7 @@ paths:
           description: Internal Server Error
       deprecated: true
     put:
-      summary: >-
-        Edit static route. [Deprecated in favor of route PUT
-        /nms/api/v2.1/devices/{id}/router/routes]
+      summary: Edit static route. [Deprecated in favor of route PUT /nms/api/v2.1/devices/{id}/router/routes]
       operationId: putDevicesUisprsIdRouterRoutes
       parameters:
         - type: string
@@ -9550,9 +9515,7 @@ paths:
       deprecated: true
   /devices/uisprs/{id}/router/ospf:
     get:
-      summary: >-
-        Get OSPF configuration. [Deprecated in favor of route GET
-        /nms/api/v2.1/devices/{id}/router/ospf]
+      summary: Get OSPF configuration. [Deprecated in favor of route GET /nms/api/v2.1/devices/{id}/router/ospf]
       operationId: getDevicesUisprsIdRouterOspf
       parameters:
         - type: string
@@ -9592,10 +9555,8 @@ paths:
           description: Internal Server Error
       deprecated: true
     put:
-      summary: |2-
-
-                Update OSPF configuration. [Deprecated in favor of route PUT /nms/api/v2.1/devices/{id}/router/ospf]
-              
+      summary: "\n        Update OSPF configuration. [Deprecated in favor of route\
+        \ PUT /nms/api/v2.1/devices/{id}/router/ospf]\n      "
       operationId: putDevicesUisprsIdRouterOspf
       parameters:
         - type: string
@@ -10236,9 +10197,7 @@ paths:
           description: Internal Server Error
   /devices/erouters/{id}/router/ospf/areas:
     get:
-      summary: >-
-        All OSPF areas. [Deprecated in favor of route GET
-        /nms/api/v2.1/devices/{id}/router/ospf/areas]
+      summary: All OSPF areas. [Deprecated in favor of route GET /nms/api/v2.1/devices/{id}/router/ospf/areas]
       operationId: getDevicesEroutersIdRouterOspfAreas
       parameters:
         - type: string
@@ -10278,10 +10237,8 @@ paths:
           description: Internal Server Error
       deprecated: true
     post:
-      summary: |2-
-
-                Create new OSPF area. [Deprecated in favor of route POST /nms/api/v2.1/devices/{id}/router/ospf/areas]
-              
+      summary: "\n        Create new OSPF area. [Deprecated in favor of route POST\
+        \ /nms/api/v2.1/devices/{id}/router/ospf/areas]\n      "
       operationId: postDevicesEroutersIdRouterOspfAreas
       parameters:
         - type: string
@@ -10326,9 +10283,7 @@ paths:
       deprecated: true
   /devices/uisprs/{id}/router/ospf/interfaces:
     get:
-      summary: >-
-        All OSPF Interface. [Deprecated in favor of route GET
-        /nms/api/v2.1/devices/{deviceId}/interfaces]
+      summary: All OSPF Interface. [Deprecated in favor of route GET /nms/api/v2.1/devices/{deviceId}/interfaces]
       operationId: getDevicesUisprsIdRouterOspfInterfaces
       parameters:
         - type: string
@@ -10369,9 +10324,7 @@ paths:
       deprecated: true
   /devices/uisprs/{id}/router/ospf/areas:
     get:
-      summary: >-
-        All OSPF areas. [Deprecated in favor of route GET
-        /nms/api/v2.1/devices/{id}/router/ospf/areas]
+      summary: All OSPF areas. [Deprecated in favor of route GET /nms/api/v2.1/devices/{id}/router/ospf/areas]
       operationId: getDevicesUisprsIdRouterOspfAreas
       parameters:
         - type: string
@@ -10411,10 +10364,8 @@ paths:
           description: Internal Server Error
       deprecated: true
     post:
-      summary: |2-
-
-                Create new OSPF area. [Deprecated in favor of route POST /nms/api/v2.1/devices/{id}/router/ospf/areas]
-              
+      summary: "\n        Create new OSPF area. [Deprecated in favor of route POST\
+        \ /nms/api/v2.1/devices/{id}/router/ospf/areas]\n      "
       operationId: postDevicesUisprsIdRouterOspfAreas
       parameters:
         - type: string
@@ -10805,10 +10756,8 @@ paths:
           description: Internal Server Error
   /devices/import:
     post:
-      summary: |2-
-
-              Complex devices import which internally use discovery and creates blackboxes for unreachable and non-UBNT devices.
-              
+      summary: "\n      Complex devices import which internally use discovery and\
+        \ creates blackboxes for unreachable and non-UBNT devices.\n      "
       operationId: postDevicesImport
       parameters:
         - in: body
@@ -11062,10 +11011,9 @@ paths:
       operationId: postSitesDevicesiterelations
       parameters:
         - type: boolean
-          description: |2-
-
-                  If true it will create all sites and clients from payload.
-                  In case of duplicate names or ucrmId it will not update them but create duplicates.
+          description: "\n      If true it will create all sites and clients from\
+            \ payload.\n      In case of duplicate names or ucrmId it will not update\
+            \ them but create duplicates."
           default: false
           name: forceCreate
           in: query
@@ -11847,9 +11795,7 @@ paths:
           description: Internal Server Error
   /devices/{id}/authorize:
     post:
-      summary: >-
-        Authorize device. [Deprecated in favor of route POST
-        /nms/api/v2.1/devices/authorize]
+      summary: Authorize device. [Deprecated in favor of route POST /nms/api/v2.1/devices/authorize]
       operationId: postDevicesIdAuthorize
       parameters:
         - type: string
@@ -11890,10 +11836,8 @@ paths:
       deprecated: true
   /devices/{id}/upgrade-to-latest:
     post:
-      summary: |2-
-
-              Upgrade device FW to the latest FW version in UISP. It's possible to track upgrade process via /tasks API.
-              
+      summary: "\n      Upgrade device FW to the latest FW version in UISP. It's possible\
+        \ to track upgrade process via /tasks API.\n      "
       operationId: postDevicesIdUpgradetolatest
       parameters:
         - type: string
@@ -13384,8 +13328,7 @@ paths:
           description: Internal Server Error
   /nms/questionnaires/{id}/touch:
     post:
-      summary: >-
-        Mark the questionnaire as visited. It will pop up later if it is not
+      summary: Mark the questionnaire as visited. It will pop up later if it is not
         submitted.
       operationId: postNmsQuestionnairesIdTouch
       parameters:
@@ -13610,9 +13553,8 @@ paths:
           description: Internal Server Error
   /vault/{deviceId}/credentials/regenerate:
     post:
-      summary: |-
-        Generate new password for device. This endpoint is DEPRECATED.
-              Please refer to '/nms/api/v2.1/vault/credentials/regenerate' instead.
+      summary: "Generate new password for device. This endpoint is DEPRECATED.\n \
+        \     Please refer to '/nms/api/v2.1/vault/credentials/regenerate' instead."
       operationId: postVaultDeviceidCredentialsRegenerate
       parameters:
         - type: string
@@ -13628,7 +13570,7 @@ paths:
       responses:
         '200':
           schema:
-            $ref: '#/definitions/Device''s credentials'
+            $ref: '#/definitions/Devices credentials'
           description: Successful
         '400':
           schema:
@@ -13676,8 +13618,7 @@ paths:
       responses:
         '200':
           schema:
-            $ref: >-
-              #/definitions/Data%20coming%20from%20cable%20test%20on%20ES%20devices
+            $ref: '#/definitions/Data%20coming%20from%20cable%20test%20on%20ES%20devices'
           description: Successful
         '400':
           schema:
@@ -14222,10 +14163,8 @@ paths:
           description: Internal Server Error
   /devices/erouters/{id}/router/routes/block:
     post:
-      summary: |2-
-
-                Block static route. [Deprecated in favor of route POST /nms/api/v2.1/devices/{id}/router/routes/block]
-              
+      summary: "\n        Block static route. [Deprecated in favor of route POST /nms/api/v2.1/devices/{id}/router/routes/block]\n\
+        \      "
       operationId: postDevicesEroutersIdRouterRoutesBlock
       parameters:
         - type: string
@@ -14270,9 +14209,7 @@ paths:
       deprecated: true
   /devices/erouters/{id}/router/routes/delete:
     post:
-      summary: >-
-        Delete route. [Deprecated in favor of route POST
-        /nms/api/v2.1/devices/{id}/router/routes/delete]
+      summary: Delete route. [Deprecated in favor of route POST /nms/api/v2.1/devices/{id}/router/routes/delete]
       operationId: postDevicesEroutersIdRouterRoutesDelete
       parameters:
         - type: string
@@ -14317,10 +14254,8 @@ paths:
       deprecated: true
   /devices/erouters/{id}/router/routes/unblock:
     post:
-      summary: |2-
-
-                Unblock static route. [Deprecated in favor of route POST /nms/api/v2.1/devices/{id}/router/routes/unblock]
-              
+      summary: "\n        Unblock static route. [Deprecated in favor of route POST\
+        \ /nms/api/v2.1/devices/{id}/router/routes/unblock]\n      "
       operationId: postDevicesEroutersIdRouterRoutesUnblock
       parameters:
         - type: string
@@ -14495,10 +14430,8 @@ paths:
           description: Internal Server Error
   /devices/uisprs/{id}/router/routes/unblock:
     post:
-      summary: |2-
-
-                Unblock static route. [Deprecated in favor of route POST /nms/api/v2.1/devices/{id}/router/routes/unblock]
-              
+      summary: "\n        Unblock static route. [Deprecated in favor of route POST\
+        \ /nms/api/v2.1/devices/{id}/router/routes/unblock]\n      "
       operationId: postDevicesUisprsIdRouterRoutesUnblock
       parameters:
         - type: string
@@ -14543,9 +14476,7 @@ paths:
       deprecated: true
   /devices/uisprs/{id}/router/routes/delete:
     post:
-      summary: >-
-        Delete route. [Deprecated in favor of route POST
-        /nms/api/v2.1/devices/{id}/router/routes/delete]
+      summary: Delete route. [Deprecated in favor of route POST /nms/api/v2.1/devices/{id}/router/routes/delete]
       operationId: postDevicesUisprsIdRouterRoutesDelete
       parameters:
         - type: string
@@ -14594,10 +14525,8 @@ paths:
       deprecated: true
   /devices/uisprs/{id}/router/routes/block:
     post:
-      summary: |2-
-
-                Block static route. [Deprecated in favor of route POST /nms/api/v2.1/devices/{id}/router/routes/block]
-              
+      summary: "\n        Block static route. [Deprecated in favor of route POST /nms/api/v2.1/devices/{id}/router/routes/block]\n\
+        \      "
       operationId: postDevicesUisprsIdRouterRoutesBlock
       parameters:
         - type: string
@@ -14646,11 +14575,9 @@ paths:
       deprecated: true
   /devices/uisprs/{id}/router/ospf/interface:
     post:
-      summary: |2-
-
-                Create new OSPF Interface. 
-                [Deprecated in favor of route PUT /nms/api/v2.1/devices/{deviceId}/interfaces/{interfaceName}/ospf]
-              
+      summary: "\n        Create new OSPF Interface. \n        [Deprecated in favor\
+        \ of route PUT /nms/api/v2.1/devices/{deviceId}/interfaces/{interfaceName}/ospf]\n\
+        \      "
       operationId: postDevicesUisprsIdRouterOspfInterface
       parameters:
         - type: string
@@ -14694,11 +14621,9 @@ paths:
           description: Internal Server Error
       deprecated: true
     put:
-      summary: |2-
-
-                Update OSPF Interface. 
-                [Deprecated in favor of route PUT /nms/api/v2.1/devices/{deviceId}/interfaces/{interfaceName}/ospf]
-              
+      summary: "\n        Update OSPF Interface. \n        [Deprecated in favor of\
+        \ route PUT /nms/api/v2.1/devices/{deviceId}/interfaces/{interfaceName}/ospf]\n\
+        \      "
       operationId: putDevicesUisprsIdRouterOspfInterface
       parameters:
         - type: string
@@ -15463,8 +15388,7 @@ paths:
           in: path
           required: true
         - type: string
-          pattern: >-
-            ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+          pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
           name: mac
           in: path
           required: true
@@ -15896,9 +15820,7 @@ paths:
           description: Internal Server Error
   /devices/airmaxes/{id}/system/users:
     put:
-      summary: >-
-        Update AirMax system users. [Deprecated in favor of route PUT
-        /nms/api/v2.1/devices/{id}/system]
+      summary: Update AirMax system users. [Deprecated in favor of route PUT /nms/api/v2.1/devices/{id}/system]
       operationId: putDevicesAirmaxesIdSystemUsers
       parameters:
         - type: string
@@ -15943,9 +15865,7 @@ paths:
       deprecated: true
   /devices/eswitches/{id}/system/users:
     put:
-      summary: >-
-        Update EdgeSwitch system users. [Deprecated in favor of route PUT
-        /nms/api/v2.1/devices/{id}/system]
+      summary: Update EdgeSwitch system users. [Deprecated in favor of route PUT /nms/api/v2.1/devices/{id}/system]
       operationId: putDevicesEswitchesIdSystemUsers
       parameters:
         - type: string
@@ -15990,8 +15910,7 @@ paths:
       deprecated: true
   /devices/toughswitches/{id}/system/users:
     put:
-      summary: >-
-        Update ToughSwitch system users. [Deprecated in favor of route PUT
+      summary: Update ToughSwitch system users. [Deprecated in favor of route PUT
         /nms/api/v2.1/devices/{id}/system]
       operationId: putDevicesToughswitchesIdSystemUsers
       parameters:
@@ -16037,8 +15956,7 @@ paths:
       deprecated: true
   /devices/uispss/{id}/system/users:
     put:
-      summary: >-
-        Update UISP Switch system users. [Deprecated in favor of route PUT
+      summary: Update UISP Switch system users. [Deprecated in favor of route PUT
         /nms/api/v2.1/devices/{id}/system]
       operationId: putDevicesUispssIdSystemUsers
       parameters:
@@ -16447,10 +16365,8 @@ paths:
           description: Internal Server Error
   /devices/erouters/{id}/router/ospf/areas/{areaId}:
     put:
-      summary: |2-
-
-                Update OSPF area. [Deprecated in favor of route PUT /nms/api/v2.1/devices/{id}/router/ospf/areas/{areaId}]
-              
+      summary: "\n        Update OSPF area. [Deprecated in favor of route PUT /nms/api/v2.1/devices/{id}/router/ospf/areas/{areaId}]\n\
+        \      "
       operationId: putDevicesEroutersIdRouterOspfAreasAreaid
       parameters:
         - type: string
@@ -16501,10 +16417,8 @@ paths:
           description: Internal Server Error
       deprecated: true
     delete:
-      summary: |2-
-
-                Delete OSPF area. [Deprecated in favor of route DELETE /nms/api/v2.1/devices/{id}/router/ospf/areas/{areaId}]
-              
+      summary: "\n        Delete OSPF area. [Deprecated in favor of route DELETE /nms/api/v2.1/devices/{id}/router/ospf/areas/{areaId}]\n\
+        \      "
       operationId: deleteDevicesEroutersIdRouterOspfAreasAreaid
       parameters:
         - type: string
@@ -16651,10 +16565,8 @@ paths:
           description: Internal Server Error
   /devices/uisprs/{id}/router/ospf/areas/{areaId}:
     put:
-      summary: |2-
-
-                Update OSPF area. [Deprecated in favor of route PUT /nms/api/v2.1/devices/{id}/router/ospf/areas/{areaId}]
-              
+      summary: "\n        Update OSPF area. [Deprecated in favor of route PUT /nms/api/v2.1/devices/{id}/router/ospf/areas/{areaId}]\n\
+        \      "
       operationId: putDevicesUisprsIdRouterOspfAreasAreaid
       parameters:
         - type: string
@@ -16705,10 +16617,8 @@ paths:
           description: Internal Server Error
       deprecated: true
     delete:
-      summary: |2-
-
-                Delete OSPF area. [Deprecated in favor of route DELETE /nms/api/v2.1/devices/{id}/router/ospf/areas/{areaId}]
-              
+      summary: "\n        Delete OSPF area. [Deprecated in favor of route DELETE /nms/api/v2.1/devices/{id}/router/ospf/areas/{areaId}]\n\
+        \      "
       operationId: deleteDevicesUisprsIdRouterOspfAreasAreaid
       parameters:
         - type: string
@@ -16758,11 +16668,9 @@ paths:
     put:
       summary: Update DHCP IP lease.
       operationId: putDevicesUisprsIdDhcpLeasesServernameLeaseid
-      description: |2-
-
-                Request does accept payload with "leaseId" property, to match api,
-                but the id is ignored and it will be changed when mac or ip is updated.
-              
+      description: "\n        Request does accept payload with \"leaseId\" property,\
+        \ to match api,\n        but the id is ignored and it will be changed when\
+        \ mac or ip is updated.\n      "
       parameters:
         - type: string
           x-format:
@@ -17068,11 +16976,9 @@ paths:
           description: Internal Server Error
   /devices/uisprs/{id}/router/ospf/interfaces/{interfaceName}:
     delete:
-      summary: |2-
-
-                Delete OSPF Interface. 
-                [Deprecated in favor of route DELETE /nms/api/v2.1/devices/{deviceId}/interfaces/{interfaceName}/ospf]
-              
+      summary: "\n        Delete OSPF Interface. \n        [Deprecated in favor of\
+        \ route DELETE /nms/api/v2.1/devices/{deviceId}/interfaces/{interfaceName}/ospf]\n\
+        \      "
       operationId: deleteDevicesUisprsIdRouterOspfInterfacesInterfacename
       parameters:
         - type: string
@@ -17819,9 +17725,8 @@ definitions:
         $ref: '#/definitions/location'
       cableLength:
         type: number
-        description: >-
-          Cable Length from eth0 interface in meters. When below values is null
-          cable is long less then 20m.
+        description: Cable Length from eth0 interface in meters. When below values
+          is null cable is long less then 20m.
       cableSnr:
         type: number
         description: Average signal-to-noise ratio on eth0 interface in dB
@@ -18791,9 +18696,8 @@ definitions:
         description: Latest known firmware version on current major version
       latestOver:
         type: string
-        description: |-
-          Upgrade this firmware version as first if target
-            firmware is higher than latestOver. (AirCube must be updated over 2.8.0 fw)
+        description: "Upgrade this firmware version as first if target\n  firmware\
+          \ is higher than latestOver. (AirCube must be updated over 2.8.0 fw)"
       semver:
         $ref: '#/definitions/semver'
       upgradeRecommendedToVersion:
@@ -18879,8 +18783,7 @@ definitions:
             cidr: optional
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       model:
         type: string
         description: Short names, for example UF-OLT.
@@ -19318,9 +19221,8 @@ definitions:
         format: date-time
       distance:
         type: number
-        description: >-
-          Nullable property in meters.Either distance between sites or distance
-          returned from device AP.
+        description: Nullable property in meters.Either distance between sites or
+          distance returned from device AP.
       downlinkUtilization:
         type: number
       uplinkUtilization:
@@ -19352,9 +19254,8 @@ definitions:
         description: Current memory usage.
       signal:
         type: number
-        description: >-
-          Nullable prop; current signal level (only for airmax devices), for
-          example -55 dBm.
+        description: Nullable prop; current signal level (only for airmax devices),
+          for example -55 dBm.
         example: '-55'
       signalMax:
         type: number
@@ -19484,39 +19385,29 @@ definitions:
         example: 20
       heading:
         type: number
-        description: |2-
-
-              Value in degrees. The value is based on map, e.g. without magnetic declination.
-              Ignored on udpate when magneticHeading is present. North is 0 degrees, East is 90, South is 180, West is 270.
-            
+        description: "\n    Value in degrees. The value is based on map, e.g. without\
+          \ magnetic declination.\n    Ignored on udpate when magneticHeading is present.\
+          \ North is 0 degrees, East is 90, South is 180, West is 270.\n  "
         example: 88
       magneticHeading:
         type: number
-        description: |2-
-
-              Value in degrees. Compass heading (magnetic north).
-              It’s what you’re changing when you spin the dish around on a mast.
-              North is 0 degrees, East is 90, South is 180, West is 270.
-            
+        description: "\n    Value in degrees. Compass heading (magnetic north).\n\
+          \    It’s what you’re changing when you spin the dish around on a mast.\n\
+          \    North is 0 degrees, East is 90, South is 180, West is 270.\n  "
         example: 90
       tilt:
         type: number
-        description: |2-
-
-              Value in degrees. How high in the sky the dish is pointing.
-              0 degrees has the dish pointing straight ahead, 90 has the dish pointing straight up
-              and -90 has the dish pointing straight down.
-            
+        description: "\n    Value in degrees. How high in the sky the dish is pointing.\n\
+          \    0 degrees has the dish pointing straight ahead, 90 has the dish pointing\
+          \ straight up\n    and -90 has the dish pointing straight down.\n  "
         example: 20
         minimum: -90
         maximum: 90
       roll:
         type: number
-        description: |2-
-
-              Value in degrees. How low one side of the dish is compared to the other.
-              0 degrees no rotation, 90 rotation to the left, -90 rotation to the right and -180 upside down.
-            
+        description: "\n    Value in degrees. How low one side of the dish is compared\
+          \ to the other.\n    0 degrees no rotation, 90 rotation to the left, -90\
+          \ rotation to the right and -180 upside down.\n  "
         example: 0
         minimum: -180
         maximum: 180
@@ -19580,8 +19471,7 @@ definitions:
       mac:
         type: string
         example: fc:ec:da:03:bb:a8
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       name:
         type: string
         description: Interface name.
@@ -19952,9 +19842,8 @@ definitions:
         minimum: 0
       dlRatio:
         type: integer
-        description: >-
-          Downlink ratio in percentage. To calculate Uplink percentage substract
-          DlRatio out of a hundered.
+        description: Downlink ratio in percentage. To calculate Uplink percentage
+          substract DlRatio out of a hundered.
         example: 67
       noiseFloor:
         type: integer
@@ -20015,8 +19904,7 @@ definitions:
             cidr: optional
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       model:
         type: string
         description: Short names, for example UF-OLT.
@@ -20398,9 +20286,8 @@ definitions:
         description: Latest known firmware version on current major version
       latestOver:
         type: string
-        description: |-
-          Upgrade this firmware version as first if target
-            firmware is higher than latestOver. (AirCube must be updated over 2.8.0 fw)
+        description: "Upgrade this firmware version as first if target\n  firmware\
+          \ is higher than latestOver. (AirCube must be updated over 2.8.0 fw)"
       semver:
         $ref: '#/definitions/semver'
       upgradeRecommendedToVersion:
@@ -20438,8 +20325,7 @@ definitions:
         example: 10
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       interfaceId:
         type: string
         description: Interface name, where the station is connected.
@@ -20784,11 +20670,9 @@ definitions:
     type: object
     properties:
       airmax:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       airfiber:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       attributes:
         $ref: '#/definitions/DeviceAttributes'
       discovery:
@@ -21214,8 +21098,7 @@ definitions:
       $ref: '#/definitions/Firmware'
   suspendAllowedIps:
     type: array
-    description: >-
-      Array of IP addresses in IPv4 format that are allowed for suspended
+    description: Array of IP addresses in IPv4 format that are allowed for suspended
       clients.
     example:
       - 192.168.1.2
@@ -21229,22 +21112,19 @@ definitions:
     properties:
       interfaceId:
         type: string
-        description: >-
-          Interface name, for example eth0 which handles connectivity to WAN
-          network. If null, speed limits are applied on all interfaces.
+        description: Interface name, for example eth0 which handles connectivity to
+          WAN network. If null, speed limits are applied on all interfaces.
         example: eth0
       downloadSpeed:
         type: integer
-        description: >-
-          Max speed given in kbps. If 0 value is configured then ingress traffic
-          for this tariff is blocked. If null, no maximum speed is assumed.
+        description: Max speed given in kbps. If 0 value is configured then ingress
+          traffic for this tariff is blocked. If null, no maximum speed is assumed.
         example: 1000
         minimum: 0
       uploadSpeed:
         type: integer
-        description: >-
-          Max speed given in kbps. If 0 value is configured then egress traffic
-          for this tariff is blocked. If null, no maximum speed is assumed.
+        description: Max speed given in kbps. If 0 value is configured then egress
+          traffic for this tariff is blocked. If null, no maximum speed is assumed.
         example: 1000
         minimum: 0
       clientsUploadSpeedSum:
@@ -21266,11 +21146,9 @@ definitions:
     properties:
       enabled:
         type: boolean
-        description: >-
-          Enable configuration for QoS queue for IPs without any specific queue.
-          The main purpose of this configuration is to block new devices without
-          any active queue. If null, traffic not belonging to any queue is not
-          limited.
+        description: Enable configuration for QoS queue for IPs without any specific
+          queue. The main purpose of this configuration is to block new devices without
+          any active queue. If null, traffic not belonging to any queue is not limited.
         example: true
         default: false
       downloadSpeed:
@@ -21325,8 +21203,7 @@ definitions:
         type: string
         description: Device MAC address
         example: 78:8a:20:f9:4e:78
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       firmwareVersion:
         type: string
         description: Device firmware version
@@ -21383,9 +21260,8 @@ definitions:
         $ref: '#/definitions/defaultIpQueue'
       forceOverwrite:
         type: boolean
-        description: >-
-          Set to true to force write new NetFlow settings to device over current
-          device's settings.
+        description: Set to true to force write new NetFlow settings to device over
+          current device's settings.
         example: false
       id:
         type: string
@@ -21487,8 +21363,7 @@ definitions:
             cidr: optional
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       model:
         type: string
         description: Short names, for example UF-OLT.
@@ -22134,7 +22009,7 @@ definitions:
         type: string
     required:
       - alias
-  Model 11:
+  Outage:
     type: object
     properties:
       id:
@@ -22170,10 +22045,10 @@ definitions:
       - aggregatedTime
       - ongoing
       - inProgress
-  items 1:
+  outageList:
     type: array
     items:
-      $ref: '#/definitions/Model%2011'
+      $ref: '#/definitions/Outage'
   Outages:
     type: object
     properties:
@@ -22182,7 +22057,7 @@ definitions:
       aggregation:
         $ref: '#/definitions/aggregation%201'
       items:
-        $ref: '#/definitions/items%201'
+        $ref: '#/definitions/outageList'
   antenna 2:
     type: object
     properties:
@@ -22811,9 +22686,8 @@ definitions:
           - ZW
       ucrmId:
         type: string
-        description: >-
-          ID of UCRM client bound with this site. Null if no UCRM client is
-          bound to this site.
+        description: ID of UCRM client bound with this site. Null if no UCRM client
+          is bound to this site.
         example: '135'
       ipAddresses:
         $ref: '#/definitions/ipAddresses'
@@ -22822,9 +22696,8 @@ definitions:
         example: 0.4
   Model 12:
     type: object
-    description: >-
-      Users who will receive notifications. Notification type must be set to
-      custom.
+    description: Users who will receive notifications. Notification type must be set
+      to custom.
     properties:
       id:
         type: string
@@ -22871,11 +22744,9 @@ definitions:
         example: true
       propagation:
         type: string
-        description: |2-
-
-                Whether or not set Traffic Shaping on Client devices like, CPEs and ONUs.
-                Enabling this will lower your traffic in local network.
-              
+        description: "\n      Whether or not set Traffic Shaping on Client devices\
+          \ like, CPEs and ONUs.\n      Enabling this will lower your traffic in local\
+          \ network.\n    "
         enum:
           - all
           - gateway
@@ -22890,9 +22761,8 @@ definitions:
           positive: true
       downloadBurstSize:
         type: integer
-        description: >-
-          Amount of bytes that can be sent at downloadSpeed in excess of the
-          guaranteed rate.
+        description: Amount of bytes that can be sent at downloadSpeed in excess of
+          the guaranteed rate.
         example: 512
         enum:
           - 0
@@ -22910,9 +22780,8 @@ definitions:
           positive: true
       uploadBurstSize:
         type: integer
-        description: >-
-          Amount of bytes that can be sent at uploadSpeed in excess of the
-          guaranteed rate.
+        description: Amount of bytes that can be sent at uploadSpeed in excess of
+          the guaranteed rate.
         example: 512
         enum:
           - 0
@@ -22921,11 +22790,9 @@ definitions:
           positive: true
       aggregation:
         type: integer
-        description: |2-
-
-                Number indicating how many times the guaranteed rate is less than the maximum allowed bandwidth.
-                Null for auto calculation by UISP.
-              
+        description: "\n      Number indicating how many times the guaranteed rate\
+          \ is less than the maximum allowed bandwidth.\n      Null for auto calculation\
+          \ by UISP.\n    "
         example: 2
         minimum: 1
         maximum: 10000
@@ -23203,31 +23070,27 @@ definitions:
       lastUsed:
         type: string
         format: date-time
-        description: >-
-          Time when this token was last used. If null then it has not been used
-          yet.
+        description: Time when this token was last used. If null then it has not been
+          used yet.
         example: '2011-10-04T14:48:00.000Z'
       expiresAt:
         type: string
         format: date-time
-        description: >-
-          Time when this token will expire unless it is renewed. If null than it
-          will never expire.
+        description: Time when this token will expire unless it is renewed. If null
+          than it will never expire.
         example: '2011-10-05T14:48:00.000Z'
       maxExpiresAt:
         type: string
         format: date-time
-        description: >-
-          Latest time when the token will expire. If null then it will never
-          expire.
+        description: Latest time when the token will expire. If null then it will
+          never expire.
         example: '2011-11-05T14:48:00.000Z'
       scope:
         $ref: '#/definitions/scope'
       userId:
         type: string
-        description: >-
-          Id of the user this token represents. Null if the token is not bound
-          to any user.
+        description: Id of the user this token represents. Null if the token is not
+          bound to any user.
         example: 261aa95a-0270-4416-894a-616a0cecedbb
       user:
         $ref: '#/definitions/user'
@@ -23320,9 +23183,8 @@ definitions:
         type: boolean
       role:
         type: string
-        description: >-
-          Role of this user in UISP. 'anonymous' if user is only allowed to
-          access CRM.
+        description: Role of this user in UISP. 'anonymous' if user is only allowed
+          to access CRM.
         example: admin
         enum:
           - superadmin
@@ -23370,8 +23232,7 @@ definitions:
         example: '123'
       ucrmRole:
         type: string
-        description: >-
-          Role of this user in UCRM. 'null' if user is not allowed to access
+        description: Role of this user in UCRM. 'null' if user is not allowed to access
           UCRM.
         example: '1'
       homeScreen:
@@ -23424,9 +23285,8 @@ definitions:
           guid: true
       isReadOnly:
         type: boolean
-        description: >-
-          If true, access to site is read-only. If false, access to site is
-          read-write.
+        description: If true, access to site is read-only. If false, access to site
+          is read-write.
         example: true
       name:
         type: string
@@ -23521,15 +23381,13 @@ definitions:
         maxLength: 100
       isAuto:
         type: boolean
-        description: >-
-          If true the access group is automatically generated and cannot be
-          edited.
+        description: If true the access group is automatically generated and cannot
+          be edited.
         example: false
       isInternal:
         type: boolean
-        description: >-
-          If true the access group is internal. User should not be able to
-          select it
+        description: If true the access group is internal. User should not be able
+          to select it
         example: false
       whitelist:
         $ref: '#/definitions/whitelist'
@@ -23667,11 +23525,9 @@ definitions:
     type: object
     properties:
       airmax:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       airfiber:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       attributes:
         $ref: '#/definitions/DeviceAttributes'
       discovery:
@@ -23725,8 +23581,7 @@ definitions:
       mac:
         type: string
         description: MAC address
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       key:
         type: string
         description: Pre shared key
@@ -23788,11 +23643,9 @@ definitions:
     type: object
     properties:
       airmax:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       airfiber:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       attributes:
         $ref: '#/definitions/DeviceAttributes'
       discovery:
@@ -23858,8 +23711,7 @@ definitions:
       - id
   installation:
     type: object
-    description: >-
-      Installation this device is part of. Null if not part of an installation
+    description: Installation this device is part of. Null if not part of an installation
       yet.
     properties:
       id:
@@ -23884,8 +23736,7 @@ definitions:
         type: string
         description: Device mac address.
         example: 44:d9:e7:3d:b1:47
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       model:
         type: string
         description: Device model.
@@ -24211,9 +24062,8 @@ definitions:
       finished:
         type: string
         format: date-time
-        description: >-
-          Time when the installation was finished. Null if the installation is
-          not finished yet.
+        description: Time when the installation was finished. Null if the installation
+          is not finished yet.
         example: '2020-01-14T15:20:32.004Z'
     required:
       - id
@@ -25398,9 +25248,8 @@ definitions:
           - gateway
       migrationModeEnabled:
         type: boolean
-        description: >-
-          When true all new device connections and connected devices will change
-          UISP Key.
+        description: When true all new device connections and connected devices will
+          change UISP Key.
         example: false
       migrationForceModeEnabled:
         type: boolean
@@ -25552,9 +25401,8 @@ definitions:
           guid: true
       ucrmId:
         type: string
-        description: >-
-          ID of UCRM client bound with this site. Null if no UCRM client is
-          bound to this site.
+        description: ID of UCRM client bound with this site. Null if no UCRM client
+          is bound to this site.
         example: '135'
       deletedAt:
         type: string
@@ -25700,11 +25548,9 @@ definitions:
     type: object
     properties:
       airmax:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       airfiber:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       attributes:
         $ref: '#/definitions/DeviceAttributes'
       discovery:
@@ -25916,8 +25762,7 @@ definitions:
       latestVersionUrl:
         type: string
         description: URL to check for new version of UISP.
-        example: >-
-          https://api.github.com/repos/Ubiquiti-App/UNMS/contents/latest-version?ref=master
+        example: https://api.github.com/repos/Ubiquiti-App/UNMS/contents/latest-version?ref=master
       useCustomSslCert:
         type: boolean
         description: Whether the server is using custom SSL cert or not.
@@ -26957,9 +26802,8 @@ definitions:
           - gateway
       migrationModeEnabled:
         type: boolean
-        description: >-
-          When true all new device connections and connected devices will change
-          UISP Key.
+        description: When true all new device connections and connected devices will
+          change UISP Key.
         example: false
       migrationForceModeEnabled:
         type: boolean
@@ -27111,7 +26955,7 @@ definitions:
   Coordinates:
     type: object
     properties:
-      x:
+      'x':
         type: number
       'y':
         type: number
@@ -27154,7 +26998,7 @@ definitions:
   Model 19:
     type: object
     properties:
-      x:
+      'x':
         type: number
       'y':
         type: number
@@ -27184,7 +27028,7 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/Coordinates'
-  outages:
+  outages_stats:
     type: array
     items:
       $ref: '#/definitions/Coordinates'
@@ -27228,7 +27072,7 @@ definitions:
       linkScore:
         $ref: '#/definitions/linkScore%201'
       outages:
-        $ref: '#/definitions/outages'
+        $ref: '#/definitions/outages_stats'
       uplinkUtilizationMean:
         $ref: '#/definitions/uplinkUtilizationMean'
       downlinkUtilizationMean:
@@ -27313,17 +27157,15 @@ definitions:
     properties:
       minVersion:
         type: string
-        description: >-
-          Minimal required version of UNMS before update to the latest version
-          is possible.
+        description: Minimal required version of UNMS before update to the latest
+          version is possible.
         example: 1.3.0
     required:
       - minVersion
   NmsUpdateError:
     type: object
-    description: >-
-      Error that caused the update to fail. Null if update succeeded or is still
-      running.
+    description: Error that caused the update to fail. Null if update succeeded or
+      is still running.
     properties:
       error:
         type: string
@@ -27826,8 +27668,7 @@ definitions:
         type: string
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       mode:
         type: string
         enum:
@@ -27881,11 +27722,9 @@ definitions:
     type: object
     properties:
       airmax:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       airfiber:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       attributes:
         $ref: '#/definitions/DeviceAttributes'
       discovery:
@@ -28039,8 +27878,7 @@ definitions:
     type: object
     properties:
       airmax:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       attributes:
         $ref: '#/definitions/DeviceAttributes'
       discovery:
@@ -28077,8 +27915,7 @@ definitions:
       interfaces:
         $ref: '#/definitions/DeviceInterfaceListSchema'
       airfiber:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.%201
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.%201'
     required:
       - enabled
       - ipAddress
@@ -28197,9 +28034,8 @@ definitions:
         $ref: '#/definitions/location'
       cableLength:
         type: number
-        description: >-
-          Cable Length from eth0 interface in meters. When below values is null
-          cable is long less then 20m.
+        description: Cable Length from eth0 interface in meters. When below values
+          is null cable is long less then 20m.
       cableSnr:
         type: number
         description: Average signal-to-noise ratio on eth0 interface in dB
@@ -28216,8 +28052,7 @@ definitions:
     type: object
     properties:
       airfiber:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       attributes:
         $ref: '#/definitions/DeviceAttributes'
       discovery:
@@ -28254,8 +28089,7 @@ definitions:
       interfaces:
         $ref: '#/definitions/DeviceInterfaceListSchema'
       airmax:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.%201
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.%201'
     required:
       - enabled
       - ipAddress
@@ -28693,8 +28527,7 @@ definitions:
       mac:
         type: string
         description: MAC address
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       security:
         type: string
         enum:
@@ -28994,9 +28827,8 @@ definitions:
         $ref: '#/definitions/location'
       cableLength:
         type: number
-        description: >-
-          Cable Length from eth0 interface in meters. When below values is null
-          cable is long less then 20m.
+        description: Cable Length from eth0 interface in meters. When below values
+          is null cable is long less then 20m.
       cableSnr:
         type: number
         description: Average signal-to-noise ratio on eth0 interface in dB
@@ -29018,12 +28850,12 @@ definitions:
         type: boolean
   vlanId:
     type: object
-  sfp+1:
+  sfpPlus1:
     type: object
     properties:
       vlanNative:
         type: number
-  sfp+2:
+  sfpPlus2:
     type: object
     properties:
       vlanNative:
@@ -29041,10 +28873,10 @@ definitions:
   interface 1:
     type: object
     properties:
-      sfp+1:
-        $ref: '#/definitions/sfp%2B1'
-      sfp+2:
-        $ref: '#/definitions/sfp%2B2'
+      sfpPlus1:
+        $ref: '#/definitions/sfpPlus1'
+      sfpPlus2:
+        $ref: '#/definitions/sfpPlus2'
       sfp1:
         $ref: '#/definitions/sfp1'
       sfp2:
@@ -29078,11 +28910,9 @@ definitions:
     type: object
     properties:
       airmax:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       airfiber:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       attributes:
         $ref: '#/definitions/DeviceAttributes'
       discovery:
@@ -29162,15 +28992,13 @@ definitions:
       interfaces:
         $ref: '#/definitions/DeviceInterfaceListSchema'
       airfiber:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.%202
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.%202'
       aircube:
         $ref: '#/definitions/DeviceAirCube'
       onu:
         $ref: '#/definitions/DeviceOnu%201'
       airmax:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.%202
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.%202'
       olt:
         $ref: '#/definitions/Olt'
     required:
@@ -29229,11 +29057,9 @@ definitions:
     type: object
     properties:
       airmax:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       airfiber:
-        $ref: >-
-          #/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       attributes:
         $ref: '#/definitions/DeviceAttributes'
       discovery:
@@ -29304,8 +29130,7 @@ definitions:
         type: string
         description: Interface mac address
         example: 04:18:d6:a0:f0:47
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       type:
         type: string
         description: Interface type
@@ -29395,9 +29220,8 @@ definitions:
         $ref: '#/definitions/vlans%202'
       trunkUndefinedVlans:
         type: boolean
-        description: >-
-          If enabled, trunks ports carries all VLANs, except those defined as
-          excluded in VLANs array.
+        description: If enabled, trunks ports carries all VLANs, except those defined
+          as excluded in VLANs array.
         example: true
     required:
       - trunkUndefinedVlans
@@ -29512,8 +29336,7 @@ definitions:
         $ref: '#/definitions/addresses%201'
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       vlan:
         type: number
       hostname:
@@ -29565,7 +29388,7 @@ definitions:
   CoordinatesXY.:
     type: object
     properties:
-      x:
+      'x':
         type: number
       'y':
         type: number
@@ -29734,20 +29557,16 @@ definitions:
         example: true
       maxAge:
         type: integer
-        description: >-
-          Length of time (in seconds) since last BPDU received on this port
-          before aging out the BPDU and
-                initiating topology reconvergence.
+        description: "Length of time (in seconds) since last BPDU received on this\
+          \ port before aging out the BPDU and\n      initiating topology reconvergence."
         example: 30
         minimum: 6
         maximum: 40
       helloTime:
         type: integer
-        description: >-
-          Time between each bridge protocol data unit (BPDU) that is sent on a
-          port (in seconds).
-                Updating hello time is disallowed per IEEE 802.1Q-REV 200.
-              
+        description: "Time between each bridge protocol data unit (BPDU) that is sent\
+          \ on a port (in seconds).\n      Updating hello time is disallowed per IEEE\
+          \ 802.1Q-REV 200.\n    "
         example: 2
         minimum: 0
         maximum: 100
@@ -29761,9 +29580,8 @@ definitions:
           - STP
       forwardDelay:
         type: integer
-        description: >-
-          Time spent in listening and learning state (in seconds) prior to
-          entering forwarding state.
+        description: Time spent in listening and learning state (in seconds) prior
+          to entering forwarding state.
         example: 30
         minimum: 4
         maximum: 30
@@ -29973,24 +29791,21 @@ definitions:
     properties:
       enabled:
         type: boolean
-        description: >-
-          Respond to UBNT Device Discovery protocol requests. Device must have
-          DISCOVERY_RESPONDER service capability (aka discovery server).
+        description: Respond to UBNT Device Discovery protocol requests. Device must
+          have DISCOVERY_RESPONDER service capability (aka discovery server).
         example: true
   scanner:
     type: object
     properties:
       enabled:
         type: boolean
-        description: >-
-          Enable discovery scanner tool. Device must have DISCOVERY_SCANNER tool
-          capability (aka discovery client).
+        description: Enable discovery scanner tool. Device must have DISCOVERY_SCANNER
+          tool capability (aka discovery client).
         example: true
       passiveOnly:
         type: boolean
-        description: >-
-          Use only passive discovery protocols (MNDP, CDP and LLDP) and not
-          active protocols (UBNT discovery).
+        description: Use only passive discovery protocols (MNDP, CDP and LLDP) and
+          not active protocols (UBNT discovery).
         example: true
   discovery 1:
     type: object
@@ -30152,9 +29967,8 @@ definitions:
     properties:
       id:
         type: string
-        description: >-
-          ID of the currently active questionnaire. Null if no questionnaire is
-          active.
+        description: ID of the currently active questionnaire. Null if no questionnaire
+          is active.
         example: Q1
     required:
       - id
@@ -30212,9 +30026,7 @@ definitions:
       - deviceId
   ips:
     type: array
-    description: >-
-      List of IPs objects in UISP within the subnet with deviceId and
-      interfaceId.
+    description: List of IPs objects in UISP within the subnet with deviceId and interfaceId.
     items:
       $ref: '#/definitions/Model%2034'
   SubnetWithIpSchema:
@@ -30258,20 +30070,18 @@ definitions:
   GraphDataPoint:
     type: object
     properties:
-      x:
+      'x':
         type: number
-        description: >-
-          Milliseconds elapsed between 1 January 1970 00:00:00 UTC and the given
-          date
+        description: Milliseconds elapsed between 1 January 1970 00:00:00 UTC and
+          the given date
         example: 1534426215000
       'y':
         type: number
-        description: >-
-          Data point value. null if we do not have any value for given
+        description: Data point value. null if we do not have any value for given
           timestamp.
         example: 10193
     required:
-      - x
+      - 'x'
       - 'y'
   GraphDataSet:
     type: array
@@ -30388,11 +30198,9 @@ definitions:
         example: true
       propagation:
         type: string
-        description: |2-
-
-                Whether or not set Traffic Shaping on Client devices like, CPEs and ONUs.
-                Enabling this will lower your traffic in local network.
-              
+        description: "\n      Whether or not set Traffic Shaping on Client devices\
+          \ like, CPEs and ONUs.\n      Enabling this will lower your traffic in local\
+          \ network.\n    "
         enum:
           - all
           - gateway
@@ -30407,9 +30215,8 @@ definitions:
           positive: true
       downloadBurstSize:
         type: integer
-        description: >-
-          Amount of bytes that can be sent at downloadSpeed in excess of the
-          guaranteed rate.
+        description: Amount of bytes that can be sent at downloadSpeed in excess of
+          the guaranteed rate.
         example: 512
         enum:
           - 0
@@ -30427,9 +30234,8 @@ definitions:
           positive: true
       uploadBurstSize:
         type: integer
-        description: >-
-          Amount of bytes that can be sent at uploadSpeed in excess of the
-          guaranteed rate.
+        description: Amount of bytes that can be sent at uploadSpeed in excess of
+          the guaranteed rate.
         example: 512
         enum:
           - 0
@@ -30438,11 +30244,9 @@ definitions:
           positive: true
       aggregation:
         type: integer
-        description: |2-
-
-                Number indicating how many times the guaranteed rate is less than the maximum allowed bandwidth.
-                Null for auto calculation by UISP.
-              
+        description: "\n      Number indicating how many times the guaranteed rate\
+          \ is less than the maximum allowed bandwidth.\n      Null for auto calculation\
+          \ by UISP.\n    "
         example: 2
         minimum: 1
         maximum: 10000
@@ -30493,7 +30297,7 @@ definitions:
         type: boolean
     required:
       - credentials
-  Device's credentials:
+  Devices credentials:
     type: object
     properties:
       username:
@@ -30505,11 +30309,11 @@ definitions:
       createdAt:
         type: string
         format: date-time
-  Device's credentials with flags:
+  Devices credentials with flags:
     type: object
     properties:
       credentials:
-        $ref: '#/definitions/Device''s%20credentials'
+        $ref: '#/definitions/Devices%20credentials'
       isPassphraseMissing:
         type: boolean
     required:
@@ -30921,8 +30725,7 @@ definitions:
         type: number
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       isChannelAuto:
         type: boolean
       frequency:
@@ -30997,8 +30800,7 @@ definitions:
         type: number
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       isChannelAuto:
         type: boolean
       frequency:
@@ -31117,8 +30919,7 @@ definitions:
         type: boolean
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       mode:
         type: string
       name:
@@ -31199,8 +31000,7 @@ definitions:
         maxLength: 50
       macAddress:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       deviceRole:
         type: string
         default: router
@@ -31487,9 +31287,8 @@ definitions:
           - pppoe
       wanAddress:
         type: string
-        description: >-
-          WAN address of ONU in CIDR format - required if wanMode is set to
-          "static"
+        description: WAN address of ONU in CIDR format - required if wanMode is set
+          to "static"
         example: 192.168.1.250/24
         x-format:
           ip:
@@ -31607,9 +31406,8 @@ definitions:
           - static
       wanAddress6:
         type: string
-        description: >-
-          WAN address of ONU in CIDR format - required if wanMode6 is set to
-          "static"
+        description: WAN address of ONU in CIDR format - required if wanMode6 is set
+          to "static"
         example: 0:0:0:0:0:ffff:5ca8:d101/24
         x-format:
           ip:
@@ -31779,8 +31577,7 @@ definitions:
       mac:
         type: string
         description: MAC address
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
     required:
       - origin
       - mac
@@ -31833,9 +31630,8 @@ definitions:
     properties:
       provisioned:
         type: boolean
-        description: >-
-          When false, configuration of wireless part can be done directly from
-          ONU only.
+        description: When false, configuration of wireless part can be done directly
+          from ONU only.
         example: true
       enabled:
         type: boolean
@@ -31875,9 +31671,8 @@ definitions:
         maximum: 100
       country:
         type: string
-        description: >-
-          Country for regulatory domain - ISO 3166-2 alpha code or WO for 'World
-          wide'
+        description: Country for regulatory domain - ISO 3166-2 alpha code or WO for
+          'World wide'
         example: US
       countryListId:
         type: string
@@ -31919,8 +31714,7 @@ definitions:
         type: string
         description: MAC address of the interface
         example: 04:18:D6:A0:64:DC
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       type:
         type: string
         description: Interface type
@@ -32053,10 +31847,8 @@ definitions:
     properties:
       overrideGlobal:
         type: boolean
-        description: |2-
-
-              If TRUE during update of UISP global settings this device settings will not update if FALSE then yes.
-              
+        description: "\n    If TRUE during update of UISP global settings this device\
+          \ settings will not update if FALSE then yes.\n    "
       deviceTransmissionFrequency:
         type: string
         enum:
@@ -32144,7 +31936,8 @@ definitions:
         $ref: '#/definitions/configuration'
       ap:
         type: boolean
-        description: It is set to true when the device is set to be installed as a AP
+        description: It is set to true when the device is set to be installed as a
+          AP
         example: true
   TrafficSummary:
     type: object
@@ -32357,8 +32150,7 @@ definitions:
       apMac:
         type: string
         description: MAC address
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       enabled:
         type: boolean
       presharedKey:
@@ -32495,8 +32287,7 @@ definitions:
       mac:
         type: string
         description: MAC address
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       isEnabled:
         type: boolean
       comment:
@@ -32581,8 +32372,7 @@ definitions:
       apMac:
         type: string
         description: MAC address
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       countryCode:
         type: number
       allowedFrequencies:
@@ -33246,8 +33036,7 @@ definitions:
                     cidr: optional
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       port:
         type: string
       sets:
@@ -33290,8 +33079,7 @@ definitions:
                     cidr: optional
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       port:
         type: string
       sets:
@@ -34168,9 +33956,8 @@ definitions:
         $ref: '#/definitions/defaultIpQueue'
       forceOverwrite:
         type: boolean
-        description: >-
-          Set to true to force write new NetFlow settings to device over current
-          device's settings.
+        description: Set to true to force write new NetFlow settings to device over
+          current device's settings.
         example: false
       device:
         $ref: '#/definitions/NewGatewayDevice'
@@ -34205,14 +33992,12 @@ definitions:
         type: string
         description: MAC address of the first installation device.
         example: 44:d9:e7:3d:b1:47
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       mac2:
         type: string
         description: MAC address of the second installation device.
         example: 44:d9:e7:3d:b1:48
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
     required:
       - mac1
       - mac2
@@ -34605,31 +34390,27 @@ definitions:
       lastUsed:
         type: string
         format: date-time
-        description: >-
-          Time when this token was last used. If null then it has not been used
-          yet.
+        description: Time when this token was last used. If null then it has not been
+          used yet.
         example: '2011-10-04T14:48:00.000Z'
       expiresAt:
         type: string
         format: date-time
-        description: >-
-          Time when this token will expire unless it is renewed. If null than it
-          will never expire.
+        description: Time when this token will expire unless it is renewed. If null
+          than it will never expire.
         example: '2011-10-05T14:48:00.000Z'
       maxExpiresAt:
         type: string
         format: date-time
-        description: >-
-          Latest time when the token will expire. If null then it will never
-          expire.
+        description: Latest time when the token will expire. If null then it will
+          never expire.
         example: '2011-11-05T14:48:00.000Z'
       scope:
         $ref: '#/definitions/scope'
       userId:
         type: string
-        description: >-
-          Id of the user this token represents. Null if the token is not bound
-          to any user.
+        description: Id of the user this token represents. Null if the token is not
+          bound to any user.
         example: 261aa95a-0270-4416-894a-616a0cecedbb
       user:
         $ref: '#/definitions/user'
@@ -34729,9 +34510,8 @@ definitions:
           guid: true
       isReadOnly:
         type: boolean
-        description: >-
-          If true, access to site is read-only. If false, access to site is
-          read-write.
+        description: If true, access to site is read-only. If false, access to site
+          is read-write.
         example: true
     required:
       - id
@@ -34801,7 +34581,8 @@ definitions:
         example: Watson
       servicePlanId:
         type: string
-        description: ID of the CRM Service plan that should be assigned to the new Client
+        description: ID of the CRM Service plan that should be assigned to the new
+          Client
         example: '1'
       address:
         type: string
@@ -34979,8 +34760,7 @@ definitions:
             cidr: optional
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       ubntDevice:
         type: boolean
       deviceRole:
@@ -35098,33 +34878,29 @@ definitions:
         minimum: -1000
       heading:
         type: number
-        description: >-
-          Antenna's azimuth rotation in rad, max 6.28318. North: 0, East: PI/2,
-          South: PI, West: 3*PI/2.
+        description: 'Antenna''s azimuth rotation in rad, max 6.28318. North: 0, East:
+          PI/2, South: PI, West: 3*PI/2.'
         example: 1.2566370614359172
         minimum: 0
         maximum: 6.28319
       magneticHeading:
         type: number
-        description: >-
-          Antenna's azimuth rotation in rad with (magnetic declination is
-          included), max 6.28318. North: 0, East: PI/2, South: PI, West: 3*PI/2.
+        description: 'Antenna''s azimuth rotation in rad with (magnetic declination
+          is included), max 6.28318. North: 0, East: PI/2, South: PI, West: 3*PI/2.'
         example: 1.1814056081614541
         minimum: 0
         maximum: 6.28319
       tilt:
         type: number
-        description: >-
-          Antenna's vertical rotation in rad. Straight: 0, Down: -PI/2, Up:
-          PI/2.
+        description: 'Antenna''s vertical rotation in rad. Straight: 0, Down: -PI/2,
+          Up: PI/2.'
         example: -0.05235987755982988
         minimum: -1.5708
         maximum: 1.5708
       roll:
         type: number
-        description: >-
-          Antenna's axial rotation in rad. Horizontal: 0, increased by right
-          (clockwise) rotation.
+        description: 'Antenna''s axial rotation in rad. Horizontal: 0, increased by
+          right (clockwise) rotation.'
         example: 6.265732014659643
         minimum: 0
         maximum: 6.28319
@@ -35257,8 +35033,7 @@ definitions:
         type: string
         description: Device mac address.
         example: 44:d9:e7:3d:b1:47
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       model:
         type: string
         description: Device model.
@@ -36780,16 +36555,14 @@ definitions:
       - message
   macAddresses:
     type: array
-    description: >-
-      Device with one of these MAC addresses will be automatically authorised
+    description: Device with one of these MAC addresses will be automatically authorised
       and assigned to defined site/client.
     items:
       type: string
   ipAddresses 1:
     type: array
-    description: >-
-      Device with one of these IP addresses will be automatically authorised and
-      assigned to defined site/client.
+    description: Device with one of these IP addresses will be automatically authorised
+      and assigned to defined site/client.
     items:
       type: string
       example: 192.168.10.12
@@ -36822,15 +36595,13 @@ definitions:
           - client
       ucrmId:
         type: string
-        description: >-
-          In case of client type, ID of UCRM service. In case of site type, ID
-          of UCRM site.
+        description: In case of client type, ID of UCRM service. In case of site type,
+          ID of UCRM site.
         example: '135'
       parentSiteUcrmId:
         type: string
-        description: >-
-          ID of UCRM parent site of a client. Null if UCRM client has no parent
-          site.
+        description: ID of UCRM parent site of a client. Null if UCRM client has no
+          parent site.
         example: '134'
       longitude:
         type: number
@@ -37273,9 +37044,8 @@ definitions:
         type: boolean
       role:
         type: string
-        description: >-
-          Role of this user in UISP. 'anonymous' if user is only allowed to
-          access CRM.
+        description: Role of this user in UISP. 'anonymous' if user is only allowed
+          to access CRM.
         example: admin
         enum:
           - superadmin
@@ -37323,8 +37093,7 @@ definitions:
         example: '123'
       ucrmRole:
         type: string
-        description: >-
-          Role of this user in UCRM. 'null' if user is not allowed to access
+        description: Role of this user in UCRM. 'null' if user is not allowed to access
           UCRM.
         example: '1'
       homeScreen:
@@ -37448,9 +37217,8 @@ definitions:
         example: e868e1fb-2b65-4a86-91df-4e929a6efc26
       newUsername:
         type: string
-        description: >-
-          New username in case that the original CRM username is already taken
-          in UISP.
+        description: New username in case that the original CRM username is already
+          taken in UISP.
         example: admin_crm_1
     required:
       - ucrmId
@@ -37883,8 +37651,7 @@ definitions:
         description: Code from successful SSO authentication.
       state:
         type: string
-        description: >-
-          State previously sent to SSO. Same value must be in nms-sso-login
+        description: State previously sent to SSO. Same value must be in nms-sso-login
           cookie.
     required:
       - code
@@ -38096,8 +37863,7 @@ definitions:
     type: array
     items:
       type: string
-      pattern: >-
-        ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+      pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
   PayloadSystemUnmsKeyHostnamePort:
     type: object
     properties:
@@ -38357,8 +38123,7 @@ definitions:
         description: Code from successful SSO authentication.
       state:
         type: string
-        description: >-
-          State previously sent to SSO. Same value must be in nms-sso-login
+        description: State previously sent to SSO. Same value must be in nms-sso-login
           cookie.
       invitationToken:
         type: string
@@ -40834,9 +40599,8 @@ definitions:
           - gateway
       migrationModeEnabled:
         type: boolean
-        description: >-
-          When true all new device connections and connected devices will change
-          UISP Key.
+        description: When true all new device connections and connected devices will
+          change UISP Key.
         example: false
       migrationForceModeEnabled:
         type: boolean
@@ -41297,9 +41061,8 @@ definitions:
           - ZW
       ucrmId:
         type: string
-        description: >-
-          ID of UCRM client bound with this site. Null if no UCRM client is
-          bound to this site.
+        description: ID of UCRM client bound with this site. Null if no UCRM client
+          is bound to this site.
         example: '135'
       ipAddresses:
         $ref: '#/definitions/ipAddresses'
@@ -42277,7 +42040,8 @@ definitions:
       - quality
   SsoUserSchema 1:
     type: object
-    description: SSO user data obtained through "POST /nms/api/v2.1/user/sso/verify" API.
+    description: SSO user data obtained through "POST /nms/api/v2.1/user/sso/verify"
+      API.
     properties:
       id:
         type: string
@@ -42312,9 +42076,8 @@ definitions:
         maxLength: 64
       verificationCode:
         type: string
-        description: >-
-          UISP user 2FA verification code. Not required when 2FA is not enabled
-          for the account.
+        description: UISP user 2FA verification code. Not required when 2FA is not
+          enabled for the account.
         x-constraint:
           length: 6
       ssoUser:
@@ -42922,8 +42685,7 @@ definitions:
     properties:
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
   Model 129:
     type: array
     items:
@@ -43220,9 +42982,8 @@ x-alt-definitions:
         type: boolean
       role:
         type: string
-        description: >-
-          Role of this user in UISP. 'anonymous' if user is only allowed to
-          access CRM.
+        description: Role of this user in UISP. 'anonymous' if user is only allowed
+          to access CRM.
         example: admin
         enum:
           - superadmin
@@ -43270,8 +43031,7 @@ x-alt-definitions:
         example: '123'
       ucrmRole:
         type: string
-        description: >-
-          Role of this user in UCRM. 'null' if user is not allowed to access
+        description: Role of this user in UCRM. 'null' if user is not allowed to access
           UCRM.
         example: '1'
       homeScreen:
@@ -43688,9 +43448,8 @@ x-alt-definitions:
         $ref: '#/x-alt-definitions/location'
       cableLength:
         type: number
-        description: >-
-          Cable Length from eth0 interface in meters. When below values is null
-          cable is long less then 20m.
+        description: Cable Length from eth0 interface in meters. When below values
+          is null cable is long less then 20m.
       cableSnr:
         type: number
         description: Average signal-to-noise ratio on eth0 interface in dB
@@ -44654,9 +44413,8 @@ x-alt-definitions:
         description: Latest known firmware version on current major version
       latestOver:
         type: string
-        description: |-
-          Upgrade this firmware version as first if target
-            firmware is higher than latestOver. (AirCube must be updated over 2.8.0 fw)
+        description: "Upgrade this firmware version as first if target\n  firmware\
+          \ is higher than latestOver. (AirCube must be updated over 2.8.0 fw)"
       semver:
         $ref: '#/x-alt-definitions/semver'
       upgradeRecommendedToVersion:
@@ -44706,8 +44464,7 @@ x-alt-definitions:
             cidr: optional
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       model:
         type: string
         description: Short names, for example UF-OLT.
@@ -45152,9 +44909,8 @@ x-alt-definitions:
         format: date-time
       distance:
         type: number
-        description: >-
-          Nullable property in meters.Either distance between sites or distance
-          returned from device AP.
+        description: Nullable property in meters.Either distance between sites or
+          distance returned from device AP.
       downlinkUtilization:
         type: number
       uplinkUtilization:
@@ -45186,9 +44942,8 @@ x-alt-definitions:
         description: Current memory usage.
       signal:
         type: number
-        description: >-
-          Nullable prop; current signal level (only for airmax devices), for
-          example -55 dBm.
+        description: Nullable prop; current signal level (only for airmax devices),
+          for example -55 dBm.
         example: '-55'
       signalMax:
         type: number
@@ -45318,39 +45073,29 @@ x-alt-definitions:
         example: 20
       heading:
         type: number
-        description: |2-
-
-              Value in degrees. The value is based on map, e.g. without magnetic declination.
-              Ignored on udpate when magneticHeading is present. North is 0 degrees, East is 90, South is 180, West is 270.
-            
+        description: "\n    Value in degrees. The value is based on map, e.g. without\
+          \ magnetic declination.\n    Ignored on udpate when magneticHeading is present.\
+          \ North is 0 degrees, East is 90, South is 180, West is 270.\n  "
         example: 88
       magneticHeading:
         type: number
-        description: |2-
-
-              Value in degrees. Compass heading (magnetic north).
-              It’s what you’re changing when you spin the dish around on a mast.
-              North is 0 degrees, East is 90, South is 180, West is 270.
-            
+        description: "\n    Value in degrees. Compass heading (magnetic north).\n\
+          \    It’s what you’re changing when you spin the dish around on a mast.\n\
+          \    North is 0 degrees, East is 90, South is 180, West is 270.\n  "
         example: 90
       tilt:
         type: number
-        description: |2-
-
-              Value in degrees. How high in the sky the dish is pointing.
-              0 degrees has the dish pointing straight ahead, 90 has the dish pointing straight up
-              and -90 has the dish pointing straight down.
-            
+        description: "\n    Value in degrees. How high in the sky the dish is pointing.\n\
+          \    0 degrees has the dish pointing straight ahead, 90 has the dish pointing\
+          \ straight up\n    and -90 has the dish pointing straight down.\n  "
         example: 20
         minimum: -90
         maximum: 90
       roll:
         type: number
-        description: |2-
-
-              Value in degrees. How low one side of the dish is compared to the other.
-              0 degrees no rotation, 90 rotation to the left, -90 rotation to the right and -180 upside down.
-            
+        description: "\n    Value in degrees. How low one side of the dish is compared\
+          \ to the other.\n    0 degrees no rotation, 90 rotation to the left, -90\
+          \ rotation to the right and -180 upside down.\n  "
         example: 0
         minimum: -180
         maximum: 180
@@ -45414,8 +45159,7 @@ x-alt-definitions:
       mac:
         type: string
         example: fc:ec:da:03:bb:a8
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       name:
         type: string
         description: Interface name.
@@ -45786,9 +45530,8 @@ x-alt-definitions:
         minimum: 0
       dlRatio:
         type: integer
-        description: >-
-          Downlink ratio in percentage. To calculate Uplink percentage substract
-          DlRatio out of a hundered.
+        description: Downlink ratio in percentage. To calculate Uplink percentage
+          substract DlRatio out of a hundered.
         example: 67
       noiseFloor:
         type: integer
@@ -45849,8 +45592,7 @@ x-alt-definitions:
             cidr: optional
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       model:
         type: string
         description: Short names, for example UF-OLT.
@@ -46232,9 +45974,8 @@ x-alt-definitions:
         description: Latest known firmware version on current major version
       latestOver:
         type: string
-        description: |-
-          Upgrade this firmware version as first if target
-            firmware is higher than latestOver. (AirCube must be updated over 2.8.0 fw)
+        description: "Upgrade this firmware version as first if target\n  firmware\
+          \ is higher than latestOver. (AirCube must be updated over 2.8.0 fw)"
       semver:
         $ref: '#/x-alt-definitions/semver'
       upgradeRecommendedToVersion:
@@ -46272,8 +46013,7 @@ x-alt-definitions:
         example: 10
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       interfaceId:
         type: string
         description: Interface name, where the station is connected.
@@ -46618,11 +46358,9 @@ x-alt-definitions:
     type: object
     properties:
       airmax:
-        $ref: >-
-          #/x-alt-definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/x-alt-definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       airfiber:
-        $ref: >-
-          #/x-alt-definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/x-alt-definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       attributes:
         $ref: '#/x-alt-definitions/DeviceAttributes'
       discovery:
@@ -47128,9 +46866,8 @@ x-alt-definitions:
           - ZW
       ucrmId:
         type: string
-        description: >-
-          ID of UCRM client bound with this site. Null if no UCRM client is
-          bound to this site.
+        description: ID of UCRM client bound with this site. Null if no UCRM client
+          is bound to this site.
         example: '135'
       ipAddresses:
         $ref: '#/x-alt-definitions/ipAddresses'
@@ -47139,9 +46876,8 @@ x-alt-definitions:
         example: 0.4
   Model 8:
     type: object
-    description: >-
-      Users who will receive notifications. Notification type must be set to
-      custom.
+    description: Users who will receive notifications. Notification type must be set
+      to custom.
     properties:
       id:
         type: string
@@ -47188,11 +46924,9 @@ x-alt-definitions:
         example: true
       propagation:
         type: string
-        description: |2-
-
-                Whether or not set Traffic Shaping on Client devices like, CPEs and ONUs.
-                Enabling this will lower your traffic in local network.
-              
+        description: "\n      Whether or not set Traffic Shaping on Client devices\
+          \ like, CPEs and ONUs.\n      Enabling this will lower your traffic in local\
+          \ network.\n    "
         enum:
           - all
           - gateway
@@ -47207,9 +46941,8 @@ x-alt-definitions:
           positive: true
       downloadBurstSize:
         type: integer
-        description: >-
-          Amount of bytes that can be sent at downloadSpeed in excess of the
-          guaranteed rate.
+        description: Amount of bytes that can be sent at downloadSpeed in excess of
+          the guaranteed rate.
         example: 512
         enum:
           - 0
@@ -47227,9 +46960,8 @@ x-alt-definitions:
           positive: true
       uploadBurstSize:
         type: integer
-        description: >-
-          Amount of bytes that can be sent at uploadSpeed in excess of the
-          guaranteed rate.
+        description: Amount of bytes that can be sent at uploadSpeed in excess of
+          the guaranteed rate.
         example: 512
         enum:
           - 0
@@ -47238,11 +46970,9 @@ x-alt-definitions:
           positive: true
       aggregation:
         type: integer
-        description: |2-
-
-                Number indicating how many times the guaranteed rate is less than the maximum allowed bandwidth.
-                Null for auto calculation by UISP.
-              
+        description: "\n      Number indicating how many times the guaranteed rate\
+          \ is less than the maximum allowed bandwidth.\n      Null for auto calculation\
+          \ by UISP.\n    "
         example: 2
         minimum: 1
         maximum: 10000
@@ -47584,8 +47314,7 @@ x-alt-definitions:
             cidr: optional
       mac:
         type: string
-        pattern: >-
-          ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
+        pattern: ^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$|^([0-9a-fA-F]){12}$
       name:
         type: string
       connected:
@@ -47619,9 +47348,8 @@ x-alt-definitions:
     properties:
       minVersion:
         type: string
-        description: >-
-          Minimal required version of UNMS before update to the latest version
-          is possible.
+        description: Minimal required version of UNMS before update to the latest
+          version is possible.
         example: 1.3.0
     required:
       - minVersion
@@ -47652,11 +47380,9 @@ x-alt-definitions:
     type: object
     properties:
       airmax:
-        $ref: >-
-          #/x-alt-definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/x-alt-definitions/%5BDEPRECATED%5DDeviceAirmax%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       airfiber:
-        $ref: >-
-          #/x-alt-definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.
+        $ref: '#/x-alt-definitions/%5BDEPRECATED%5DDeviceAirFiber%20-%20partially%20moved%20properties%20to%20interface%20or%20station.'
       attributes:
         $ref: '#/x-alt-definitions/DeviceAttributes'
       discovery:
@@ -47891,9 +47617,8 @@ x-alt-definitions:
         type: boolean
       role:
         type: string
-        description: >-
-          Role of this user in UISP. 'anonymous' if user is only allowed to
-          access CRM.
+        description: Role of this user in UISP. 'anonymous' if user is only allowed
+          to access CRM.
         example: admin
         enum:
           - superadmin
@@ -47941,8 +47666,7 @@ x-alt-definitions:
         example: '123'
       ucrmRole:
         type: string
-        description: >-
-          Role of this user in UCRM. 'null' if user is not allowed to access
+        description: Role of this user in UCRM. 'null' if user is not allowed to access
           UCRM.
         example: '1'
       homeScreen:
