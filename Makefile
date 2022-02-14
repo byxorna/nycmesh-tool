@@ -16,7 +16,7 @@ UISP_SWAGGER_YAML_FILE := spec/uisp_swagger.yaml
 
 .PHONY: $(UISP_SWAGGER_MODIFIED_FILE)
 $(UISP_SWAGGER_MODIFIED_FILE):
-	# requires yq installed
+	# requires yq installed - http://mikefarah.github.io/yq/
 	cat $(UISP_SWAGGER_JSON_FILE) | yq -y > $(UISP_SWAGGER_MODIFIED_FILE)
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-1-1644866420-prerelease-removal.patch
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-2-1644867315-format-date-to-date-time.patch
@@ -25,8 +25,8 @@ $(UISP_SWAGGER_MODIFIED_FILE):
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-5-1644871790-yaml-y-bool-quoting.patch
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-6-1644874350-devices-id-services-params-fix.patch
 
-.PHONY: patch_swagger
-patch_swagger: $(UISP_SWAGGER_MODIFIED_FILE)
+.PHONY: $(UISP_SWAGGER_YAML_FILE)
+$(UISP_SWAGGER_YAML_FILE): $(UISP_SWAGGER_MODIFIED_FILE)
 	# requires yamllint - https://yamllint.readthedocs.io/en/stable/quickstart.html#installing-yamllint
 	mv $(UISP_SWAGGER_MODIFIED_FILE) $(UISP_SWAGGER_YAML_FILE)
 	yamllint -c .yamllint.yaml $(UISP_SWAGGER_YAML_FILE)
