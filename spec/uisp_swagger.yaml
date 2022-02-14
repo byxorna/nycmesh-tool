@@ -26945,9 +26945,9 @@ definitions:
   Coordinates:
     type: object
     properties:
-      x:
+      'x':
         type: number
-      y:
+      'y':
         type: number
   allClients:
     type: array
@@ -26988,9 +26988,9 @@ definitions:
   Model 19:
     type: object
     properties:
-      x:
+      'x':
         type: number
-      y:
+      'y':
         type: number
       alerts:
         $ref: '#/definitions/alerts'
@@ -29378,9 +29378,9 @@ definitions:
   CoordinatesXY.:
     type: object
     properties:
-      x:
+      'x':
         type: number
-      y:
+      'y':
         type: number
   ListOfCoordinates:
     type: array
@@ -30060,19 +30060,19 @@ definitions:
   GraphDataPoint:
     type: object
     properties:
-      x:
+      'x':
         type: number
         description: Milliseconds elapsed between 1 January 1970 00:00:00 UTC and
           the given date
         example: 1534426215000
-      y:
+      'y':
         type: number
         description: Data point value. null if we do not have any value for given
           timestamp.
         example: 10193
     required:
-      - x
-      - y
+      - 'x'
+      - 'y'
   GraphDataSet:
     type: array
     description: Generic graph data set

@@ -22,15 +22,19 @@ $(UISP_SWAGGER_MODIFIED_FILE):
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-2-1644867315-format-date-to-date-time.patch
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-3-1644868976-outage.patch
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-4-1644869339-sfp-plus.patch
+	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-5-1644871790-yaml-y-bool-quoting.patch
 
 .PHONY: patch_swagger
 patch_swagger: $(UISP_SWAGGER_MODIFIED_FILE)
+	# requires yamllint - https://yamllint.readthedocs.io/en/stable/quickstart.html#installing-yamllint
 	mv $(UISP_SWAGGER_MODIFIED_FILE) $(UISP_SWAGGER_YAML_FILE)
+	yamllint -c .yamllint.yaml $(UISP_SWAGGER_YAML_FILE)
 
 .PHONY: codegen
-codegen:
+codegen: $(UISP_SWAGGER_YAML_FILE)
+	# requires `go-swagger` - https://github.com/go-swagger/go-swagger
 	echo Generating UISP CLI
-	swagger generate cli -f ./spec/uisp_swagger.yaml --cli-app-name uisp --skip-validation --keep-spec-order -t generated/go/uisp/
+	swagger generate cli -f $(UISP_SWAGGER_YAML_FILE) --cli-app-name uisp --skip-validation --keep-spec-order -t generated/go/uisp/
 	sed -i'' -e "s|github.com/byxorna/nycmesh-tool/models|github.com/byxorna/nycmesh-tool/generated/go/uisp/models|g" generated/go/uisp/**/*.go
 
 .PHONY: go_build
