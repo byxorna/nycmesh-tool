@@ -62,9 +62,6 @@ type GetDevicesIDServicesParams struct {
 	// ID.
 	ID string
 
-	// Payload.
-	Payload string
-
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -129,17 +126,6 @@ func (o *GetDevicesIDServicesParams) SetID(id string) {
 	o.ID = id
 }
 
-// WithPayload adds the payload to the get devices Id services params
-func (o *GetDevicesIDServicesParams) WithPayload(payload string) *GetDevicesIDServicesParams {
-	o.SetPayload(payload)
-	return o
-}
-
-// SetPayload adds the payload to the get devices Id services params
-func (o *GetDevicesIDServicesParams) SetPayload(payload string) {
-	o.Payload = payload
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *GetDevicesIDServicesParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -150,11 +136,6 @@ func (o *GetDevicesIDServicesParams) WriteToRequest(r runtime.ClientRequest, reg
 
 	// path param id
 	if err := r.SetPathParam("id", o.ID); err != nil {
-		return err
-	}
-
-	// path param payload
-	if err := r.SetPathParam("payload", o.Payload); err != nil {
 		return err
 	}
 

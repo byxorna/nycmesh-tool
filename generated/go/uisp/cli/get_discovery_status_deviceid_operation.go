@@ -38,6 +38,9 @@ func runOperationDiscoveryGetDiscoveryStatusDeviceid(cmd *cobra.Command, args []
 	}
 	// retrieve flag values from cmd and fill params
 	params := discovery.NewGetDiscoveryStatusDeviceidParams()
+	if err, _ := retrieveOperationDiscoveryGetDiscoveryStatusDeviceidDeviceIDFlag(params, "", cmd); err != nil {
+		return err
+	}
 	if dryRun {
 
 		logDebugf("dry-run flag specified. Skip sending request.")
@@ -57,7 +60,49 @@ func runOperationDiscoveryGetDiscoveryStatusDeviceid(cmd *cobra.Command, args []
 
 // registerOperationDiscoveryGetDiscoveryStatusDeviceidParamFlags registers all flags needed to fill params
 func registerOperationDiscoveryGetDiscoveryStatusDeviceidParamFlags(cmd *cobra.Command) error {
+	if err := registerOperationDiscoveryGetDiscoveryStatusDeviceidDeviceIDParamFlags("", cmd); err != nil {
+		return err
+	}
 	return nil
+}
+
+func registerOperationDiscoveryGetDiscoveryStatusDeviceidDeviceIDParamFlags(cmdPrefix string, cmd *cobra.Command) error {
+
+	deviceIdDescription := `Required. `
+
+	var deviceIdFlagName string
+	if cmdPrefix == "" {
+		deviceIdFlagName = "deviceId"
+	} else {
+		deviceIdFlagName = fmt.Sprintf("%v.deviceId", cmdPrefix)
+	}
+
+	var deviceIdFlagDefault string
+
+	_ = cmd.PersistentFlags().String(deviceIdFlagName, deviceIdFlagDefault, deviceIdDescription)
+
+	return nil
+}
+
+func retrieveOperationDiscoveryGetDiscoveryStatusDeviceidDeviceIDFlag(m *discovery.GetDiscoveryStatusDeviceidParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
+	retAdded := false
+	if cmd.Flags().Changed("deviceId") {
+
+		var deviceIdFlagName string
+		if cmdPrefix == "" {
+			deviceIdFlagName = "deviceId"
+		} else {
+			deviceIdFlagName = fmt.Sprintf("%v.deviceId", cmdPrefix)
+		}
+
+		deviceIdFlagValue, err := cmd.Flags().GetString(deviceIdFlagName)
+		if err != nil {
+			return err, false
+		}
+		m.DeviceID = deviceIdFlagValue
+
+	}
+	return nil, retAdded
 }
 
 // parseOperationDiscoveryGetDiscoveryStatusDeviceidResult parses request result and return the string content

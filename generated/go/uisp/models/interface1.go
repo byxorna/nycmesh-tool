@@ -18,17 +18,17 @@ import (
 // swagger:model interface 1
 type Interface1 struct {
 
-	// sfp 1
-	Sfp1 *Sfp1 `json:"sfp+1,omitempty"`
-
-	// sfp 2
-	Sfp2 *Sfp2 `json:"sfp+2,omitempty"`
-
 	// sfp1
-	//Sfp1 *Sfp1 `json:"sfp1,omitempty"`
+	Sfp1 *Sfp1 `json:"sfp1,omitempty"`
 
 	// sfp2
-	//Sfp2 *Sfp2 `json:"sfp2,omitempty"`
+	Sfp2 *Sfp2 `json:"sfp2,omitempty"`
+
+	// sfp plus1
+	SfpPlus1 *SfpPlus1 `json:"sfpPlus1,omitempty"`
+
+	// sfp plus2
+	SfpPlus2 *SfpPlus2 `json:"sfpPlus2,omitempty"`
 }
 
 // Validate validates this interface 1
@@ -43,11 +43,11 @@ func (m *Interface1) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateSfp1(formats); err != nil {
+	if err := m.validateSfpPlus1(formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.validateSfp2(formats); err != nil {
+	if err := m.validateSfpPlus2(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -65,9 +65,9 @@ func (m *Interface1) validateSfp1(formats strfmt.Registry) error {
 	if m.Sfp1 != nil {
 		if err := m.Sfp1.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("sfp+1")
+				return ve.ValidateName("sfp1")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("sfp+1")
+				return ce.ValidateName("sfp1")
 			}
 			return err
 		}
@@ -84,9 +84,9 @@ func (m *Interface1) validateSfp2(formats strfmt.Registry) error {
 	if m.Sfp2 != nil {
 		if err := m.Sfp2.Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("sfp+2")
+				return ve.ValidateName("sfp2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("sfp+2")
+				return ce.ValidateName("sfp2")
 			}
 			return err
 		}
@@ -95,43 +95,43 @@ func (m *Interface1) validateSfp2(formats strfmt.Registry) error {
 	return nil
 }
 
-//func (m *Interface1) validateSfp1(formats strfmt.Registry) error {
-//	if swag.IsZero(m.Sfp1) { // not required
-//		return nil
-//	}
-//
-//	if m.Sfp1 != nil {
-//		if err := m.Sfp1.Validate(formats); err != nil {
-//			if ve, ok := err.(*errors.Validation); ok {
-//				return ve.ValidateName("sfp1")
-//			} else if ce, ok := err.(*errors.CompositeError); ok {
-//				return ce.ValidateName("sfp1")
-//			}
-//			return err
-//		}
-//	}
-//
-//	return nil
-//}
-//
-//func (m *Interface1) validateSfp2(formats strfmt.Registry) error {
-//	if swag.IsZero(m.Sfp2) { // not required
-//		return nil
-//	}
-//
-//	if m.Sfp2 != nil {
-//		if err := m.Sfp2.Validate(formats); err != nil {
-//			if ve, ok := err.(*errors.Validation); ok {
-//				return ve.ValidateName("sfp2")
-//			} else if ce, ok := err.(*errors.CompositeError); ok {
-//				return ce.ValidateName("sfp2")
-//			}
-//			return err
-//		}
-//	}
-//
-//	return nil
-//}
+func (m *Interface1) validateSfpPlus1(formats strfmt.Registry) error {
+	if swag.IsZero(m.SfpPlus1) { // not required
+		return nil
+	}
+
+	if m.SfpPlus1 != nil {
+		if err := m.SfpPlus1.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("sfpPlus1")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("sfpPlus1")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Interface1) validateSfpPlus2(formats strfmt.Registry) error {
+	if swag.IsZero(m.SfpPlus2) { // not required
+		return nil
+	}
+
+	if m.SfpPlus2 != nil {
+		if err := m.SfpPlus2.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("sfpPlus2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("sfpPlus2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
 
 // ContextValidate validate this interface 1 based on the context it is used
 func (m *Interface1) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
@@ -145,11 +145,11 @@ func (m *Interface1) ContextValidate(ctx context.Context, formats strfmt.Registr
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateSfp1(ctx, formats); err != nil {
+	if err := m.contextValidateSfpPlus1(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateSfp2(ctx, formats); err != nil {
+	if err := m.contextValidateSfpPlus2(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -164,9 +164,9 @@ func (m *Interface1) contextValidateSfp1(ctx context.Context, formats strfmt.Reg
 	if m.Sfp1 != nil {
 		if err := m.Sfp1.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("sfp+1")
+				return ve.ValidateName("sfp1")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("sfp+1")
+				return ce.ValidateName("sfp1")
 			}
 			return err
 		}
@@ -180,9 +180,9 @@ func (m *Interface1) contextValidateSfp2(ctx context.Context, formats strfmt.Reg
 	if m.Sfp2 != nil {
 		if err := m.Sfp2.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("sfp+2")
+				return ve.ValidateName("sfp2")
 			} else if ce, ok := err.(*errors.CompositeError); ok {
-				return ce.ValidateName("sfp+2")
+				return ce.ValidateName("sfp2")
 			}
 			return err
 		}
@@ -191,37 +191,37 @@ func (m *Interface1) contextValidateSfp2(ctx context.Context, formats strfmt.Reg
 	return nil
 }
 
-//func (m *Interface1) contextValidateSfp1(ctx context.Context, formats strfmt.Registry) error {
-//
-//	if m.Sfp1 != nil {
-//		if err := m.Sfp1.ContextValidate(ctx, formats); err != nil {
-//			if ve, ok := err.(*errors.Validation); ok {
-//				return ve.ValidateName("sfp1")
-//			} else if ce, ok := err.(*errors.CompositeError); ok {
-//				return ce.ValidateName("sfp1")
-//			}
-//			return err
-//		}
-//	}
-//
-//	return nil
-//}
-//
-//func (m *Interface1) contextValidateSfp2(ctx context.Context, formats strfmt.Registry) error {
-//
-//	if m.Sfp2 != nil {
-//		if err := m.Sfp2.ContextValidate(ctx, formats); err != nil {
-//			if ve, ok := err.(*errors.Validation); ok {
-//				return ve.ValidateName("sfp2")
-//			} else if ce, ok := err.(*errors.CompositeError); ok {
-//				return ce.ValidateName("sfp2")
-//			}
-//			return err
-//		}
-//	}
-//
-//	return nil
-//}
+func (m *Interface1) contextValidateSfpPlus1(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SfpPlus1 != nil {
+		if err := m.SfpPlus1.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("sfpPlus1")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("sfpPlus1")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *Interface1) contextValidateSfpPlus2(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.SfpPlus2 != nil {
+		if err := m.SfpPlus2.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("sfpPlus2")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("sfpPlus2")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
 
 // MarshalBinary interface implementation
 func (m *Interface1) MarshalBinary() ([]byte, error) {

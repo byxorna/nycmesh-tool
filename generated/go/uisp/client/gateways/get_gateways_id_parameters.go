@@ -58,6 +58,10 @@ func NewGetGatewaysIDParamsWithHTTPClient(client *http.Client) *GetGatewaysIDPar
    Typically these are written to a http.Request.
 */
 type GetGatewaysIDParams struct {
+
+	// ID.
+	ID string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -111,6 +115,17 @@ func (o *GetGatewaysIDParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithID adds the id to the get gateways Id params
+func (o *GetGatewaysIDParams) WithID(id string) *GetGatewaysIDParams {
+	o.SetID(id)
+	return o
+}
+
+// SetID adds the id to the get gateways Id params
+func (o *GetGatewaysIDParams) SetID(id string) {
+	o.ID = id
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *GetGatewaysIDParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -118,6 +133,11 @@ func (o *GetGatewaysIDParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 		return err
 	}
 	var res []error
+
+	// path param id
+	if err := r.SetPathParam("id", o.ID); err != nil {
+		return err
+	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

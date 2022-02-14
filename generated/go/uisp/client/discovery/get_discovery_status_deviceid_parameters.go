@@ -58,6 +58,10 @@ func NewGetDiscoveryStatusDeviceidParamsWithHTTPClient(client *http.Client) *Get
    Typically these are written to a http.Request.
 */
 type GetDiscoveryStatusDeviceidParams struct {
+
+	// DeviceID.
+	DeviceID string
+
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -111,6 +115,17 @@ func (o *GetDiscoveryStatusDeviceidParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithDeviceID adds the deviceID to the get discovery status deviceid params
+func (o *GetDiscoveryStatusDeviceidParams) WithDeviceID(deviceID string) *GetDiscoveryStatusDeviceidParams {
+	o.SetDeviceID(deviceID)
+	return o
+}
+
+// SetDeviceID adds the deviceId to the get discovery status deviceid params
+func (o *GetDiscoveryStatusDeviceidParams) SetDeviceID(deviceID string) {
+	o.DeviceID = deviceID
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *GetDiscoveryStatusDeviceidParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -118,6 +133,11 @@ func (o *GetDiscoveryStatusDeviceidParams) WriteToRequest(r runtime.ClientReques
 		return err
 	}
 	var res []error
+
+	// path param deviceId
+	if err := r.SetPathParam("deviceId", o.DeviceID); err != nil {
+		return err
+	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)

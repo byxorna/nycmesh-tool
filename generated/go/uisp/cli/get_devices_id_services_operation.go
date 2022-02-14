@@ -41,9 +41,6 @@ func runOperationDevicesGetDevicesIDServices(cmd *cobra.Command, args []string) 
 	if err, _ := retrieveOperationDevicesGetDevicesIDServicesIDFlag(params, "", cmd); err != nil {
 		return err
 	}
-	if err, _ := retrieveOperationDevicesGetDevicesIDServicesPayloadFlag(params, "", cmd); err != nil {
-		return err
-	}
 	if dryRun {
 
 		logDebugf("dry-run flag specified. Skip sending request.")
@@ -66,9 +63,6 @@ func registerOperationDevicesGetDevicesIDServicesParamFlags(cmd *cobra.Command) 
 	if err := registerOperationDevicesGetDevicesIDServicesIDParamFlags("", cmd); err != nil {
 		return err
 	}
-	if err := registerOperationDevicesGetDevicesIDServicesPayloadParamFlags("", cmd); err != nil {
-		return err
-	}
 	return nil
 }
 
@@ -89,10 +83,6 @@ func registerOperationDevicesGetDevicesIDServicesIDParamFlags(cmdPrefix string, 
 
 	return nil
 }
-func registerOperationDevicesGetDevicesIDServicesPayloadParamFlags(cmdPrefix string, cmd *cobra.Command) error {
-	// warning: go type object is not supported by go-swagger cli yet.
-	return nil
-}
 
 func retrieveOperationDevicesGetDevicesIDServicesIDFlag(m *devices.GetDevicesIDServicesParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
 	retAdded := false
@@ -111,13 +101,6 @@ func retrieveOperationDevicesGetDevicesIDServicesIDFlag(m *devices.GetDevicesIDS
 		}
 		m.ID = idFlagValue
 
-	}
-	return nil, retAdded
-}
-func retrieveOperationDevicesGetDevicesIDServicesPayloadFlag(m *devices.GetDevicesIDServicesParams, cmdPrefix string, cmd *cobra.Command) (error, bool) {
-	retAdded := false
-	if cmd.Flags().Changed("payload") {
-		// warning: object is not supported by go-swagger cli yet
 	}
 	return nil, retAdded
 }
