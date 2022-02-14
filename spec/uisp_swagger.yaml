@@ -21999,7 +21999,7 @@ definitions:
         type: string
     required:
       - alias
-  Model 11:
+  Outage:
     type: object
     properties:
       id:
@@ -22035,10 +22035,10 @@ definitions:
       - aggregatedTime
       - ongoing
       - inProgress
-  items 1:
+  outageList:
     type: array
     items:
-      $ref: '#/definitions/Model%2011'
+      $ref: '#/definitions/Outage'
   Outages:
     type: object
     properties:
@@ -22047,7 +22047,7 @@ definitions:
       aggregation:
         $ref: '#/definitions/aggregation%201'
       items:
-        $ref: '#/definitions/items%201'
+        $ref: '#/definitions/outageList'
   antenna 2:
     type: object
     properties:
@@ -28840,12 +28840,12 @@ definitions:
         type: boolean
   vlanId:
     type: object
-  sfp+1:
+  sfpPlus1:
     type: object
     properties:
       vlanNative:
         type: number
-  sfp+2:
+  sfpPlus2:
     type: object
     properties:
       vlanNative:
@@ -28863,10 +28863,10 @@ definitions:
   interface 1:
     type: object
     properties:
-      sfp+1:
-        $ref: '#/definitions/sfp%2B1'
-      sfp+2:
-        $ref: '#/definitions/sfp%2B2'
+      sfpPlus1:
+        $ref: '#/definitions/sfpPlus1'
+      sfpPlus2:
+        $ref: '#/definitions/sfpPlus2'
       sfp1:
         $ref: '#/definitions/sfp1'
       sfp2:
