@@ -27028,7 +27028,7 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/Coordinates'
-  outages:
+  outages_stats:
     type: array
     items:
       $ref: '#/definitions/Coordinates'
@@ -27072,7 +27072,7 @@ definitions:
       linkScore:
         $ref: '#/definitions/linkScore%201'
       outages:
-        $ref: '#/definitions/outages'
+        $ref: '#/definitions/outages_stats'
       uplinkUtilizationMean:
         $ref: '#/definitions/uplinkUtilizationMean'
       downlinkUtilizationMean:

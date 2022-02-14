@@ -1,0 +1,20 @@
+--- spec/uisp_swagger.yaml	2022-02-14 17:06:40.404799341 -0500
++++ patch/uisp_swagger.yaml	2022-02-14 17:48:39.631391957 -0500
+@@ -27028,7 +27028,7 @@
+     type: array
+     items:
+       $ref: '#/definitions/Coordinates'
+-  outages:
++  outages_stats:
+     type: array
+     items:
+       $ref: '#/definitions/Coordinates'
+@@ -27072,7 +27072,7 @@
+       linkScore:
+         $ref: '#/definitions/linkScore%201'
+       outages:
+-        $ref: '#/definitions/outages'
++        $ref: '#/definitions/outages_stats'
+       uplinkUtilizationMean:
+         $ref: '#/definitions/uplinkUtilizationMean'
+       downlinkUtilizationMean:
