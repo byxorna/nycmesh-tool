@@ -24,6 +24,7 @@ $(UISP_SWAGGER_MODIFIED_FILE):
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-4-1644869339-sfp-plus.patch
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-5-1644871790-yaml-y-bool-quoting.patch
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-6-1644874350-devices-id-services-params-fix.patch
+	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-7-1644876262-quoting-issues.patch
 
 .PHONY: $(UISP_SWAGGER_YAML_FILE)
 $(UISP_SWAGGER_YAML_FILE): $(UISP_SWAGGER_MODIFIED_FILE)
