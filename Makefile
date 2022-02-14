@@ -20,6 +20,7 @@ $(UISP_SWAGGER_MODIFIED_FILE):
 	cat $(UISP_SWAGGER_JSON_FILE) | yq -y > $(UISP_SWAGGER_MODIFIED_FILE)
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-1-1644866420-prerelease-removal.patch
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-2-1644867315-format-date-to-date-time.patch
+	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-3-1644868976-outage.patch
 
 .PHONY: patch_swagger
 patch_swagger: $(UISP_SWAGGER_MODIFIED_FILE)
