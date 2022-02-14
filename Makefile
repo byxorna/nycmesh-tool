@@ -23,6 +23,7 @@ $(UISP_SWAGGER_MODIFIED_FILE):
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-3-1644868976-outage.patch
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-4-1644869339-sfp-plus.patch
 	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-5-1644871790-yaml-y-bool-quoting.patch
+	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-6-1644874350-devices-id-services-params-fix.patch
 
 .PHONY: patch_swagger
 patch_swagger: $(UISP_SWAGGER_MODIFIED_FILE)

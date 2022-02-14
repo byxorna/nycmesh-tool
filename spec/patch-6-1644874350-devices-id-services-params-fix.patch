@@ -1,0 +1,13 @@
+--- spec/_uisp_swagger_patched.yaml	2022-02-14 16:31:16.962848597 -0500
++++ patch/_uisp_swagger_patched.yaml	2022-02-14 16:32:04.476818541 -0500
+@@ -4701,10 +4701,6 @@
+           name: id
+           in: path
+           required: true
+-        - type: object
+-          required: true
+-          name: payload
+-          in: path
+       produces:
+         - application/json
+       tags:
