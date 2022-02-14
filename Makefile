@@ -34,6 +34,7 @@ patch_swagger: $(UISP_SWAGGER_MODIFIED_FILE)
 codegen: $(UISP_SWAGGER_YAML_FILE)
 	# requires `go-swagger` - https://github.com/go-swagger/go-swagger
 	echo Generating UISP CLI
+	find generated/go/uisp -type f -name '*.go' -delete
 	swagger generate cli -f $(UISP_SWAGGER_YAML_FILE) --cli-app-name uisp --skip-validation --keep-spec-order -t generated/go/uisp/
 	sed -i'' -e "s|github.com/byxorna/nycmesh-tool/models|github.com/byxorna/nycmesh-tool/generated/go/uisp/models|g" generated/go/uisp/**/*.go
 
