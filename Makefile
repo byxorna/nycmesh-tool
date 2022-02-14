@@ -10,6 +10,21 @@ GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 GO_LDFLAGS := -X $(VERSION_PACKAGE).GitCommit=$(GIT_COMMIT) -X "$(VERSION_PACKAGE).BuildDate=$(shell date -u)" -X "$(VERSION_PACKAGE).Release=$(GIT_DESCRIBE)" -X "$(VERSION_PACKAGE).GitBranch=$(GIT_BRANCH)"
 timestamp := $(shell date +%s)
 
+UISP_SWAGGER_JSON_FILE := spec/uisp_swagger_original.json
+UISP_SWAGGER_MODIFIED_FILE := spec/_uisp_swagger_patched.yaml
+UISP_SWAGGER_YAML_FILE := spec/uisp_swagger.yaml
+
+.PHONY: $(UISP_SWAGGER_MODIFIED_FILE)
+$(UISP_SWAGGER_MODIFIED_FILE):
+	# requires yq installed
+	cat $(UISP_SWAGGER_JSON_FILE) | yq -y > $(UISP_SWAGGER_MODIFIED_FILE)
+	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-1-1644866420-prerelease-removal.patch
+	patch -u $(UISP_SWAGGER_MODIFIED_FILE) -i spec/patch-2-1644867315-format-date-to-date-time.patch
+
+.PHONY: patch_swagger
+patch_swagger: $(UISP_SWAGGER_MODIFIED_FILE)
+	mv $(UISP_SWAGGER_MODIFIED_FILE) $(UISP_SWAGGER_YAML_FILE)
+
 .PHONY: codegen
 codegen:
 	echo Generating UISP CLI

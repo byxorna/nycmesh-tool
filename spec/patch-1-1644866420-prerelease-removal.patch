@@ -1,8 +1,6 @@
-diff --git a/spec/uisp_swagger.yaml b/spec/uisp_swagger.yaml
-index 8a3e248..aeca006 100644
---- a/spec/uisp_swagger.yaml
-+++ b/spec/uisp_swagger.yaml
-@@ -18710,8 +18710,6 @@ definitions:
+--- spec/_uisp_swagger_patched.yaml	2022-02-14 14:19:44.864311746 -0500
++++ patch/_uisp_swagger_patched.yaml	2022-02-14 14:19:37.607540014 -0500
+@@ -18605,8 +18605,6 @@
          type: string
        patch:
          type: number
@@ -11,7 +9,7 @@ index 8a3e248..aeca006 100644
      required:
        - major
        - minor
-@@ -18728,8 +18726,6 @@ definitions:
+@@ -18623,8 +18621,6 @@
          type: string
        patch:
          type: number
@@ -20,7 +18,7 @@ index 8a3e248..aeca006 100644
      required:
        - major
        - minor
-@@ -18746,8 +18742,6 @@ definitions:
+@@ -18641,8 +18637,6 @@
          type: string
        patch:
          type: number
@@ -29,7 +27,7 @@ index 8a3e248..aeca006 100644
      required:
        - major
        - minor
-@@ -18764,8 +18758,6 @@ definitions:
+@@ -18659,8 +18653,6 @@
          type: string
        patch:
          type: number
@@ -38,7 +36,7 @@ index 8a3e248..aeca006 100644
      required:
        - major
        - minor
-@@ -19447,8 +19439,6 @@ definitions:
+@@ -19338,8 +19330,6 @@
        patch:
          type: number
          example: 8
@@ -47,7 +45,7 @@ index 8a3e248..aeca006 100644
        order:
          type: string
          example: 65546.8.0
-@@ -21186,8 +21176,6 @@ definitions:
+@@ -21060,8 +21050,6 @@
        patch:
          type: number
          example: 8
@@ -56,7 +54,7 @@ index 8a3e248..aeca006 100644
        order:
          type: string
          example: 65546.8.0
-@@ -24255,8 +24243,6 @@ definitions:
+@@ -24095,8 +24083,6 @@
        patch:
          type: number
          example: 8
@@ -65,7 +63,7 @@ index 8a3e248..aeca006 100644
        order:
          type: string
          example: 65546.8.0
-@@ -44587,8 +44573,6 @@ x-alt-definitions:
+@@ -44336,8 +44322,6 @@
          type: string
        patch:
          type: number
@@ -74,7 +72,7 @@ index 8a3e248..aeca006 100644
      required:
        - major
        - minor
-@@ -44605,8 +44589,6 @@ x-alt-definitions:
+@@ -44354,8 +44338,6 @@
          type: string
        patch:
          type: number
@@ -83,7 +81,7 @@ index 8a3e248..aeca006 100644
      required:
        - major
        - minor
-@@ -44623,8 +44605,6 @@ x-alt-definitions:
+@@ -44372,8 +44354,6 @@
          type: string
        patch:
          type: number
@@ -92,7 +90,7 @@ index 8a3e248..aeca006 100644
      required:
        - major
        - minor
-@@ -44641,8 +44621,6 @@ x-alt-definitions:
+@@ -44390,8 +44370,6 @@
          type: string
        patch:
          type: number
@@ -101,7 +99,7 @@ index 8a3e248..aeca006 100644
      required:
        - major
        - minor
-@@ -45295,8 +45273,6 @@ x-alt-definitions:
+@@ -45040,8 +45018,6 @@
        patch:
          type: number
          example: 8

@@ -1,0 +1,617 @@
+--- spec/_uisp_swagger_patched.yaml	2022-02-14 14:21:12.498913466 -0500
++++ patch/_uisp_swagger_patched.yaml	2022-02-14 14:34:15.276889900 -0500
+@@ -19047,7 +19047,7 @@
+           - $ref: '#/x-alt-definitions/site'
+       started:
+         type: string
+-        format: date
++        format: date-time
+       status:
+         type: string
+         description: Status of the station.
+@@ -19087,7 +19087,7 @@
+         type: string
+       updated:
+         type: string
+-        format: date
++        format: date-time
+     required:
+       - id
+   latestBackup:
+@@ -19096,7 +19096,7 @@
+     properties:
+       timestamp:
+         type: string
+-        format: date
++        format: date-time
+         description: Latest backup timestamp.
+         example: '2018-11-14T15:20:32.004Z'
+       id:
+@@ -19127,7 +19127,7 @@
+         maxLength: 300
+       restartTimestamp:
+         type: string
+-        format: date
++        format: date-time
+         example: '2018-11-14T15:20:32.004Z'
+     required:
+       - failedMessageDecryption
+@@ -19208,7 +19208,7 @@
+         description: Current cpu load.
+       createdAt:
+         type: string
+-        format: date
++        format: date-time
+       distance:
+         type: number
+         description: Nullable property in meters.Either distance between sites or
+@@ -19225,7 +19225,7 @@
+         description: TRUE if device is in location mode.
+       lastSeen:
+         type: string
+-        format: date
++        format: date-time
+         description: Last seen timestamp in ISO format.
+         example: '2018-11-14T15:20:32.004Z'
+       powerStatus:
+@@ -20168,7 +20168,7 @@
+           - $ref: '#/x-alt-definitions/site'
+       started:
+         type: string
+-        format: date
++        format: date-time
+       status:
+         type: string
+         description: Status of the station.
+@@ -20208,7 +20208,7 @@
+         type: string
+       updated:
+         type: string
+-        format: date
++        format: date-time
+     required:
+       - id
+   rxChain:
+@@ -20543,7 +20543,7 @@
+         example: 2
+       timestamp:
+         type: string
+-        format: date
++        format: date-time
+         example: '2018-11-14T15:20:32.004Z'
+       txBytes:
+         type: integer
+@@ -21261,7 +21261,7 @@
+           guid: true
+       lastTrafficSeen:
+         type: string
+-        format: date
++        format: date-time
+         description: Date and time of last traffic in ISO format
+         example: '2019-08-22T09:49:24.675Z'
+       netflowStatus:
+@@ -21627,7 +21627,7 @@
+           - $ref: '#/x-alt-definitions/site'
+       started:
+         type: string
+-        format: date
++        format: date-time
+       status:
+         type: string
+         description: Status of the station.
+@@ -21667,7 +21667,7 @@
+         type: string
+       updated:
+         type: string
+-        format: date
++        format: date-time
+     required:
+       - id
+   deviceMetadata:
+@@ -21728,7 +21728,7 @@
+           guid: true
+       timestamp:
+         type: string
+-        format: date
++        format: date-time
+         description: Date and time of the log creation.
+         example: '2020-05-12T10:19:10.056Z'
+       message:
+@@ -22159,10 +22159,10 @@
+         type: number
+       updatedAt:
+         type: string
+-        format: date
++        format: date-time
+       createdAt:
+         type: string
+-        format: date
++        format: date-time
+     required:
+       - id
+       - deviceId
+@@ -22227,10 +22227,10 @@
+         $ref: '#/definitions/terrain'
+       updatedAt:
+         type: string
+-        format: date
++        format: date-time
+       createdAt:
+         type: string
+-        format: date
++        format: date-time
+     required:
+       - id
+       - apDeviceId
+@@ -22281,7 +22281,7 @@
+           - inactive
+       updated:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when the site was last updated.
+         example: '2018-11-14T15:20:32.004Z'
+       suspended:
+@@ -22356,7 +22356,7 @@
+           - inactive
+       updated:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when the site was last updated.
+         example: '2018-11-14T15:20:32.004Z'
+       suspended:
+@@ -22831,7 +22831,7 @@
+           - 7
+       activeFrom:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when the service was activated.
+         example: '2018-11-14T15:20:32.004Z'
+       tariffId:
+@@ -23054,24 +23054,24 @@
+         example: Mobile App
+       createdAt:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when this token was created.
+         example: '2011-10-03T14:48:00.000Z'
+       lastUsed:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when this token was last used. If null then it has not been
+           used yet.
+         example: '2011-10-04T14:48:00.000Z'
+       expiresAt:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when this token will expire unless it is renewed. If null
+           than it will never expire.
+         example: '2011-10-05T14:48:00.000Z'
+       maxExpiresAt:
+         type: string
+-        format: date
++        format: date-time
+         description: Latest time when the token will expire. If null then it will
+           never expire.
+         example: '2011-11-05T14:48:00.000Z'
+@@ -23135,7 +23135,7 @@
+         maximum: 180
+       updated:
+         type: string
+-        format: date
++        format: date-time
+         description: Last time the location was updated.
+         example: '2018-11-14T15:20:32.004Z'
+     required:
+@@ -23209,7 +23209,7 @@
+         example: true
+       lastNewsSeenDate:
+         type: string
+-        format: date
++        format: date-time
+         description: Last news check time in ISO format.
+         example: '2018-11-14T15:20:32.004Z'
+       lastReleaseNotesSeen:
+@@ -23238,7 +23238,7 @@
+         example: true
+       updated:
+         type: string
+-        format: date
++        format: date-time
+         description: Last time the user was updated.
+         example: '2018-11-14T15:20:32.004Z'
+     required:
+@@ -23602,12 +23602,12 @@
+             cidr: forbidden
+       firstSeen:
+         type: string
+-        format: date
++        format: date-time
+         description: First time this IP address was seen as a ISO 8601.
+         example: '2011-10-05T14:48:00.000Z'
+       lastSeen:
+         type: string
+-        format: date
++        format: date-time
+         description: Last time this IP address was seen as a ISO 8601.
+         example: '2012-10-05T14:48:00.000Z'
+       upload:
+@@ -23940,12 +23940,12 @@
+         minimum: 0
+       updated:
+         type: string
+-        format: date
++        format: date-time
+         description: Last time the installation device was updated.
+         example: '2020-01-14T15:20:32.004Z'
+       created:
+         type: string
+-        format: date
++        format: date-time
+         description: Last time the installation device was updated.
+         example: '2020-01-14T15:20:32.004Z'
+     required:
+@@ -24010,7 +24010,7 @@
+         $ref: '#/definitions/user%203'
+       created:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when the chat message was created.
+         example: '2020-01-14T15:20:32.004Z'
+     required:
+@@ -24041,17 +24041,17 @@
+         $ref: '#/definitions/chat'
+       created:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when the installation was created.
+         example: '2020-01-14T15:20:32.004Z'
+       updated:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when the installation was updated.
+         example: '2020-01-14T15:20:32.004Z'
+       finished:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when the installation was finished. Null if the installation
+           is not finished yet.
+         example: '2020-01-14T15:20:32.004Z'
+@@ -24123,7 +24123,7 @@
+           - manual
+       createdAt:
+         type: string
+-        format: date
++        format: date-time
+     required:
+       - id
+       - state
+@@ -25396,7 +25396,7 @@
+         example: '135'
+       deletedAt:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when the site was deleted in ISO format.
+         example: '2018-11-14T15:20:32.004Z'
+     required:
+@@ -25462,7 +25462,7 @@
+           - fatal
+       expiresAt:
+         type: string
+-        format: date
++        format: date-time
+     required:
+       - verbosity
+       - expiresAt
+@@ -27177,7 +27177,7 @@
+         example: Not enough disk space.
+       time:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when the error occurred.
+         example: '2019-02-07T10:18:01.000Z'
+       metadata:
+@@ -28414,7 +28414,7 @@
+           - UNKNOWN
+       updated:
+         type: string
+-        format: date
++        format: date-time
+       ipAddress:
+         type: string
+         x-format:
+@@ -29847,7 +29847,7 @@
+         type: string
+       timestamp:
+         type: string
+-        format: date
++        format: date-time
+       firmwareVersion:
+         $ref: '#/definitions/interface'
+         x-alternatives:
+@@ -29933,7 +29933,7 @@
+         description: blog post id in Ubiquiti blog
+       publicationDate:
+         type: string
+-        format: date
++        format: date-time
+         description: publication date on Ubiquiti blog
+       read:
+         type: boolean
+@@ -30258,7 +30258,7 @@
+         type: boolean
+       createdAt:
+         type: string
+-        format: date
++        format: date-time
+       deviceId:
+         type: string
+         example: f7ac9cad-ea28-4390-93c8-7add010e8ee3
+@@ -30298,7 +30298,7 @@
+         type: boolean
+       createdAt:
+         type: string
+-        format: date
++        format: date-time
+   Device's credentials with flags:
+     type: object
+     properties:
+@@ -34374,24 +34374,24 @@
+         example: Mobile App
+       createdAt:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when this token was created.
+         example: '2011-10-03T14:48:00.000Z'
+       lastUsed:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when this token was last used. If null then it has not been
+           used yet.
+         example: '2011-10-04T14:48:00.000Z'
+       expiresAt:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when this token will expire unless it is renewed. If null
+           than it will never expire.
+         example: '2011-10-05T14:48:00.000Z'
+       maxExpiresAt:
+         type: string
+-        format: date
++        format: date-time
+         description: Latest time when the token will expire. If null then it will
+           never expire.
+         example: '2011-11-05T14:48:00.000Z'
+@@ -36393,10 +36393,10 @@
+         $ref: '#/definitions/terrain'
+       updatedAt:
+         type: string
+-        format: date
++        format: date-time
+       createdAt:
+         type: string
+-        format: date
++        format: date-time
+     required:
+       - id
+       - apDeviceId
+@@ -36499,10 +36499,10 @@
+           - $ref: '#/x-alt-definitions/SimulationLink'
+       updatedAt:
+         type: string
+-        format: date
++        format: date-time
+       createdAt:
+         type: string
+-        format: date
++        format: date-time
+     required:
+       - id
+       - deviceId
+@@ -37070,7 +37070,7 @@
+         example: true
+       lastNewsSeenDate:
+         type: string
+-        format: date
++        format: date-time
+         description: Last news check time in ISO format.
+         example: '2018-11-14T15:20:32.004Z'
+       lastReleaseNotesSeen:
+@@ -37099,7 +37099,7 @@
+         example: true
+       updated:
+         type: string
+-        format: date
++        format: date-time
+         description: Last time the user was updated.
+         example: '2018-11-14T15:20:32.004Z'
+     required:
+@@ -40749,7 +40749,7 @@
+           - inactive
+       updated:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when the site was last updated.
+         example: '2018-11-14T15:20:32.004Z'
+       suspended:
+@@ -42934,7 +42934,7 @@
+         maximum: 180
+       updated:
+         type: string
+-        format: date
++        format: date-time
+         description: Last time the location was updated.
+         example: '2018-11-14T15:20:32.004Z'
+     required:
+@@ -43008,7 +43008,7 @@
+         example: true
+       lastNewsSeenDate:
+         type: string
+-        format: date
++        format: date-time
+         description: Last news check time in ISO format.
+         example: '2018-11-14T15:20:32.004Z'
+       lastReleaseNotesSeen:
+@@ -43037,7 +43037,7 @@
+         example: true
+       updated:
+         type: string
+-        format: date
++        format: date-time
+         description: Last time the user was updated.
+         example: '2018-11-14T15:20:32.004Z'
+     required:
+@@ -44728,7 +44728,7 @@
+           - $ref: '#/x-alt-definitions/site'
+       started:
+         type: string
+-        format: date
++        format: date-time
+       status:
+         type: string
+         description: Status of the station.
+@@ -44768,7 +44768,7 @@
+         type: string
+       updated:
+         type: string
+-        format: date
++        format: date-time
+     required:
+       - id
+   latestBackup:
+@@ -44777,7 +44777,7 @@
+     properties:
+       timestamp:
+         type: string
+-        format: date
++        format: date-time
+         description: Latest backup timestamp.
+         example: '2018-11-14T15:20:32.004Z'
+       id:
+@@ -44808,7 +44808,7 @@
+         maxLength: 300
+       restartTimestamp:
+         type: string
+-        format: date
++        format: date-time
+         example: '2018-11-14T15:20:32.004Z'
+     required:
+       - failedMessageDecryption
+@@ -44896,7 +44896,7 @@
+         description: Current cpu load.
+       createdAt:
+         type: string
+-        format: date
++        format: date-time
+       distance:
+         type: number
+         description: Nullable property in meters.Either distance between sites or
+@@ -44913,7 +44913,7 @@
+         description: TRUE if device is in location mode.
+       lastSeen:
+         type: string
+-        format: date
++        format: date-time
+         description: Last seen timestamp in ISO format.
+         example: '2018-11-14T15:20:32.004Z'
+       powerStatus:
+@@ -45856,7 +45856,7 @@
+           - $ref: '#/x-alt-definitions/site'
+       started:
+         type: string
+-        format: date
++        format: date-time
+       status:
+         type: string
+         description: Status of the station.
+@@ -45896,7 +45896,7 @@
+         type: string
+       updated:
+         type: string
+-        format: date
++        format: date-time
+     required:
+       - id
+   rxChain:
+@@ -46231,7 +46231,7 @@
+         example: 2
+       timestamp:
+         type: string
+-        format: date
++        format: date-time
+         example: '2018-11-14T15:20:32.004Z'
+       txBytes:
+         type: integer
+@@ -46461,7 +46461,7 @@
+           - inactive
+       updated:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when the site was last updated.
+         example: '2018-11-14T15:20:32.004Z'
+       suspended:
+@@ -46536,7 +46536,7 @@
+           - inactive
+       updated:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when the site was last updated.
+         example: '2018-11-14T15:20:32.004Z'
+       suspended:
+@@ -47011,7 +47011,7 @@
+           - 7
+       activeFrom:
+         type: string
+-        format: date
++        format: date-time
+         description: Time when the service was activated.
+         example: '2018-11-14T15:20:32.004Z'
+       tariffId:
+@@ -47560,10 +47560,10 @@
+         $ref: '#/x-alt-definitions/terrain'
+       updatedAt:
+         type: string
+-        format: date
++        format: date-time
+       createdAt:
+         type: string
+-        format: date
++        format: date-time
+     required:
+       - id
+       - apDeviceId
+@@ -47643,7 +47643,7 @@
+         example: true
+       lastNewsSeenDate:
+         type: string
+-        format: date
++        format: date-time
+         description: Last news check time in ISO format.
+         example: '2018-11-14T15:20:32.004Z'
+       lastReleaseNotesSeen:
+@@ -47672,7 +47672,7 @@
+         example: true
+       updated:
+         type: string
+-        format: date
++        format: date-time
+         description: Last time the user was updated.
+         example: '2018-11-14T15:20:32.004Z'
+     required:
