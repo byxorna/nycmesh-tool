@@ -4701,10 +4701,6 @@ paths:
           name: id
           in: path
           required: true
-        - type: object
-          required: true
-          name: payload
-          in: path
       produces:
         - application/json
       tags:
