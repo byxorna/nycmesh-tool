@@ -58,7 +58,7 @@ type NetworkStatistics struct {
 	NetworkHealth NetworkHealth `json:"networkHealth,omitempty"`
 
 	// outages
-	Outages Outages `json:"outages,omitempty"`
+	Outages OutagesStats `json:"outages,omitempty"`
 
 	// period
 	Period int64 `json:"period,omitempty"`

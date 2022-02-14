@@ -9,10 +9,10 @@ import (
 	"encoding/json"
 	"fmt"
 
+  "github.com/byxorna/nycmesh-tool/generated/go/uisp/models"
 	"github.com/go-openapi/swag"
 
 	"github.com/spf13/cobra"
-  "github.com/byxorna/nycmesh-tool/generated/go/uisp/models"
 )
 
 // Schema cli for Outage
