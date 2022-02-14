@@ -1595,6 +1595,13 @@ paths:
     get:
       summary: Get gateway detail
       operationId: getGatewaysId
+      parameters:
+        - type: string
+          x-format:
+            guid: true
+          name: id
+          in: path
+          required: true
       produces:
         - application/json
       tags:
@@ -5023,6 +5030,13 @@ paths:
     get:
       summary: Get device's discovery status.
       operationId: getDiscoveryStatusDeviceid
+      parameters:
+        - type: string
+          x-format:
+            guid: true
+          name: deviceId
+          in: path
+          required: true
       produces:
         - application/json
       tags:
@@ -5871,7 +5885,7 @@ paths:
       responses:
         '200':
           schema:
-            $ref: '#/definitions/Device''s%20credentials%20with%20flags'
+            $ref: '#/definitions/Devices%20credentials%20with%20flags'
           description: Successful
         '400':
           schema:
@@ -13556,7 +13570,7 @@ paths:
       responses:
         '200':
           schema:
-            $ref: '#/definitions/Device''s credentials'
+            $ref: '#/definitions/Devices credentials'
           description: Successful
         '400':
           schema:
@@ -30283,7 +30297,7 @@ definitions:
         type: boolean
     required:
       - credentials
-  Device's credentials:
+  Devices credentials:
     type: object
     properties:
       username:
@@ -30295,11 +30309,11 @@ definitions:
       createdAt:
         type: string
         format: date-time
-  Device's credentials with flags:
+  Devices credentials with flags:
     type: object
     properties:
       credentials:
-        $ref: '#/definitions/Device''s%20credentials'
+        $ref: '#/definitions/Devices%20credentials'
       isPassphraseMissing:
         type: boolean
     required:
