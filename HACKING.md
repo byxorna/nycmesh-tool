@@ -33,14 +33,14 @@ See [./RELEASES.md](RELEASES.md)
 
 # Updating or changing the UISP Swagger Spec
 
-- `make patch_swagger`
+- `make spec/uisp_swagger.yaml`
   - takes the `spec/uisp_swagger_original.json` (downloaded from the UISP controller at https://your-uips.local/nms/api-docs/swagger.json) and converts it to YAML
   - applies `spec/patch-*.patch` one at a time
   - moves the resultant swagger yaml to `spec/uisp_swagger.yaml`
+
 - `make codegen`
-  - this regenerates the whole UISP CLI under `generated/go/uisp/`
-  - This currently will not produce compilable code!
-  - TODO: make patches to generated code automated
+  - calls `make spec/uisp_swagger.yaml`
+  - regenerates the whole UISP CLI under `generated/go/uisp/`
 
 # Random Notes
 

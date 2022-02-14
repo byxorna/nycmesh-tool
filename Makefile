@@ -38,7 +38,7 @@ codegen: $(UISP_SWAGGER_YAML_FILE)
 	find generated/go/uisp -type f -name '*.go' -delete
 	swagger generate cli -f $(UISP_SWAGGER_YAML_FILE) --cli-app-name uisp --skip-validation --keep-spec-order -t generated/go/uisp/
 	sed -i'' -e "s|github.com/byxorna/nycmesh-tool/models|github.com/byxorna/nycmesh-tool/generated/go/uisp/models|g" generated/go/uisp/**/*.go
-	ln -s ../../../../internal/uisp/cli/custom.go generated/go/uisp/cli/custom.go
+	ln -sfn ../../../../internal/uisp/cli/custom.go generated/go/uisp/cli/custom.go
 
 .PHONY: go_build
 go_build: 
