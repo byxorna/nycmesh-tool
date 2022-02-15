@@ -18,8 +18,10 @@ type CoreConfig struct {
 	OutputFormat string `json:"format"`
 }
 
+// DaemonConfig contains relevant configuration for the daemon's behavior.
 type DaemonConfig struct {
 	DFSEventDetection bool `json:"dfs-event-detection"`
+	OutageDetection   bool `json:"outage-detection"`
 	EnableSlack       bool `json:"enable-slack"`
 }
 
@@ -36,6 +38,7 @@ func NewConfig() (*Config, error) {
 		},
 		Daemon: DaemonConfig{
 			DFSEventDetection: viper.GetBool("daemon.dfs-event-detection"),
+			OutageDetection:   viper.GetBool("daemon.outage-detection"),
 			EnableSlack:       viper.GetBool("daemon.enable-slack"),
 		},
 	}

@@ -44,6 +44,8 @@ func (a *App) startLogProducer(ctx context.Context, wg *sync.WaitGroup, ch chan<
 		}
 	}()
 }
+
+// TODO: good candidate for genericization
 func (a *App) startLogConsumerMultiplexer(ctx context.Context, wg *sync.WaitGroup, srcCh <-chan LogEvent, numChannelsToMultiplexTo int) []chan LogEvent {
 	// create a multiplexer, so for each consumer that cares about logs, we make a new channel and send
 	// each log to each consumer
@@ -157,18 +159,18 @@ func (a *App) logConsumerDFSEventDetector(ctx context.Context, wg *sync.WaitGrou
 	}()
 }
 
-func (a *App) coroutineLogWatch(ctx context.Context) error {
+func (a *App) runLogInformer(ctx context.Context) error {
 	wg := sync.WaitGroup{}
-	logFountain := make(chan LogEvent, 10)
+	fountain := make(chan LogEvent, 10)
 
-	logConsumers := []func(context.Context, *sync.WaitGroup, <-chan LogEvent){}
+	consumers := []func(context.Context, *sync.WaitGroup, <-chan LogEvent){}
 	if a.config.Daemon.DFSEventDetection {
-		logConsumers = append(logConsumers, a.logConsumerDFSEventDetector)
+		consumers = append(consumers, a.logConsumerDFSEventDetector)
 	}
 
-	a.startLogProducer(ctx, &wg, logFountain)
-	outputChannels := a.startLogConsumerMultiplexer(ctx, &wg, logFountain, len(logConsumers))
-	for i, startCoroutine := range logConsumers {
+	a.startLogProducer(ctx, &wg, fountain)
+	outputChannels := a.startLogConsumerMultiplexer(ctx, &wg, fountain, len(consumers))
+	for i, startCoroutine := range consumers {
 		// create the log watchers, giving them their own channel to listen on for logs
 		startCoroutine(ctx, &wg, outputChannels[i])
 	}
@@ -192,16 +194,17 @@ func (a *App) RunDaemon(daemonCtx context.Context) (errs []error) {
 	log.Printf("logged into UISP as %s", uispUser.Payload.Username)
 	log.Printf("daemon config: %s", encodedConfig)
 
-	coroutines := []func(context.Context) error{
-		a.coroutineLogWatch,
+	informers := []func(context.Context) error{
+		a.runLogInformer,
+		a.runOutageInformer,
 	}
 
 	errCh := make(chan error)
 	wgDone := make(chan bool)
 
-	// TODO: coroutines should map into a channel of errors
+	// TODO: informers should map into a channel of errors
 	wg := sync.WaitGroup{}
-	for i, cr := range coroutines {
+	for i, informer := range informers {
 		i := i // local variable, so we dont lose track of which coroutine is which
 		wg.Add(1)
 		go func(routine func(context.Context) error) {
@@ -211,7 +214,7 @@ func (a *App) RunDaemon(daemonCtx context.Context) (errs []error) {
 				errCh <- err
 			}
 			wg.Done()
-		}(cr)
+		}(informer)
 	}
 
 	go func() {
