@@ -38,6 +38,9 @@ func init() {
 	daemonCmd.Flags().Bool("dfs-event-detection", true, "enable DFS event detection feature")
 	viper.BindPFlag("daemon.dfs-event-detection", daemonCmd.Flags().Lookup("dfs-event-detection"))
 
+	daemonCmd.Flags().Bool("outage-detection", true, "keep track of UISP outages by device and attribute them to mesh NNs")
+	viper.BindPFlag("daemon.outage-detection", daemonCmd.Flags().Lookup("outage-detection"))
+
 	daemonCmd.Flags().Bool("enable-slack", false, "enable Slack integration for the daemon")
 	viper.BindPFlag("daemon.enable-slack", daemonCmd.Flags().Lookup("enable-slack"))
 

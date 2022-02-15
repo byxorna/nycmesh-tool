@@ -23,6 +23,7 @@ var (
 	MaxLogQueryPeriod = float64((24 * 365 * time.Hour).Milliseconds())
 )
 
+// TODO: we should patch the UISP swagger spec to rename Model9 to something more useful here
 type LogEventUISP models.Model9 // -_- generated code suxxx, why this confusing name
 
 type LogEvent struct {
