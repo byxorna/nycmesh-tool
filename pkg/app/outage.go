@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"sort"
 	"strings"
@@ -82,23 +83,16 @@ func (om *OutageMap) GetOutagesDeviceNamesByOutageType(nn int, outageType string
 	return res
 }
 
-func (om *OutageMap) NodeAggregatedHealth(nn int) (outageStart *time.Time, numUnreachable int, numOutage int) {
+func (om *OutageMap) OutageStartTime(nn int) (outageStart *time.Time, err error) {
 	outages, ok := om.data[nn]
 	if !ok {
-		return
+		return nil, fmt.Errorf("no outage for nn:%d found", nn)
 	}
 
 	for _, o := range outages {
 		o := o
 		if outageStart == nil || outageStart.After(o.Start) {
 			outageStart = &o.Start
-		}
-
-		switch o.Type {
-		case "outage":
-			numOutage = numOutage + 1
-		case "unreachable":
-			numUnreachable = numUnreachable + 1
 		}
 	}
 	return
@@ -186,20 +180,49 @@ func (a *App) GetFullOutageMap(ctx context.Context) (OutageMap, error) {
 	}
 }
 
+func contains(elems []int, v int) bool {
+	for _, s := range elems {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
 func (a *App) outageConsumer(ctx context.Context, wg *sync.WaitGroup, fountain <-chan OutageMap) {
 
 	// read from outages that are valid to us, and update our status map
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
+		var oldOutageMap OutageMap
+
 		for {
 			select {
 			case <-ctx.Done():
 				break
 			case outageMap := <-fountain:
-				for _, nn := range outageMap.ImpactedNNs() {
-					outageStart, nunreachable, noutage := outageMap.NodeAggregatedHealth(nn)
-					if outageStart == nil {
+				// determine new outages only
+				newOutageNNs := []int{}
+				oldImpactedNNs := oldOutageMap.ImpactedNNs()
+				currentImpactedNNs := outageMap.ImpactedNNs()
+
+				for _, nn := range currentImpactedNNs {
+					if !contains(oldImpactedNNs, nn) {
+						newOutageNNs = append(newOutageNNs, nn)
+					}
+				}
+
+				for _, nn := range oldImpactedNNs {
+					if !contains(currentImpactedNNs, nn) {
+						log.Printf("nn:%d outage all clear!", nn)
+					}
+				}
+
+				for _, nn := range newOutageNNs {
+					outageStart, err := outageMap.OutageStartTime(nn)
+					if err != nil {
+						log.Printf("unable to determine outage start time: %s", err.Error())
 						continue
 					}
 
@@ -212,23 +235,23 @@ func (a *App) outageConsumer(ctx context.Context, wg *sync.WaitGroup, fountain <
 						//log.Printf("nn:%d has outage > %s, ignoring", nn, ignoreOutagesLongerThan)
 						continue
 					}
-					switch {
-					case noutage > 0 && nunreachable == 0:
-						log.Printf("nn:%d: degraded for %s (%d devices in outage: %s)", nn, dur.String(), len(outageDevices), strings.Join(outageDevices, ","))
-					case noutage > 0 && nunreachable > 0:
-						log.Printf("nn:%d: degraded for %s (%d devices in outage: %s, %d devices unreachable: %s)", nn, dur.String(), len(outageDevices), strings.Join(outageDevices, ","), len(unreachableDevices), strings.Join(unreachableDevices, ","))
-					case noutage == 0 && nunreachable > 0:
-						log.Printf("nn:%d: degraded for %s (%d devices unreachable: %s)", nn, dur.String(), len(unreachableDevices), strings.Join(unreachableDevices, ","))
-					default:
-						log.Printf("nn:%d: online", nn)
+
+					msgs := []string{}
+					if len(outageDevices) > 0 {
+						msgs = append(msgs, fmt.Sprintf("%d in outage: %s", len(outageDevices), strings.Join(outageDevices, ",")))
 					}
+					if len(unreachableDevices) > 0 {
+						msgs = append(msgs, fmt.Sprintf("%d unreachable: %s", len(unreachableDevices), strings.Join(unreachableDevices, ",")))
+					}
+					log.Printf("nn:%d in outage for %s (%s)", nn, dur.String(), strings.Join(msgs, ", "))
 				}
+
+				oldOutageMap = outageMap
 
 				if !a.config.Daemon.EnableSlack {
-					log.Printf("slack support disabled via --enable-slack=false - not updating slack hub topics with status")
+					// TODO: update slack channel topics with some health indicator of a given node
 					continue
 				}
-
 			}
 		}
 	}()
@@ -264,7 +287,6 @@ func (a *App) startOutageMapProducer(ctx context.Context, wg *sync.WaitGroup, ch
 		}()
 
 		doFetch := func() {
-			log.Printf("fetching outage map from UISP")
 			om, err := a.GetFullOutageMap(ctx)
 			if err != nil {
 				log.Printf("error getting outage map: %s", err.Error())
