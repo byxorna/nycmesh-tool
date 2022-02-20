@@ -235,6 +235,17 @@ func (a *App) outageConsumer(ctx context.Context, wg *sync.WaitGroup, fountain <
 
 					dur := time.Since(*outageStart)
 
+					durString := fmt.Sprintf("%s", dur.String())
+					// prettify how we show long outages, so we dont see tons of microseconds for 1w long outages
+					switch {
+					case dur.Hours() > 7*24:
+						durString = fmt.Sprintf("%.1f weeks", dur.Round(time.Hour).Hours()/(24*7))
+					case dur.Hours() > 24:
+						durString = fmt.Sprintf("%.1f days", dur.Round(time.Hour).Hours()/24)
+					case dur.Minutes() > 10:
+						durString = fmt.Sprintf("%s", dur.Round(time.Minute))
+					}
+
 					if dur > ignoreOutagesLongerThan {
 						//log.Printf("nn:%d has outage > %s, ignoring", nn, ignoreOutagesLongerThan)
 						continue
@@ -247,7 +258,7 @@ func (a *App) outageConsumer(ctx context.Context, wg *sync.WaitGroup, fountain <
 					if len(unreachableDevices) > 0 {
 						msgs = append(msgs, fmt.Sprintf("%d unreachable: %s", len(unreachableDevices), strings.Join(unreachableDevices, ",")))
 					}
-					log.Printf("nn:%d in outage for %s (%s)", nn, dur.String(), strings.Join(msgs, ", "))
+					log.Printf("nn:%d in outage for %s (%s)", nn, durString, strings.Join(msgs, ", "))
 				}
 
 				oldOutageMap = outageMap
