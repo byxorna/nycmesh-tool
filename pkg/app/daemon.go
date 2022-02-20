@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"regexp"
 	"sort"
@@ -15,6 +16,8 @@ import (
 
 var (
 	daemonWatchFailureBackoff = time.Second * 10
+
+	DFSEventDropOlderThan = time.Hour * 1
 )
 
 func (a *App) startLogProducer(ctx context.Context, wg *sync.WaitGroup, ch chan<- LogEvent) {
@@ -120,7 +123,15 @@ func (a *App) logConsumerDFSEventDetector(ctx context.Context, wg *sync.WaitGrou
 			case <-ctxDone:
 				break
 			case dfsEvent := <-dfsEventCh:
-				log.Printf("DFS event detected at nn:%d on %s: %s", dfsEvent.NN, dfsEvent.Timestamp, *dfsEvent.Message)
+				elapsed := time.Since(dfsEvent.Time)
+				log.Printf("DFS event detected at nn:%d %s ago: %s (%s)", dfsEvent.NN, elapsed.String(), *dfsEvent.Message, dfsEvent.Time.String())
+
+				// drop any DFS events that happened too long in the past
+				if elapsed > DFSEventDropOlderThan {
+					log.Printf("ignoring DFS event at nn:%d that is %s old (limit %s)", dfsEvent.NN, elapsed.String(), DFSEventDropOlderThan.String())
+					continue
+				}
+
 				if !a.config.Daemon.EnableSlack {
 					log.Printf("slack support disabled via --enable-slack=false")
 					continue

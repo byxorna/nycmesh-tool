@@ -215,7 +215,11 @@ func (a *App) outageConsumer(ctx context.Context, wg *sync.WaitGroup, fountain <
 
 				for _, nn := range oldImpactedNNs {
 					if !contains(currentImpactedNNs, nn) {
-						log.Printf("nn:%d outage all clear!", nn)
+						if outageBegin, err := oldOutageMap.OutageStartTime(nn); err != nil {
+							log.Printf("nn:%d outage resolved (unable to verify outage duration: %s)", nn, err.Error())
+						} else {
+							log.Printf("nn:%d outage resolved after %s", nn, time.Since(*outageBegin).String())
+						}
 					}
 				}
 
