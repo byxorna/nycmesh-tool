@@ -33,7 +33,7 @@ func (a *App) logConsumerDFSEventDetector(ctx context.Context, wg *sync.WaitGrou
 
 					// drop any DFS events that happened before our daemon started running
 					if rawLog.Time.Before(a.daemonBootupTimestamp) {
-						elapsed := time.Since(rawLog.Time)
+						elapsed := time.Since(rawLog.Time).Round(time.Minute)
 						log.Printf("[ignored] DFS event detected before daemon starup at nn:%d (%s, %s ago): %s", rawLog.NN, rawLog.Time.String(), elapsed.String(), *rawLog.Message)
 						continue
 					}
@@ -64,28 +64,19 @@ func (a *App) logConsumerDFSEventDetector(ctx context.Context, wg *sync.WaitGrou
 
 				slackChannel, err := lookupSlackChannelIDFromNN(dfsEvent.NN)
 				if err != nil {
-					log.Printf("Unable to resolve slack channel: %s", err.Error())
-					log.Printf("Using default monitoring channel %s", DefaultMonitoringChannel)
+					log.Printf("Unable to resolve slack channel (will use default monitoring channel %s): %s", DefaultMonitoringChannel, err.Error())
 					slackChannel = DefaultMonitoringChannel
 				}
 
 				log.Printf("notifying slack channel %s of DFS on nn:%d %s", slackChannel, dfsEvent.NN, dfsEvent.Device.Name)
-				panic(123)
+				log.Printf("%+v %s", dfsEvent.LogEventUISP, *dfsEvent.Message)
 				go func() {
 					// TODO: add buttons to link out to UISP for the device triggering the event
-					/*
-											attachment := slack.Attachment{
-												Pretext: ":warning:",
-												Text:    *dfsEvent.Message,
-						            Actions: slack.NewAc,
-											}
-					*/
 
 					channelID, timestamp, err := a.Slack.PostMessage(
 						slackChannel,
 						slack.MsgOptionText(*dfsEvent.Message, false),
-						nil,
-						//slack.MsgOptionAttachments(attachment),
+						nil,                         //slack.MsgOptionAttachments(attachment)
 						slack.MsgOptionAsUser(true), // Add this if you want that the bot would post message as a user, otherwise it will send response using the default slackbot
 					)
 					if err != nil {
