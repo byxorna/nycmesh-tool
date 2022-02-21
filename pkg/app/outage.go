@@ -264,8 +264,10 @@ func (a *App) outageConsumer(ctx context.Context, wg *sync.WaitGroup, fountain <
 				oldOutageMap = outageMap
 
 				if !a.config.Daemon.EnableSlack {
-					// TODO: update slack channel topics with some health indicator of a given node
+					// bail if slack is not enabled - we shouldnt update channels to match observed state
 					continue
+				} else {
+					// TODO: update slack channel topics with some health indicator of a given node
 				}
 			}
 		}
