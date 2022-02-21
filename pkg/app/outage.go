@@ -244,6 +244,8 @@ func (a *App) outageConsumer(ctx context.Context, wg *sync.WaitGroup, fountain <
 						durString = fmt.Sprintf("%.1f days", dur.Round(time.Hour).Hours()/24)
 					case dur.Minutes() > 10:
 						durString = fmt.Sprintf("%s", dur.Round(time.Minute))
+					default:
+						durString = fmt.Sprintf("%s", dur.Round(time.Second))
 					}
 
 					if dur > ignoreOutagesLongerThan {
