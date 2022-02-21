@@ -15,6 +15,7 @@ import (
 
 type OutageUISP models.Outage
 
+// Outage is a single UISP Outage, which impacts a single Device/Site pair
 type Outage struct {
 	NN int
 	OutageUISP
@@ -38,8 +39,39 @@ const (
 	HealthStatusUnknown     HealthStatus = "unknown"
 )
 
+// OutageMap maps a NN to a list of device outages. Each OutageMap is a
+// snapshot of UISP outage data at a point in time
 type OutageMap struct {
 	data map[int][]Outage
+}
+
+// outageNNGroups takes a current and previous outage, and returns the list of NNs that:
+// newOutageNNs: NNs that are newly in the Outage state (at least 1 device in current map is unavailable)
+// clearedNNs: NNs that were in outage, but now are all good
+// prevImpactedNNs: all NNs impacted in the previous OutageMap
+// currentImpactedNNs: all NNs impacted in the current OutageMap
+func outageNNGroups(currOutageMap, prevOutageMap OutageMap) (newOutageNNs, clearedNNs, prevImpactedNNs, currentImpactedNNs []int) {
+	prevImpactedNNs = prevOutageMap.ImpactedNNs()
+	currentImpactedNNs = currOutageMap.ImpactedNNs()
+
+	for _, nn := range currentImpactedNNs {
+		if !contains(prevImpactedNNs, nn) {
+			newOutageNNs = append(newOutageNNs, nn)
+		}
+	}
+
+	for _, nn := range prevImpactedNNs {
+		if !contains(currentImpactedNNs, nn) {
+			clearedNNs = append(clearedNNs, nn)
+		}
+	}
+
+	sort.Ints(newOutageNNs)
+	sort.Ints(clearedNNs)
+	sort.Ints(prevImpactedNNs)
+	sort.Ints(currentImpactedNNs)
+
+	return newOutageNNs, clearedNNs, prevImpactedNNs, currentImpactedNNs
 }
 
 func (om *OutageMap) ImpactedNNs() []int {
@@ -189,88 +221,115 @@ func contains(elems []int, v int) bool {
 	return false
 }
 
+func (a *App) processNewOutageMap(outageMap OutageMap, prevOutageMap OutageMap) error {
+	// determine new outages only
+	newOutageNNs, clearedNNs, _, currentImpactedNNs := outageNNGroups(outageMap, prevOutageMap)
+
+	for _, nn := range clearedNNs {
+		if outageBegin, err := prevOutageMap.OutageStartTime(nn); err != nil {
+			log.Printf("nn:%d outage resolved (unable to verify outage duration: %s)", nn, err.Error())
+		} else {
+			log.Printf("nn:%d outage resolved after %s", nn, time.Since(*outageBegin).String())
+		}
+	}
+
+	for _, nn := range newOutageNNs {
+		outageStart, err := outageMap.OutageStartTime(nn)
+		if err != nil {
+			log.Printf("unable to determine outage start time: %s", err.Error())
+			continue
+		}
+
+		outageDevices := outageMap.GetOutagesDeviceNamesByOutageType(nn, "outage")
+		unreachableDevices := outageMap.GetOutagesDeviceNamesByOutageType(nn, "unreachable")
+
+		dur := time.Since(*outageStart)
+
+		durString := fmt.Sprintf("%s", dur.String())
+		// prettify how we show long outages, so we dont see tons of microseconds for 1w long outages
+		switch {
+		case dur.Hours() > 7*24:
+			durString = fmt.Sprintf("%.1f weeks", dur.Round(time.Hour).Hours()/(24*7))
+		case dur.Hours() > 24:
+			durString = fmt.Sprintf("%.1f days", dur.Round(time.Hour).Hours()/24)
+		case dur.Minutes() > 10:
+			durString = fmt.Sprintf("%s", dur.Round(time.Minute))
+		default:
+			durString = fmt.Sprintf("%s", dur.Round(time.Second))
+		}
+
+		if dur > ignoreOutagesLongerThan {
+			//log.Printf("nn:%d has outage > %s, ignoring", nn, ignoreOutagesLongerThan)
+			continue
+		}
+
+		msgs := []string{}
+		if len(outageDevices) > 0 {
+			msgs = append(msgs, fmt.Sprintf("%d in outage: %s", len(outageDevices), strings.Join(outageDevices, ",")))
+		}
+		if len(unreachableDevices) > 0 {
+			msgs = append(msgs, fmt.Sprintf("%d unreachable: %s", len(unreachableDevices), strings.Join(unreachableDevices, ",")))
+		}
+		log.Printf("nn:%d in outage for %s (%s)", nn, durString, strings.Join(msgs, ", "))
+	}
+
+	for _, nn := range currentImpactedNNs {
+		if !contains(newOutageNNs, nn) {
+			currOutages, _ := outageMap.NodeDeviceOutages(nn)
+			prevOutages, _ := prevOutageMap.NodeDeviceOutages(nn)
+
+			outageDevices := outageMap.GetOutagesDeviceNamesByOutageType(nn, "outage")
+			unreachableDevices := outageMap.GetOutagesDeviceNamesByOutageType(nn, "unreachable")
+			msgs := []string{}
+			if len(outageDevices) > 0 {
+				msgs = append(msgs, fmt.Sprintf("%d in outage: %s", len(outageDevices), strings.Join(outageDevices, ",")))
+			}
+			if len(unreachableDevices) > 0 {
+				msgs = append(msgs, fmt.Sprintf("%d unreachable: %s", len(unreachableDevices), strings.Join(unreachableDevices, ",")))
+			}
+
+			delta := len(prevOutages) - len(currOutages)
+			switch {
+			case delta > 0:
+				log.Printf("nn:%d outage continues but got better: %s", nn, strings.Join(msgs, ", "))
+			case delta < 0:
+				log.Printf("nn:%d outage intensifies: %s", nn, strings.Join(msgs, ", "))
+			default:
+				// no change in device outage states, ignore
+			}
+		}
+	}
+
+	return nil
+}
+
 func (a *App) outageConsumer(ctx context.Context, wg *sync.WaitGroup, fountain <-chan OutageMap) {
 
 	// read from outages that are valid to us, and update our status map
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		var oldOutageMap OutageMap
+		var prevOutageMap OutageMap
 
 		for {
 			select {
 			case <-ctx.Done():
 				break
 			case outageMap := <-fountain:
-				// determine new outages only
-				newOutageNNs := []int{}
-				oldImpactedNNs := oldOutageMap.ImpactedNNs()
-				currentImpactedNNs := outageMap.ImpactedNNs()
+				if err := a.processNewOutageMap(outageMap, prevOutageMap); err != nil {
+					log.Printf("error processing outage map: %s", err.Error())
+				}
 
-				for _, nn := range currentImpactedNNs {
-					if !contains(oldImpactedNNs, nn) {
-						newOutageNNs = append(newOutageNNs, nn)
+				if a.config.Daemon.EnableSlack {
+					log.Printf("syncing outages to slack threads")
+					if err := a.updateSlackOutages(outageMap, prevOutageMap); err != nil {
+						log.Printf("error syncing outage map to slack: %s", err.Error())
 					}
 				}
 
-				for _, nn := range oldImpactedNNs {
-					if !contains(currentImpactedNNs, nn) {
-						if outageBegin, err := oldOutageMap.OutageStartTime(nn); err != nil {
-							log.Printf("nn:%d outage resolved (unable to verify outage duration: %s)", nn, err.Error())
-						} else {
-							log.Printf("nn:%d outage resolved after %s", nn, time.Since(*outageBegin).String())
-						}
-					}
-				}
+				// record our previous outage map, so we can detect new vs existing outages
+				prevOutageMap = outageMap
 
-				for _, nn := range newOutageNNs {
-					outageStart, err := outageMap.OutageStartTime(nn)
-					if err != nil {
-						log.Printf("unable to determine outage start time: %s", err.Error())
-						continue
-					}
-
-					outageDevices := outageMap.GetOutagesDeviceNamesByOutageType(nn, "outage")
-					unreachableDevices := outageMap.GetOutagesDeviceNamesByOutageType(nn, "unreachable")
-
-					dur := time.Since(*outageStart)
-
-					durString := fmt.Sprintf("%s", dur.String())
-					// prettify how we show long outages, so we dont see tons of microseconds for 1w long outages
-					switch {
-					case dur.Hours() > 7*24:
-						durString = fmt.Sprintf("%.1f weeks", dur.Round(time.Hour).Hours()/(24*7))
-					case dur.Hours() > 24:
-						durString = fmt.Sprintf("%.1f days", dur.Round(time.Hour).Hours()/24)
-					case dur.Minutes() > 10:
-						durString = fmt.Sprintf("%s", dur.Round(time.Minute))
-					default:
-						durString = fmt.Sprintf("%s", dur.Round(time.Second))
-					}
-
-					if dur > ignoreOutagesLongerThan {
-						//log.Printf("nn:%d has outage > %s, ignoring", nn, ignoreOutagesLongerThan)
-						continue
-					}
-
-					msgs := []string{}
-					if len(outageDevices) > 0 {
-						msgs = append(msgs, fmt.Sprintf("%d in outage: %s", len(outageDevices), strings.Join(outageDevices, ",")))
-					}
-					if len(unreachableDevices) > 0 {
-						msgs = append(msgs, fmt.Sprintf("%d unreachable: %s", len(unreachableDevices), strings.Join(unreachableDevices, ",")))
-					}
-					log.Printf("nn:%d in outage for %s (%s)", nn, durString, strings.Join(msgs, ", "))
-				}
-
-				oldOutageMap = outageMap
-
-				if !a.config.Daemon.EnableSlack {
-					// bail if slack is not enabled - we shouldnt update channels to match observed state
-					continue
-				} else {
-					// TODO: update slack channel topics with some health indicator of a given node
-				}
 			}
 		}
 	}()
