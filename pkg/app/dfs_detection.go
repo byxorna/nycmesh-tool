@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"regexp"
-	"sort"
 	"sync"
 	"time"
 
@@ -30,10 +29,15 @@ func (a *App) logConsumerDFSEventDetector(ctx context.Context, wg *sync.WaitGrou
 			case <-ctxDone:
 				break
 			case rawLog := <-logsCh:
-				t := rawLog.Tags
-				sort.Strings(t)
+				if rawLog.Message != nil && dfsMessageRegex.MatchString(*rawLog.Message) {
 
-				if rawLog.Message != nil && dfsMessageRegex.MatchString(*rawLog.Message) { // && sort.SearchStrings(t, "device-state") != len(t) {
+					// drop any DFS events that happened before our daemon started running
+					if rawLog.Time.Before(a.daemonBootupTimestamp) {
+						elapsed := time.Since(rawLog.Time)
+						log.Printf("[ignored] DFS event detected before daemon starup at nn:%d (%s, %s ago): %s", rawLog.NN, rawLog.Time.String(), elapsed.String(), *rawLog.Message)
+						continue
+					}
+
 					dfsEventCh <- rawLog
 				}
 			}
@@ -41,7 +45,7 @@ func (a *App) logConsumerDFSEventDetector(ctx context.Context, wg *sync.WaitGrou
 
 	}()
 
-	// read from dfsEventCh, log events as we see them
+	// read from dfsEventCh, handle valid DFS events
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -52,16 +56,9 @@ func (a *App) logConsumerDFSEventDetector(ctx context.Context, wg *sync.WaitGrou
 			case dfsEvent := <-dfsEventCh:
 				elapsed := time.Since(dfsEvent.Time)
 
-				if dfsEvent.Time.Before(a.daemonBootupTimestamp) {
-					// drop any DFS events that happened before our daemon started running
-					log.Printf("[ignore] DFS event detected at nn:%d %s ago: %s (%s)", dfsEvent.NN, elapsed.String(), *dfsEvent.Message, dfsEvent.Time.String())
-					continue
-				}
-
 				log.Printf("DFS event detected at nn:%d %s ago: %s (%s)", dfsEvent.NN, elapsed.String(), *dfsEvent.Message, dfsEvent.Time.String())
 
 				if !a.config.Daemon.EnableSlack {
-					log.Printf("slack support disabled via --enable-slack=false")
 					continue
 				}
 
@@ -73,17 +70,22 @@ func (a *App) logConsumerDFSEventDetector(ctx context.Context, wg *sync.WaitGrou
 				}
 
 				log.Printf("notifying slack channel %s of DFS on nn:%d %s", slackChannel, dfsEvent.NN, dfsEvent.Device.Name)
+				panic(123)
 				go func() {
 					// TODO: add buttons to link out to UISP for the device triggering the event
-					attachment := slack.Attachment{
-						Pretext: ":warning:",
-						Text:    *dfsEvent.Message,
-					}
+					/*
+											attachment := slack.Attachment{
+												Pretext: ":warning:",
+												Text:    *dfsEvent.Message,
+						            Actions: slack.NewAc,
+											}
+					*/
 
 					channelID, timestamp, err := a.Slack.PostMessage(
 						slackChannel,
-						slack.MsgOptionText("nothing here", false),
-						slack.MsgOptionAttachments(attachment),
+						slack.MsgOptionText(*dfsEvent.Message, false),
+						nil,
+						//slack.MsgOptionAttachments(attachment),
 						slack.MsgOptionAsUser(true), // Add this if you want that the bot would post message as a user, otherwise it will send response using the default slackbot
 					)
 					if err != nil {
