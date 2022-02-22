@@ -19,7 +19,6 @@ type OutageUISP models.Outage
 type Outage struct {
 	NN int
 	OutageUISP
-	HealthStatus
 	Start time.Time
 }
 
@@ -221,6 +220,25 @@ func contains(elems []int, v int) bool {
 	return false
 }
 
+func allNNs(outageMap OutageMap, prevOutageMap OutageMap) []int {
+	nns := map[int]interface{}{}
+	for _, nn := range outageMap.ImpactedNNs() {
+		nns[nn] = struct{}{}
+	}
+	for _, nn := range prevOutageMap.ImpactedNNs() {
+		nns[nn] = struct{}{}
+	}
+
+	l := []int{}
+	for nn, _ := range nns {
+		l = append(l, nn)
+	}
+
+	sort.Ints(l)
+	return l
+
+}
+
 func (a *App) processNewOutageMap(outageMap OutageMap, prevOutageMap OutageMap) error {
 	// determine new outages only
 	newOutageNNs, clearedNNs, _, currentImpactedNNs := outageNNGroups(outageMap, prevOutageMap)
@@ -322,7 +340,7 @@ func (a *App) outageConsumer(ctx context.Context, wg *sync.WaitGroup, fountain <
 
 				if a.config.Daemon.EnableSlack {
 					log.Printf("syncing outages to slack threads")
-					if err := a.updateSlackOutages(outageMap, prevOutageMap); err != nil {
+					if err := a.updateSlackOutageThreadsFromOutageMaps(outageMap, prevOutageMap); err != nil {
 						log.Printf("error syncing outage map to slack: %s", err.Error())
 					}
 				}
