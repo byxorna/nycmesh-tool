@@ -23,20 +23,20 @@ func lookupSlackChannelIDFromNN(nn int) (string, error) {
 	return "", fmt.Errorf("implement me: lookup of slack channel for nn:%d", nn)
 }
 
-func (a *App) slackEnsureOutageStatusUpdate(nn int, outageMap OutageMap) error {
+func (a *App) slackEnsureOutageStatusUpdate(nn int, baseURL string, outageMap OutageMap) error {
 	devOutages, err := outageMap.NodeDeviceOutages(nn)
 	if err != nil {
 		return fmt.Errorf("unable to get device outages for nn:%d: %w", nn, err)
 	}
 
-	msg := createMarkdownStatus(nn, baseURL, devOutages) // TODO: should we include site info, or all devices in this site?
+	md := createMarkdownStatus(nn, baseURL, devOutages) // TODO: should we include site info, or all devices in this site?
 
 	outageThreadID, err := findOrCreateOutageThread(nn)
 	if err != nil {
 		return fmt.Errorf("unable to create outage thread: %w", err)
 	}
 
-	if err := ensureNodeStatusMessageInThread(outageThreadID, msg); err != nil {
+	if err := ensureNodeStatusMessageInThread(outageThreadID, md); err != nil {
 		return fmt.Errorf("unable to ensure node status in outage thread: %w", err)
 	}
 
@@ -103,7 +103,7 @@ func findOrCreateOutageThread(nn int) (string, error) {
 	return "", fmt.Errorf("FindOrCreateOutageThread")
 }
 
-func ensureNodeStatusMessageInThread(message_id string) error {
+func ensureNodeStatusMessageInThread(message_id, markdown string) error {
 	return fmt.Errorf("EnsureNodeStatusMessageInThread")
 }
 
@@ -113,9 +113,9 @@ func postThreadUpdate(message_id string, update string) error {
 
 // iterate over all NNs in an outage map, and update its absolute status in the "Outage"
 // thread
-func (a *App) updateSlackOutageThreadsFromOutageMaps(outageMap OutageMap, prevOutageMap OutageMap) error {
+func (a *App) updateSlackOutageThreadsFromOutageMaps(baseURL string, outageMap OutageMap, prevOutageMap OutageMap) error {
 	for _, nn := range allNNs(outageMap, prevOutageMap) {
-		if err := a.slackEnsureOutageStatusUpdate(nn, outageMap); err != nil {
+		if err := a.slackEnsureOutageStatusUpdate(nn, baseURL, outageMap); err != nil {
 			return fmt.Errorf("unable to update slack outage thread: %w", err)
 		}
 	}

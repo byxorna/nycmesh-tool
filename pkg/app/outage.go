@@ -137,7 +137,7 @@ func (om *OutageMap) NodeDeviceOutages(nn int) ([]Outage, error) {
 	return []Outage{}, nil
 }
 
-func (a *App) GetFullOutageMap(ctx context.Context) (OutageMap, error) {
+func (a *App) FetchOutageMap(ctx context.Context) (OutageMap, error) {
 	inProgress := true
 	params := outages.NewGetOutagesParams().
 		WithDefaults().
@@ -339,10 +339,12 @@ func (a *App) outageConsumer(ctx context.Context, wg *sync.WaitGroup, fountain <
 				}
 
 				if a.config.Daemon.EnableSlack {
-					log.Printf("syncing outages to slack threads")
-					if err := a.updateSlackOutageThreadsFromOutageMaps(outageMap, prevOutageMap); err != nil {
-						log.Printf("error syncing outage map to slack: %s", err.Error())
-					}
+					log.Printf("TODO @gabe enable when ready to turn on outage notifications into slack threads")
+					//log.Printf("syncing outages to slack threads")
+					//baseURL := fmt.Sprintf("%s://%s/nms", a.config.UISP.Scheme, a.config.UISP.Hostname)
+					//if err := a.updateSlackOutageThreadsFromOutageMaps(baseURL, outageMap, prevOutageMap); err != nil {
+					//	log.Printf("error syncing outage map to slack: %s", err.Error())
+					//}
 				}
 
 				// record our previous outage map, so we can detect new vs existing outages
@@ -383,7 +385,7 @@ func (a *App) startOutageMapProducer(ctx context.Context, wg *sync.WaitGroup, ch
 		}()
 
 		doFetch := func() {
-			om, err := a.GetFullOutageMap(ctx)
+			om, err := a.FetchOutageMap(ctx)
 			if err != nil {
 				log.Printf("error getting outage map: %s", err.Error())
 				time.Sleep(outageMapErrorBackoffInterval)

@@ -5,7 +5,18 @@ import (
 	"log"
 	"sync"
 	"time"
+
+	"github.com/byxorna/nycmesh-tool/generated/go/uisp/models"
 )
+
+// TODO: we should patch the UISP swagger spec to rename Model9 to something more useful here
+type LogEventUISP models.Model9 // -_- generated code suxxx, why this confusing name
+
+type LogEvent struct {
+	Time time.Time
+	NN   int
+	LogEventUISP
+}
 
 func (a *App) startLogProducer(ctx context.Context, wg *sync.WaitGroup, ch chan<- LogEvent) {
 	// start up the log producer, which pushes events into ch
