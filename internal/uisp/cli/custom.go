@@ -5,7 +5,11 @@ package cli
 
 import (
 	"fmt"
+	"log"
+	"net/http"
 	"os"
+
+	"github.com/byxorna/nycmesh-tool/pkg/version"
 
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client"
 	"github.com/go-openapi/runtime"
@@ -63,7 +67,7 @@ func bindFlags(rootCmd *cobra.Command) *cobra.Command {
 	rootCmd.PersistentFlags().String("scheme", client.DefaultSchemes[0], fmt.Sprintf("Choose from: %v", client.DefaultSchemes))
 	viper.BindPFlag("uisp.scheme", rootCmd.PersistentFlags().Lookup("scheme"))
 
-	//http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	// allow connecting to self-signed TLS controllers
 	rootCmd.PersistentFlags().Bool("skip-verify-tls", false, fmt.Sprintf("sets &tls.Config{InsecureSkipVerify: true} in UISP HTTP Client"))
 	viper.BindPFlag("uisp.skip-verify-tls", rootCmd.PersistentFlags().Lookup("skip-verify-tls"))
 
@@ -252,6 +256,7 @@ func makeClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
 	hostname := viper.GetString("uisp.hostname")
 	scheme := viper.GetString("uisp.scheme")
 
+	// TODO: change this to set user-agent appropriately
 	httpc, err := httptransport.TLSClient(httptransport.TLSClientOptions{
 		InsecureSkipVerify: viper.GetBool("uisp.skip-verify-tls"),
 	})
@@ -259,20 +264,76 @@ func makeClient(cmd *cobra.Command, args []string) (*client.UISPAPI, error) {
 		return nil, err
 	}
 
-	r := httptransport.NewWithClient(hostname, client.DefaultBasePath, []string{scheme}, httpc)
-	r.SetDebug(viper.GetBool("uisp.debug"))
+	transport := httptransport.NewWithClient(hostname, client.DefaultBasePath, []string{scheme}, httpc)
 
-	r.Consumers["application/json"] = runtime.JSONConsumer()
+	transport.SetDebug(viper.GetBool("uisp.debug"))
 
-	r.Producers["application/json"] = runtime.JSONProducer()
+	transport.Consumers["application/json"] = runtime.JSONConsumer()
+
+	transport.Producers["application/json"] = runtime.JSONProducer()
 
 	auth, err := makeAuthInfoWriterCustom(cmd)
 	if err != nil {
 		return nil, err
 	}
-	r.DefaultAuthentication = auth
+	transport.DefaultAuthentication = auth
 
-	appCli := client.New(r, strfmt.Default)
+	appCli := client.New(transport, strfmt.Default)
 	logDebugf("Server url: %v://%v", scheme, hostname)
 	return appCli, nil
+}
+
+// everything below this is not working correctly! for some reason, the request debugger
+// logs the request before the RoundTripper gets a chance to set the User-Agent headers...
+// whats going on here? Is middleware ordering a thing?
+
+type httpRoundTripperWithUserAgent struct {
+	origtransport http.RoundTripper
+	agent         string
+}
+
+func (s *httpRoundTripperWithUserAgent) RoundTrip(r *http.Request) (*http.Response, error) {
+	log.Printf("cloning context...")
+	newReq := r.Clone(r.Context())
+	log.Printf("setting user-agent!!!!!! %s", s.agent)
+	newReq.Header.Set("User-Agent", s.agent)
+	log.Printf("getting user-agent!!!!!! %s", newReq.Header.Get("User-Agent"))
+	log.Printf("xxxxxxxxxx")
+	resp, err := s.origtransport.RoundTrip(newReq)
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("yyyyyyy")
+
+	panic("fuck")
+	// TODO: instrument better logging here?
+
+	return resp, nil
+}
+
+// create a custom roundtripper that sets the User-Agent header on all requests
+func createInstrumentedRoundTripper(transport http.RoundTripper) http.RoundTripper {
+	return &httpRoundTripperWithUserAgent{
+		origtransport: transport,
+		agent:         version.UserAgent(),
+	}
+}
+
+// customTLSTransport creates a http client transport suitable for mutual tls auth
+func customTLSTransport(opts httptransport.TLSClientOptions) (http.RoundTripper, error) {
+	cfg, err := httptransport.TLSClientAuth(opts)
+	if err != nil {
+		return nil, err
+	}
+
+	return &http.Transport{TLSClientConfig: cfg}, nil
+}
+
+// customTLSClient creates a http.Client for mutual auth
+func customTLSClient(opts httptransport.TLSClientOptions) (*http.Client, error) {
+	transport, err := customTLSTransport(opts)
+	if err != nil {
+		return nil, err
+	}
+	return &http.Client{Transport: createInstrumentedRoundTripper(transport)}, nil
 }
