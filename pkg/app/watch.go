@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client/logs"
-	"github.com/byxorna/nycmesh-tool/generated/go/uisp/models"
 )
 
 var (
@@ -22,15 +21,6 @@ var (
 	MinLogQueryPeriod = float64(time.Hour.Milliseconds())
 	MaxLogQueryPeriod = float64((24 * 365 * time.Hour).Milliseconds())
 )
-
-// TODO: we should patch the UISP swagger spec to rename Model9 to something more useful here
-type LogEventUISP models.Model9 // -_- generated code suxxx, why this confusing name
-
-type LogEvent struct {
-	Time time.Time
-	NN   int
-	LogEventUISP
-}
 
 func (a *App) WatchLogs(ctx context.Context, since time.Time, dstCh chan<- LogEvent) error {
 	initialQueryPeriod := float64(time.Now().Sub(since).Milliseconds())

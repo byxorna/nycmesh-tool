@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/cli"
 	"github.com/byxorna/nycmesh-tool/generated/go/uisp/client"
@@ -24,7 +25,8 @@ type App struct {
 	// TODO: wire this up as a general caching layer, instead of if being in meshapi.Client?
 	diskCache cache.DiskCache
 
-	config *Config
+	daemonBootupTimestamp time.Time
+	config                *Config
 }
 
 func New(cmd *cobra.Command, args []string) (*App, error) {

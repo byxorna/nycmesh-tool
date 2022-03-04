@@ -8,6 +8,7 @@ type Config struct {
 	Core   CoreConfig   `json:"core"`
 	Slack  SlackConfig  `json:"slack"`
 	Daemon DaemonConfig `json:"daemon"`
+	UISP   UISPConfig   `json:"uisp"`
 }
 
 type SlackConfig struct {
@@ -25,6 +26,13 @@ type DaemonConfig struct {
 	EnableSlack       bool `json:"enable-slack"`
 }
 
+type UISPConfig struct {
+	Scheme        string `json:"scheme"`
+	Hostname      string `json:"hostname"`
+	SkipVerifyTLS bool   `json:"skip-verify-tls"`
+	Debug         bool   `json:"debug"`
+}
+
 func NewConfig() (*Config, error) {
 	// TODO: there is surely a more clever way to get this struct populated via
 	// viper.Unmarshal, but I cannot be troubled to figure out the proper struct tags
@@ -40,6 +48,12 @@ func NewConfig() (*Config, error) {
 			DFSEventDetection: viper.GetBool("daemon.dfs-event-detection"),
 			OutageDetection:   viper.GetBool("daemon.outage-detection"),
 			EnableSlack:       viper.GetBool("daemon.enable-slack"),
+		},
+		UISP: UISPConfig{
+			Scheme:        viper.GetString("uisp.scheme"),
+			Hostname:      viper.GetString("uisp.hostname"),
+			SkipVerifyTLS: viper.GetBool("uisp.skip-verify-tls"),
+			Debug:         viper.GetBool("uisp.debug"),
 		},
 	}
 
